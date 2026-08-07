@@ -1,0 +1,90 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Our Work — APEX AUTO STUDIO</title>
+<meta name="description" content="Recent builds from APEX Auto Studio — ceramic, PPF, detailing and bodyshop work." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<header class="nav">
+  <a class="nav__brand" href="index.html">APEX<b>.</b></a>
+  <nav class="nav__links">
+    <a href="index.html" class="hide-sm" data-cursor>Home</a>
+    <a href="index.html#services" class="hide-sm" data-cursor>Services</a>
+    <a href="index.html#book" class="nav__cta" data-cursor>Book Now</a>
+  </nav>
+</header>
+
+<!-- ===== WORK HERO ===== -->
+<section class="work-hero" id="workHero">
+  <canvas class="work-hero__canvas"></canvas>
+  <div class="work-hero__veil"></div>
+  <div class="wrap">
+    <div class="eyebrow" style="margin-bottom:18px">The APEX portfolio</div>
+    <h1 class="display work-hero__title chrome-text">Our Work</h1>
+    <p class="work-hero__sub">Real cars, real transformations. Every clip below is a job that rolled out of the studio flawless. (Footage drops in soon.)</p>
+  </div>
+</section>
+
+<!-- ===== WORK GRID ===== -->
+<section class="work-grid-section">
+  <div class="wrap">
+    <div class="work-toolbar" id="workFilters">
+      <button class="chip active" data-cat="all" data-cursor>All</button>
+      <button class="chip" data-cat="ceramic" data-cursor>Ceramic</button>
+      <button class="chip" data-cat="ppf" data-cursor>PPF</button>
+      <button class="chip" data-cat="detailing" data-cursor>Detailing</button>
+      <button class="chip" data-cat="bodyshop" data-cursor>Bodyshop</button>
+    </div>
+    <div class="work-grid" id="workGrid"><!-- built by work.js --></div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="page-cta">
+  <div class="wrap">
+    <h3>Your car could be next.</h3>
+    <a class="wa" href="index.html#book" data-cursor>
+      <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.6.2-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.6-.8-2.6-1.4-3.7-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5 0-.2-.6-1.6-.9-2.2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.9-.6 3 .7 2 2 3.5 3.9 4.7 2.5 1.5 3 .9 3.6.9.6 0 1.7-.7 2-1.4.2-.7.2-1.2.1-1.4 0 0-.2-.1-.5-.3zM12 2A10 10 0 0 0 3.5 17.2L2 22l5-1.3A10 10 0 1 0 12 2zm0 18c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 20 12a8 8 0 0 1-8 8z"/></svg>
+      Book on WhatsApp
+    </a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__brand">
+      APEX<b>.</b>
+      <p>Cinematic car care — detailing, paint protection and bodyshop, obsessed over panel by panel.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="index.html" data-cursor>Home</a></li>
+        <li><a href="index.html#services" data-cursor>Services</a></li>
+        <li><a href="index.html#book" data-cursor>Book on WhatsApp</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Studio</h4>
+      <ul>
+        <li><a href="#top" data-cursor>Back to top</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer__base">
+    <span>© <span id="year"></span> APEX Auto Studio. All rights reserved.</span>
+    <span>Built for the obsessed.</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/sequence.js"></script>
+<script src="js/work.js"></script>
