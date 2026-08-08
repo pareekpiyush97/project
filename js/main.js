@@ -83,10 +83,16 @@ function initAct(section) {
     trigger: section, start: 'top bottom+=80%',
     once: true, onEnter: () => seq.load()
   });
-  // scrub the sequence across the act
+  // scrub the sequence across the act; fade the text out near the end
+  // so it doesn't overlap the next section during the sticky hand-off
+  const overlay = $('.act__overlay', section);
   ScrollTrigger.create({
     trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.4,
-    onUpdate: self => seq.seek(self.progress)
+    onUpdate: self => {
+      const p = self.progress;
+      seq.seek(p);
+      if (overlay) overlay.style.opacity = p > 0.86 ? Math.max(0, (1 - p) / 0.14) : 1;
+    }
   });
   return { section, seq };
 }
@@ -178,7 +184,7 @@ function initMenu() {
     raf = requestAnimationFrame(loop);
     if (t - last < 45) return;            // ~22fps
     last = t;
-    if (seq && seq.loaded > 0) { frame = (frame + 1) % seq.count; seq.draw(frame); }
+    if (seq && seq.loaded > 0) { frame = (frame + seq.step) % seq.count; seq.draw(frame); }
   };
   const startAnim = () => {
     if (reduced || !canvas) return;

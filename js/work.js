@@ -138,7 +138,7 @@ function initMenu() {
     raf = requestAnimationFrame(loop);
     if (t - last < 45) return;            // ~22fps
     last = t;
-    if (seq && seq.loaded > 0) { frame = (frame + 1) % seq.count; seq.draw(frame); }
+    if (seq && seq.loaded > 0) { frame = (frame + seq.step) % seq.count; seq.draw(frame); }
   };
   const startAnim = () => {
     if (reduced || !canvas) return;
