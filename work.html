@@ -15,11 +15,28 @@
 <header class="nav">
   <a class="nav__brand" href="index.html">APEX<b>.</b></a>
   <nav class="nav__links">
-    <a href="index.html" class="hide-sm" data-cursor>Home</a>
-    <a href="index.html#services" class="hide-sm" data-cursor>Services</a>
-    <a href="index.html#book" class="nav__cta" data-cursor>Book Now</a>
+    <a href="index.html#book" class="nav__cta hide-sm" data-cursor>Book Now</a>
+    <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
+      <span class="nav__toggle-ico"><i></i><i></i></span>
+      <span class="nav__toggle-txt">Menu</span>
+    </button>
   </nav>
 </header>
+
+<!-- ============ MENU BOX ============ -->
+<div class="menu" id="menu" aria-hidden="true">
+  <nav class="menu__links">
+    <a href="index.html" data-cursor><span>01</span> Home</a>
+    <a href="index.html#services" data-cursor><span>02</span> Services</a>
+    <a href="work.html" data-cursor><span>03</span> Our Work</a>
+    <a href="index.html#book" data-cursor><span>04</span> Book</a>
+  </nav>
+  <div class="menu__foot">
+    <div><h4>Studio</h4><p>Your City · Auto Studio<br />Mon–Sun · 9–8</p></div>
+    <div><h4>WhatsApp</h4><a href="index.html#book" data-cursor>Chat with us →</a></div>
+    <div><h4>Follow</h4><p>Instagram · YouTube</p></div>
+  </div>
+</div>
 
 <!-- ===== WORK HERO ===== -->
 <section class="work-hero" id="workHero">
@@ -27,7 +44,7 @@
   <div class="work-hero__veil"></div>
   <div class="wrap">
     <div class="eyebrow" style="margin-bottom:18px">The APEX portfolio</div>
-    <h1 class="display work-hero__title chrome-text">Our Work</h1>
+    <h1 class="display work-hero__title chrome-text">Our <span class="hot">Work</span></h1>
     <p class="work-hero__sub">Real cars, real transformations. Every clip below is a job that rolled out of the studio flawless. (Footage drops in soon.)</p>
   </div>
 </section>
@@ -84,7 +101,7 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
 <script src="js/sequence.js"></script>
 <script src="js/work.js"></script>

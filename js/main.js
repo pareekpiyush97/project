@@ -109,7 +109,7 @@ function initServices(section) {
   const items = $$('.svc', section);
   const count = $('#svcCount');
   if (reduced) { items.forEach(el => el.classList.add('is-in', 'is-active')); return; }
-  const START = 0.05, END = 0.8, N = items.length;
+  const START = 0.0, END = 0.82, N = items.length;
   ScrollTrigger.create({
     trigger: section, start: 'top top', end: 'bottom bottom', scrub: true,
     onUpdate: self => {
@@ -163,10 +163,39 @@ function initChrome() {
   }
 }
 
+/* ---------- menu box ---------- */
+function initMenu() {
+  const menu = $('#menu'), toggle = $('#navToggle');
+  if (!menu || !toggle) return;
+  const txt = toggle.querySelector('.nav__toggle-txt');
+  const mwa = $('#menuWa');
+  if (mwa) mwa.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_TEXT)}`;
+  const set = open => {
+    document.body.classList.toggle('menu-open', open);
+    menu.classList.toggle('open', open);
+    menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (txt) txt.textContent = open ? 'Close' : 'Menu';
+  };
+  toggle.addEventListener('click', () => set(!menu.classList.contains('open')));
+  $$('.menu a').forEach(a => a.addEventListener('click', () => set(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape' && menu.classList.contains('open')) set(false); });
+}
+
+/* ---------- clean hero entrance ---------- */
+function heroIntro() {
+  if (reduced) return;
+  gsap.from('.hero__eyebrow, .hero__title, .hero__sub', {
+    y: 44, opacity: 0, duration: 1.1, ease: 'power3.out', stagger: 0.12, delay: 0.1
+  });
+  gsap.from('.hero__scroll', { opacity: 0, duration: 1, delay: 1 });
+}
+
 /* ---------- boot ---------- */
 function boot() {
   buildServices();
   initChrome();
+  initMenu();
 
   if (!reduced) gsap.registerPlugin(ScrollTrigger);
   $$('.act').forEach(initAct);
@@ -182,6 +211,7 @@ function boot() {
   }).then(() => {
     const loader = $('#loader');
     loader.classList.add('done');
+    heroIntro();
     setTimeout(() => { loader.remove(); if (!reduced) ScrollTrigger.refresh(); }, 800);
     // warm the rest in the background, in order
     ['protect', 'services', 'booking'].forEach(n => {

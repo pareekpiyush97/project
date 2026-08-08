@@ -23,11 +23,28 @@
 <header class="nav">
   <a class="nav__brand" href="index.html">APEX<b>.</b></a>
   <nav class="nav__links">
-    <a href="#services" class="hide-sm" data-cursor>Services</a>
-    <a href="work.html" class="hide-sm" data-cursor>Our Work</a>
-    <a href="#book" class="nav__cta" data-cursor>Book Now</a>
+    <a href="#book" class="nav__cta hide-sm" data-cursor>Book Now</a>
+    <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
+      <span class="nav__toggle-ico"><i></i><i></i></span>
+      <span class="nav__toggle-txt">Menu</span>
+    </button>
   </nav>
 </header>
+
+<!-- ============ MENU BOX ============ -->
+<div class="menu" id="menu" aria-hidden="true">
+  <nav class="menu__links">
+    <a href="#top" data-cursor><span>01</span> Home</a>
+    <a href="#services" data-cursor><span>02</span> Services</a>
+    <a href="work.html" data-cursor><span>03</span> Our Work</a>
+    <a href="#book" data-cursor><span>04</span> Book</a>
+  </nav>
+  <div class="menu__foot">
+    <div><h4>Studio</h4><p>Your City · Auto Studio<br />Mon–Sun · 9–8</p></div>
+    <div><h4>WhatsApp</h4><a id="menuWa" href="#" target="_blank" rel="noopener" data-cursor>Chat with us →</a></div>
+    <div><h4>Follow</h4><p>Instagram · YouTube</p></div>
+  </div>
+</div>
 
 <main>
 
@@ -41,7 +58,7 @@
           <div class="eyebrow hero__eyebrow">Detailing · Protection · Bodyshop</div>
           <h1 class="display hero__title chrome-text">
             <span class="lead">Reborn</span>
-            <span>In Gloss</span>
+            <span>In <span class="hot">Gloss</span></span>
           </h1>
           <p class="hero__sub">Where supercars go to be flawless again. Ceramic, PPF, paint &amp; body — obsessed over, panel by panel.</p>
         </div>
@@ -111,7 +128,7 @@
       <div class="act__overlay">
         <div class="book__inner wrap">
           <div class="eyebrow" style="margin-bottom:18px">Ready when you are</div>
-          <h2 class="display book__title chrome-text">Book Your<br />Slot</h2>
+          <h2 class="display book__title chrome-text">Book Your<br /><span class="hot">Slot</span></h2>
           <p class="book__sub">Tell us the car and the service. We&rsquo;ll send back a quote and a date — all on WhatsApp.</p>
           <a class="wa" id="waBtn" href="#" target="_blank" rel="noopener" data-cursor>
             <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.6.2-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.6-.8-2.6-1.4-3.7-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5 0-.2-.6-1.6-.9-2.2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.9-.6 3 .7 2 2 3.5 3.9 4.7 2.5 1.5 3 .9 3.6.9.6 0 1.7-.7 2-1.4.2-.7.2-1.2.1-1.4 0 0-.2-.1-.5-.3zM12 2A10 10 0 0 0 3.5 17.2L2 22l5-1.3A10 10 0 1 0 12 2zm0 18c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 20 12a8 8 0 0 1-8 8z"/></svg>
@@ -181,7 +198,7 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
 <script src="js/sequence.js"></script>
 <script src="js/main.js"></script>

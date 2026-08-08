@@ -111,4 +111,21 @@ function initChrome() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => { buildGrid(); initFilters(); initHero(); initChrome(); });
+/* ---- menu box ---- */
+function initMenu() {
+  const menu = $('#menu'), toggle = $('#navToggle');
+  if (!menu || !toggle) return;
+  const txt = toggle.querySelector('.nav__toggle-txt');
+  const set = open => {
+    document.body.classList.toggle('menu-open', open);
+    menu.classList.toggle('open', open);
+    menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (txt) txt.textContent = open ? 'Close' : 'Menu';
+  };
+  toggle.addEventListener('click', () => set(!menu.classList.contains('open')));
+  $$('.menu a').forEach(a => a.addEventListener('click', () => set(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape' && menu.classList.contains('open')) set(false); });
+}
+
+document.addEventListener('DOMContentLoaded', () => { buildGrid(); initFilters(); initHero(); initChrome(); initMenu(); });
