@@ -228,26 +228,33 @@ function boot() {
   initStatement($('.act--statement'));
   initServices($('.act--services'));
 
-  // Loader gates on the hero sequence
+  // Reveal the intro as soon as the FIRST hero frame is ready — the rest of
+  // the frames keep streaming in the background while the user reads the hero.
   const hero = sequences.find(s => s.seq.name === 'hero').seq;
   const fill = $('#loaderFill'), pct = $('#loaderPct');
-  hero.load(p => {
-    fill.style.width = Math.round(p * 100) + '%';
-    pct.textContent = `Loading the studio · ${Math.round(p * 100)}%`;
-  }).then(() => {
+  let revealed = false;
+  const reveal = () => {
+    if (revealed) return; revealed = true;
     const loader = $('#loader');
+    if (!loader) return;
+    fill.style.width = '100%';
     loader.classList.add('done');
     heroIntro();
-    setTimeout(() => { loader.remove(); if (!reduced) ScrollTrigger.refresh(); }, 800);
-    // warm the rest in the background, in order
+    setTimeout(() => { loader.remove(); if (!reduced) ScrollTrigger.refresh(); }, 700);
+    // warm the other acts once the intro is up
     ['protect', 'services', 'booking'].forEach(n => {
       const s = sequences.find(x => x.seq.name === n);
       if (s) s.seq.load();
     });
-  });
+  };
 
-  // safety: if hero stalls, reveal anyway after 12s
-  setTimeout(() => { const l = $('#loader'); if (l && !l.classList.contains('done')) { l.classList.add('done'); setTimeout(() => l.remove(), 800); } }, 12000);
+  hero.load(p => {
+    fill.style.width = Math.round(p * 100) + '%';
+    pct.textContent = `Loading the studio · ${Math.round(p * 100)}%`;
+    if (hero.images[0] || p > 0.05) reveal();   // first frame in → go
+  }).then(reveal);
+
+  setTimeout(reveal, 8000); // safety net
 }
 
 document.addEventListener('DOMContentLoaded', boot);
