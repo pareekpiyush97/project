@@ -497,14 +497,19 @@ body.menu-open .nav__cta{ opacity:0; pointer-events:none; }
 .act--finale{ height:170vh; }
 .act--finale__veil{
   background:
-    linear-gradient(180deg, rgba(4,5,7,.28) 0%, rgba(4,5,7,.18) 45%, rgba(4,5,7,.58) 100%),
-    radial-gradient(100% 80% at 50% 50%, rgba(4,5,7,0) 30%, rgba(4,5,7,.42) 100%);
+    /* dark band behind the headline + button so text stays crisp */
+    linear-gradient(180deg, transparent 24%, rgba(4,5,7,.62) 42%, rgba(4,5,7,.62) 62%, transparent 80%),
+    linear-gradient(180deg, rgba(4,5,7,.24) 0%, rgba(4,5,7,.14) 45%, rgba(4,5,7,.55) 100%);
 }
 .page-cta__inner{ text-align:center; }
 .finale__title{
-  font-size:clamp(2.4rem,8vw,6.5rem); text-transform:uppercase; letter-spacing:.02em;
-  margin:0 0 30px; text-shadow:0 2px 14px rgba(0,0,0,.8), 0 10px 50px rgba(0,0,0,.55);
+  font-size:clamp(2.2rem,7.5vw,6.2rem); text-transform:uppercase; letter-spacing:.02em;
+  margin:0 0 30px;
+  /* solid white — chrome gradient washes out over the bright car */
+  background:none; -webkit-text-fill-color:#fff; color:#fff;
+  text-shadow:0 2px 4px rgba(0,0,0,.9), 0 4px 26px rgba(0,0,0,.7);
 }
+.finale__title .hot{ -webkit-text-fill-color:var(--ember); color:var(--ember); }
 
 /* ============================================================
    REVEAL utility + reduced motion
