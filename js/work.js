@@ -130,12 +130,30 @@ function initMenu() {
   const menu = $('#menu'), toggle = $('#navToggle');
   if (!menu || !toggle) return;
   const txt = toggle.querySelector('.nav__toggle-txt');
+
+  // looping car backdrop (unused sequence), only while the menu is open
+  const canvas = menu.querySelector('.menu__canvas');
+  let seq = null, raf = 0, last = 0, frame = 0;
+  const loop = t => {
+    raf = requestAnimationFrame(loop);
+    if (t - last < 45) return;            // ~22fps
+    last = t;
+    if (seq && seq.loaded > 0) { frame = (frame + 1) % seq.count; seq.draw(frame); }
+  };
+  const startAnim = () => {
+    if (reduced || !canvas) return;
+    if (!seq) { seq = new Sequence(canvas, 'menu', 206); seq.load(); }
+    cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop);
+  };
+  const stopAnim = () => { cancelAnimationFrame(raf); raf = 0; };
+
   const set = open => {
     document.body.classList.toggle('menu-open', open);
     menu.classList.toggle('open', open);
     menu.setAttribute('aria-hidden', open ? 'false' : 'true');
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     if (txt) txt.textContent = open ? 'Close' : 'Menu';
+    if (open) startAnim(); else stopAnim();
   };
   toggle.addEventListener('click', () => set(!menu.classList.contains('open')));
   $$('.menu a').forEach(a => a.addEventListener('click', () => set(false)));
