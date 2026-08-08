@@ -479,8 +479,18 @@ body.menu-open .nav__cta{ opacity:0; pointer-events:none; }
 .work-card__title{ font-family:var(--font-display); font-size:1.3rem; letter-spacing:.04em; text-transform:uppercase; }
 .work-card__n{ font-size:.72rem; color:var(--muted); font-variant-numeric:tabular-nums; }
 
-.page-cta{ text-align:center; padding:var(--space-6) 0; border-top:1px solid var(--line); }
-.page-cta h3{ font-family:var(--font-display); font-size:clamp(2rem,7vw,5rem); text-transform:uppercase; letter-spacing:.02em; margin:0 0 24px; }
+/* scroll-animated finale CTA (unused chameleon sequence) */
+.act--finale{ height:170vh; }
+.act--finale__veil{
+  background:
+    linear-gradient(180deg, rgba(4,5,7,.55) 0%, rgba(4,5,7,.45) 45%, rgba(4,5,7,.8) 100%),
+    radial-gradient(90% 70% at 50% 45%, rgba(4,5,7,.2), rgba(4,5,7,.7) 100%);
+}
+.page-cta__inner{ text-align:center; }
+.finale__title{
+  font-size:clamp(2.4rem,8vw,6.5rem); text-transform:uppercase; letter-spacing:.02em;
+  margin:0 0 30px; text-shadow:0 10px 50px rgba(0,0,0,.6);
+}
 
 /* ============================================================
    REVEAL utility + reduced motion

@@ -91,6 +91,20 @@ function initHero() {
   });
 }
 
+/* ---- scroll-animated finale CTA ---- */
+function initFinale() {
+  const section = $('#finale');
+  if (!section) return;
+  const seq = new Sequence($('.act__canvas', section), section.dataset.seq, +section.dataset.count);
+  if (reduced) { seq.load().then(() => seq.seek(0.5)); return; }
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.create({ trigger: section, start: 'top bottom+=60%', once: true, onEnter: () => seq.load() });
+  ScrollTrigger.create({
+    trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.4,
+    onUpdate: self => seq.seek(self.progress)
+  });
+}
+
 /* ---- shared chrome ---- */
 function initChrome() {
   $('#year').textContent = new Date().getFullYear();
@@ -128,4 +142,4 @@ function initMenu() {
   addEventListener('keydown', e => { if (e.key === 'Escape' && menu.classList.contains('open')) set(false); });
 }
 
-document.addEventListener('DOMContentLoaded', () => { buildGrid(); initFilters(); initHero(); initChrome(); initMenu(); });
+document.addEventListener('DOMContentLoaded', () => { buildGrid(); initFilters(); initHero(); initFinale(); initChrome(); initMenu(); });
