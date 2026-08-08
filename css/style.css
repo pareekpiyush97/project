@@ -497,13 +497,13 @@ body.menu-open .nav__cta{ opacity:0; pointer-events:none; }
 .act--finale{ height:170vh; }
 .act--finale__veil{
   background:
-    linear-gradient(180deg, rgba(4,5,7,.55) 0%, rgba(4,5,7,.45) 45%, rgba(4,5,7,.8) 100%),
-    radial-gradient(90% 70% at 50% 45%, rgba(4,5,7,.2), rgba(4,5,7,.7) 100%);
+    linear-gradient(180deg, rgba(4,5,7,.28) 0%, rgba(4,5,7,.18) 45%, rgba(4,5,7,.58) 100%),
+    radial-gradient(100% 80% at 50% 50%, rgba(4,5,7,0) 30%, rgba(4,5,7,.42) 100%);
 }
 .page-cta__inner{ text-align:center; }
 .finale__title{
   font-size:clamp(2.4rem,8vw,6.5rem); text-transform:uppercase; letter-spacing:.02em;
-  margin:0 0 30px; text-shadow:0 10px 50px rgba(0,0,0,.6);
+  margin:0 0 30px; text-shadow:0 2px 14px rgba(0,0,0,.8), 0 10px 50px rgba(0,0,0,.55);
 }
 
 /* ============================================================
