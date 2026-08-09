@@ -19,9 +19,10 @@
   var MANIFEST = w.APEX_SEQ || {};
   var isMobile = matchMedia('(max-width: 768px)').matches;
   var SRC_W = isMobile ? 720 : 1280;
-  // Cap the backing store: drawing a 1280px source into a 2880px canvas is
-  // wasted fill rate. Cap keeps GPU work proportional to the source.
-  var MAX_BACKING = isMobile ? 1100 : 1700;
+  // Never allocate more backing pixels than the source image actually has —
+  // upscaling a 1280px frame into a 1700px canvas costs fill rate every frame
+  // and buys no detail.
+  var MAX_BACKING = SRC_W;
   var WARM_BACK = 4;    // frames behind the playhead to keep decoded
   var WARM_AHEAD = 14;  // frames ahead (scrolling down is the common case)
 
@@ -169,6 +170,7 @@
   };
 
   Sequence.prototype.resize = function () {
+    if (this.asleep) return;                 // stay released until woken
     var r = this.canvas.getBoundingClientRect();
     if (!r.width || !r.height) return;
     var dpr = Math.min(w.devicePixelRatio || 1, 2);
@@ -181,6 +183,22 @@
     this.ctx.fillStyle = '#0a0a0c';
     this.ctx.fillRect(0, 0, nw, nh);
     this._painted = false;
+    if (this.frame >= 0) this.draw(this.frame);
+  };
+
+  /** Release the backing store while the section is far off screen. Five
+   *  full-viewport canvases at dpr 2 is ~30MB of GPU texture held for content
+   *  nobody can see; on phones that pressure shows up as scroll jank. */
+  Sequence.prototype.sleep = function () {
+    if (this.asleep) return;
+    this.asleep = true;
+    this.canvas.width = this.canvas.height = 1;
+    this._painted = false;
+  };
+  Sequence.prototype.wake = function () {
+    if (!this.asleep) return;
+    this.asleep = false;
+    this.resize();
     if (this.frame >= 0) this.draw(this.frame);
   };
 

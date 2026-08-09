@@ -29,7 +29,7 @@
   var lenis = null;
   function initScroll() {
     if (reduced || typeof Lenis === 'undefined') return;
-    lenis = new Lenis({ duration: 1.05, smoothWheel: true, touchMultiplier: 1.6 });
+    lenis = new Lenis({ lerp: 0.11, smoothWheel: true, wheelMultiplier: 1.05, touchMultiplier: 1.8 });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
     gsap.ticker.lagSmoothing(0);

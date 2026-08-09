@@ -31,7 +31,9 @@
   var lenis = null;
   function initScroll() {
     if (reduced || typeof Lenis === 'undefined') return;
-    lenis = new Lenis({ duration: 1.05, smoothWheel: true, touchMultiplier: 1.6 });
+    // lerp beats duration here: duration:1.05 keeps gliding after the wheel
+    // stops, which reads as lag rather than smoothness.
+    lenis = new Lenis({ lerp: 0.11, smoothWheel: true, wheelMultiplier: 1.05, touchMultiplier: 1.8 });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
     gsap.ticker.lagSmoothing(0);
@@ -65,6 +67,11 @@
       ScrollTrigger.create({
         trigger: section, start: 'top bottom+=150%', once: true,
         onEnter: function () { seq.priority = 50; seq.load(); }
+      });
+      // hold the backing store only while the section is anywhere near view
+      ScrollTrigger.create({
+        trigger: section, start: 'top bottom+=100%', end: 'bottom top-=100%',
+        onToggle: function (self) { self.isActive ? seq.wake() : seq.sleep(); }
       });
       // scrub across the whole section
       ScrollTrigger.create({

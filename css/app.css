@@ -169,7 +169,10 @@ html.lenis,html.lenis body{height:auto;}
 .pl__meta{margin-top:14px;display:flex;justify-content:space-between;}
 
 .grain{
-  position:fixed;inset:-60%;z-index:var(--z-hud);pointer-events:none;opacity:.045;
+  /* the drift below is only ±3%, so -12% covers it. At -60% this layer was
+     220%x220% of the viewport — ~4.8x the screen area held as a live
+     composited texture, which is real GPU cost for a noise overlay. */
+  position:fixed;inset:-12%;z-index:var(--z-hud);pointer-events:none;opacity:.045;
   will-change:transform;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation:grain 5s steps(5) infinite;
@@ -225,9 +228,15 @@ html.lenis,html.lenis body{height:auto;}
   position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:var(--z-nav);
   display:flex;align-items:center;justify-content:space-between;
   padding-inline:var(--pad);
-  transition:transform .5s var(--e-out),background .4s,backdrop-filter .4s;
+  transition:transform .5s var(--e-out),background .4s;
 }
-.nav.is-solid{background:rgba(8,8,10,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
+/* A blurred backdrop on a fixed bar re-blurs the moving footage behind it on
+   every scrolled frame — the single most expensive thing on the page. A solid
+   gradient reads the same at this opacity and costs nothing. */
+.nav.is-solid{
+  background:linear-gradient(180deg,rgba(8,8,10,.94),rgba(8,8,10,.78));
+  border-bottom:1px solid var(--line);
+}
 .nav.is-hidden{transform:translateY(-102%);}
 .brand{
   font-variation-settings:"wdth" 118,"wght" 800;text-transform:uppercase;
