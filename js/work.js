@@ -98,7 +98,10 @@ function initFinale() {
   const seq = new Sequence($('.act__canvas', section), section.dataset.seq, +section.dataset.count);
   if (reduced) { seq.load().then(() => seq.seek(0.5)); return; }
   gsap.registerPlugin(ScrollTrigger);
-  ScrollTrigger.create({ trigger: section, start: 'top bottom+=60%', once: true, onEnter: () => seq.load() });
+  // start decoding well before it's in view so there's no cold-scroll hitch
+  ScrollTrigger.create({ trigger: section, start: 'top bottom+=150%', once: true, onEnter: () => seq.load() });
+  // also warm it in the background shortly after the page settles
+  setTimeout(() => seq.load(), 2500);
   ScrollTrigger.create({
     trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.4,
     onUpdate: self => seq.seek(self.progress)
@@ -147,7 +150,7 @@ function initMenu() {
   };
   const startAnim = () => {
     if (reduced || !canvas) return;
-    if (!seq) { seq = new Sequence(canvas, 'menu', 206); seq.load(); }
+    if (!seq) { seq = new Sequence(canvas, 'menu', 264); seq.load(); }
     cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop);
   };
   const stopAnim = () => { cancelAnimationFrame(raf); raf = 0; };

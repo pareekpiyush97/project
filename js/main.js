@@ -187,7 +187,7 @@ function initMenu() {
   };
   const startAnim = () => {
     if (reduced || !canvas) return;
-    if (!seq) { seq = new Sequence(canvas, 'menu', 206); seq.load(); }
+    if (!seq) { seq = new Sequence(canvas, 'menu', 264); seq.load(); }
     cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop);
   };
   const stopAnim = () => { cancelAnimationFrame(raf); raf = 0; };
