@@ -49,6 +49,18 @@
 
       if (reduced) { seq.load(null, function () { seq.draw(Math.floor(seq.count / 2)); }); return; }
 
+      // .process is pinned by GSAP, which shifts its start/end. A separate
+      // scrub trigger on the same element resolves against the *unpinned*
+      // geometry and falls out of sync, so the footage freezes partway
+      // through. initProcess() drives that one from the pin itself.
+      if (section.classList.contains('process')) {
+        ScrollTrigger.create({
+          trigger: section, start: 'top bottom+=150%', once: true,
+          onEnter: function () { seq.priority = 50; seq.load(); }
+        });
+        return;
+      }
+
       // start fetching once the section is within ~1.5 screens
       ScrollTrigger.create({
         trigger: section, start: 'top bottom+=150%', once: true,
@@ -155,6 +167,9 @@
         // Reveal each card from the pin's own progress. Deriving it here is far
         // sturdier than a second ScrollTrigger bound via containerAnimation.
         onUpdate: function (self) {
+          // the footage scrubs off the *pin's* progress, so it stays locked to
+          // the horizontal track for the whole pinned range
+          if (seqs.process) seqs.process.seek(self.progress);
           var x = distance() * self.progress;
           for (var i = 0; i < steps.length; i++) {
             if (steps[i].offsetLeft - x < w.innerWidth * 0.82) steps[i].classList.add('is-in');
@@ -202,11 +217,19 @@
     var links = $$('.menu__list a');
     var seq = null, raf = 0, last = 0, frame = 0;
 
+    // Plays through exactly once per opening, then holds the last frame — a
+    // looping backdrop reads as a stuck GIF behind the nav. Driven by elapsed
+    // time rather than tick count so it always takes MENU_PLAY_MS regardless
+    // of the display's refresh rate.
+    var MENU_PLAY_MS = 2200;
     function loop(t) {
+      if (!last) last = t;
+      if (!seq || seq.loaded < 2) { raf = requestAnimationFrame(loop); return; }
+      var p = Math.min(1, (t - last) / MENU_PLAY_MS);
+      var f = Math.round(p * (seq.count - 1));
+      if (f !== frame) { frame = f; seq.draw(frame); }
+      if (p >= 1) { raf = 0; return; }        // done — hold on the last frame
       raf = requestAnimationFrame(loop);
-      if (t - last < 46) return;                 // ~21fps is plenty for a backdrop
-      last = t;
-      if (seq && seq.loaded > 1) { frame = (frame + 1) % seq.count; seq.draw(frame); }
     }
     function set(open) {
       document.body.classList.toggle('menu-open', open);
@@ -220,8 +243,12 @@
       // link reveal is handled by CSS off .is-open — nothing to tween here
       if (open) {
         if (!reduced) {
-          if (!seq) { seq = new Sequence($('.menu__canvas', menu), 'menu', { priority: 40 }); seq.load(); }
-          cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop);
+          // top priority: the menu is what the user is looking at right now, so
+          // its frames must jump ahead of the page sequences still queued
+          if (!seq) { seq = new Sequence($('.menu__canvas', menu), 'menu', { priority: 200 }); seq.load(); }
+          cancelAnimationFrame(raf);
+          last = 0; frame = 0;              // replay from the first frame
+          raf = requestAnimationFrame(loop);
         }
       } else {
         cancelAnimationFrame(raf); raf = 0;

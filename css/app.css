@@ -429,7 +429,11 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
 }
 .step{
   flex:none;width:min(78vw,420px);margin-right:clamp(18px,3vw,44px);
-  border:1px solid var(--line);background:rgba(19,19,23,.62);backdrop-filter:blur(6px);
+  border:1px solid var(--line);
+  /* No backdrop-filter here: inside a transformed track it makes mobile GPUs
+     blit the layer twice, which shows up as ghosted/doubled text. A solid
+     panel is cheaper and renders identically everywhere. */
+  background:rgba(14,14,17,.9);
   padding:clamp(20px,2.4vw,34px);border-radius:3px;position:relative;overflow:hidden;
 }
 .step::after{

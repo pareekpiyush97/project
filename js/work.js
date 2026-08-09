@@ -150,7 +150,7 @@
     // hero: parallax scrub as it leaves
     var heroCanvas = $('.whero .layer--canvas');
     if (heroCanvas) {
-      var hero = new Sequence(heroCanvas, 'work', { priority: 100 });
+      var hero = new Sequence(heroCanvas, 'proof', { priority: 100 });
       hero.load();
       if (!reduced) {
         ScrollTrigger.create({
@@ -178,11 +178,16 @@
     var menu = $('#menu'), burger = $('#burger'), txt = $('#burgerTxt');
     var links = $$('.menu__list a');
     var seq = null, raf = 0, last = 0, frame = 0;
+    // plays through exactly once per opening, then holds the last frame
+    var MENU_PLAY_MS = 2200;
     function loop(t) {
+      if (!last) last = t;
+      if (!seq || seq.loaded < 2) { raf = requestAnimationFrame(loop); return; }
+      var p = Math.min(1, (t - last) / MENU_PLAY_MS);
+      var f = Math.round(p * (seq.count - 1));
+      if (f !== frame) { frame = f; seq.draw(frame); }
+      if (p >= 1) { raf = 0; return; }
       raf = requestAnimationFrame(loop);
-      if (t - last < 46) return;
-      last = t;
-      if (seq && seq.loaded > 1) { frame = (frame + 1) % seq.count; seq.draw(frame); }
     }
     function set(open) {
       document.body.classList.toggle('menu-open', open);
@@ -195,8 +200,11 @@
       // link reveal is handled by CSS off .is-open — nothing to tween here
       if (open) {
         if (!reduced) {
-          if (!seq) { seq = new Sequence($('.menu__canvas', menu), 'menu', { priority: 40 }); seq.load(); }
-          cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop);
+          // top priority: the menu is on screen right now
+          if (!seq) { seq = new Sequence($('.menu__canvas', menu), 'menu', { priority: 200 }); seq.load(); }
+          cancelAnimationFrame(raf);
+          last = 0; frame = 0;              // replay from the first frame
+          raf = requestAnimationFrame(loop);
         }
       } else { cancelAnimationFrame(raf); raf = 0; }
     }
