@@ -1,171 +1,254 @@
-/* ============================================================
-   work.js — "Our Work" page
-   Cinematic sequence hero + a grid of work-clip placeholders.
-   Drop assets/videos/work-01.mp4 ... to fill the cards.
-   ============================================================ */
+/* ============================================================================
+   work.js — "Our Work" gallery
+   Drop assets/videos/work-01.mp4 … to fill the cards; until then each slot
+   shows a placeholder with the exact filename it is waiting for.
+   ========================================================================== */
+(function (w) {
+  'use strict';
 
-if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-window.scrollTo(0, 0);
+  var WHATSAPP = '910000000000';
+  var WA_TEXT  = "Hi APEX — I saw your work and I'd like a quote.\nCar: \nService: ";
 
-const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const $  = (s, r = document) => r.querySelector(s);
-const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  /* id, category, title, service label, grid size */
+  var WORK = [
+    ['01', 'ppf',       'Matte Black GT',    'Full-front PPF', 'wide'],
+    ['02', 'ceramic',   'Chameleon 911',     'Ceramic + wheels', ''],
+    ['03', 'detailing', 'Concours Revival',  'Paint correction', 'tall'],
+    ['04', 'bodyshop',  'Panel Respray',     'Bodyshop', ''],
+    ['05', 'ppf',       'Track Build',       'Coloured PPF', ''],
+    ['06', 'ceramic',   'Daily Driver',      '9-year coating', 'wide'],
+    ['07', 'detailing', 'Interior Reset',    'Full detail', ''],
+    ['08', 'bodyshop',  'Widebody Fit',      'Bodykit', ''],
+    ['09', 'ppf',       'Showroom Fresh',    'PPF + sun film', '']
+  ];
 
-const WORK = [
-  { n: '01', cat: 'ceramic',  tag: 'Ceramic',      title: 'Matte Black GT' },
-  { n: '02', cat: 'ppf',      tag: 'PPF',          title: 'Track Build' },
-  { n: '03', cat: 'detailing',tag: 'Detailing',    title: 'Concours Revival' },
-  { n: '04', cat: 'bodyshop', tag: 'Bodyshop',     title: 'Panel Respray' },
-  { n: '05', cat: 'ppf',      tag: 'Coloured PPF', title: 'Chrome Shift' },
-  { n: '06', cat: 'ceramic',  tag: 'Ceramic',      title: 'Daily Driver' },
-  { n: '07', cat: 'detailing',tag: 'Detailing',    title: 'Interior Reset' },
-  { n: '08', cat: 'ppf',      tag: 'PPF',          title: 'Full Front' },
-  { n: '09', cat: 'bodyshop', tag: 'Bodykit',      title: 'Widebody' },
-];
-
-/* ---- build the grid ---- */
-function buildGrid() {
-  const grid = $('#workGrid');
-  grid.innerHTML = WORK.map(w => `
-    <article class="work-card" data-cat="${w.cat}" data-n="${w.n}" data-cursor>
-      <div class="work-card__ph">
-        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
-      </div>
-      <video muted loop playsinline preload="none"></video>
-      <div class="work-card__meta">
-        <div>
-          <div class="work-card__tag">${w.tag}</div>
-          <div class="work-card__title">${w.title}</div>
-        </div>
-        <div class="work-card__n">${w.n}</div>
-      </div>
-    </article>`).join('');
-
-  // try to load each clip; if present it autoplays on view, else stays a placeholder
-  $$('.work-card').forEach(card => {
-    const v = $('video', card), ph = $('.work-card__ph', card);
-    v.onloadeddata = () => { ph.style.display = 'none'; };
-    v.onerror = () => { v.style.display = 'none'; };
-    v.src = `assets/videos/work-${card.dataset.n}.mp4`;
-    v.load();
-    // click a loaded clip -> unmute + native controls
-    card.addEventListener('click', () => {
-      if (v.style.display === 'none') return;
-      v.muted = !v.muted; v.controls = !v.muted;
-    });
-  });
-
-  // play only what's on screen (perf)
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(es => es.forEach(e => {
-      const v = $('video', e.target);
-      if (e.isIntersecting) v.play?.().catch(() => {}); else v.pause?.();
-    }), { threshold: 0.35 });
-    $$('.work-card').forEach(c => io.observe(c));
-  }
-}
-
-/* ---- filter chips ---- */
-function initFilters() {
-  $$('#workFilters .chip').forEach(chip => chip.addEventListener('click', () => {
-    $$('#workFilters .chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    const cat = chip.dataset.cat;
-    $$('.work-card').forEach(card => {
-      const show = cat === 'all' || card.dataset.cat === cat;
-      card.style.display = show ? '' : 'none';
-    });
-  }));
-}
-
-/* ---- cinematic sequence hero ---- */
-function initHero() {
-  const canvas = $('.work-hero__canvas');
-  const seq = new Sequence(canvas, 'work', 171);
-  seq.load(p => { if (p > 0.02 && seq.current < 0) seq.seek(0); });
-  if (reduced) { seq.load().then(() => seq.seek(0.4)); return; }
+  var M = w.APEX.motion, $ = M.$, $$ = M.$$, reduced = M.reduced;
   gsap.registerPlugin(ScrollTrigger);
-  ScrollTrigger.create({
-    trigger: '#workHero', start: 'top top', end: 'bottom top', scrub: 0.4,
-    onUpdate: self => seq.seek(self.progress)
-  });
-}
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
-/* ---- scroll-animated finale CTA ---- */
-function initFinale() {
-  const section = $('#finale');
-  if (!section) return;
-  const seq = new Sequence($('.act__canvas', section), section.dataset.seq, +section.dataset.count);
-  if (reduced) { seq.load().then(() => seq.seek(0.5)); return; }
-  gsap.registerPlugin(ScrollTrigger);
-  // start decoding well before it's in view so there's no cold-scroll hitch
-  ScrollTrigger.create({ trigger: section, start: 'top bottom+=150%', once: true, onEnter: () => seq.load() });
-  // also warm it in the background shortly after the page settles
-  setTimeout(() => seq.load(), 2500);
-  ScrollTrigger.create({
-    trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.4,
-    onUpdate: self => seq.seek(self.progress)
-  });
-}
-
-/* ---- shared chrome ---- */
-function initChrome() {
-  $('#year').textContent = new Date().getFullYear();
-  const bar = $('#scrollProgress');
-  let ticking = false;
-  const onScroll = () => {
-    if (ticking) return; ticking = true;
-    requestAnimationFrame(() => {
-      const h = document.documentElement;
-      bar.style.transform = `scaleX(${(h.scrollTop / (h.scrollHeight - h.clientHeight)) || 0})`;
-      ticking = false;
-    });
-  };
-  addEventListener('scroll', onScroll, { passive: true }); onScroll();
-
-  const cur = $('#cursor');
-  if (cur && matchMedia('(hover:hover)').matches) {
-    let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y;
-    addEventListener('mousemove', e => { x = e.clientX; y = e.clientY; });
-    const tick = () => { cx += (x - cx) * .18; cy += (y - cy) * .18; cur.style.transform = `translate(${cx}px,${cy}px)`; requestAnimationFrame(tick); };
-    tick();
-    document.addEventListener('mouseover', e => cur.classList.toggle('grow', !!e.target.closest('[data-cursor],a,button,.work-card,.chip')));
+  var lenis = null;
+  function initScroll() {
+    if (reduced || typeof Lenis === 'undefined') return;
+    lenis = new Lenis({ duration: 1.05, smoothWheel: true, touchMultiplier: 1.6 });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+    gsap.ticker.lagSmoothing(0);
   }
-}
 
-/* ---- menu box ---- */
-function initMenu() {
-  const menu = $('#menu'), toggle = $('#navToggle');
-  if (!menu || !toggle) return;
-  const txt = toggle.querySelector('.nav__toggle-txt');
+  /* ---- gallery --------------------------------------------------------- */
+  function buildGrid() {
+    var grid = $('#grid');
+    grid.innerHTML = WORK.map(function (it) {
+      var mod = it[4] ? ' card--' + it[4] : '';
+      return '<article class="card' + mod + '" data-cat="' + it[1] + '" data-n="' + it[0] + '" ' +
+        'tabindex="0" role="button" aria-label="' + it[2] + ' — play clip" data-cursor="Play">' +
+        '<div class="card__ph"><svg viewBox="0 0 24 24" aria-hidden="true">' +
+        '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg></div>' +
+        '<video muted loop playsinline preload="none"></video>' +
+        '<div class="card__meta"><div><div class="card__c">' + it[3] + '</div>' +
+        '<div class="card__t">' + it[2] + '</div></div>' +
+        '<div class="idx">' + it[0] + '</div></div></article>';
+    }).join('');
 
-  // looping car backdrop (unused sequence), only while the menu is open
-  const canvas = menu.querySelector('.menu__canvas');
-  let seq = null, raf = 0, last = 0, frame = 0;
-  const loop = t => {
-    raf = requestAnimationFrame(loop);
-    if (t - last < 45) return;            // ~22fps
-    last = t;
-    if (seq && seq.loaded > 0) { frame = (frame + seq.step) % seq.count; seq.draw(frame); }
-  };
-  const startAnim = () => {
-    if (reduced || !canvas) return;
-    if (!seq) { seq = new Sequence(canvas, 'menu', 240); seq.load(); }
-    cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop);
-  };
-  const stopAnim = () => { cancelAnimationFrame(raf); raf = 0; };
+    var cards = $$('.card', grid);
+    cards.forEach(function (card) {
+      var v = $('video', card), ph = $('.card__ph', card);
+      var url = 'assets/videos/work-' + card.dataset.n + '.mp4';
+      M.withVideo(url, function () {
+        v.onloadeddata = function () { ph.style.display = 'none'; };
+        v.src = url;
+        v.load();
+      });
 
-  const set = open => {
-    document.body.classList.toggle('menu-open', open);
-    menu.classList.toggle('open', open);
-    menu.setAttribute('aria-hidden', open ? 'false' : 'true');
-    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    if (txt) txt.textContent = open ? 'Close' : 'Menu';
-    if (open) startAnim(); else stopAnim();
-  };
-  toggle.addEventListener('click', () => set(!menu.classList.contains('open')));
-  $$('.menu a').forEach(a => a.addEventListener('click', () => set(false)));
-  addEventListener('keydown', e => { if (e.key === 'Escape' && menu.classList.contains('open')) set(false); });
-}
+      function open() {
+        var it = WORK.filter(function (x) { return x[0] === card.dataset.n; })[0];
+        openModal(it);
+      }
+      card.addEventListener('click', open);
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+      });
+    });
 
-document.addEventListener('DOMContentLoaded', () => { buildGrid(); initFilters(); initHero(); initFinale(); initChrome(); initMenu(); });
+    // play only what is on screen
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          var v = $('video', e.target);
+          if (!v) return;
+          if (e.isIntersecting) { var p = v.play(); if (p) p.catch(function () {}); }
+          else v.pause();
+        });
+      }, { threshold: 0.3 });
+      cards.forEach(function (c) { io.observe(c); });
+    }
+
+    // staggered entrance
+    if (!reduced) {
+      gsap.from(cards, {
+        y: 46, opacity: 0, duration: 1, ease: 'expo.out', stagger: 0.06,
+        scrollTrigger: { trigger: grid, start: 'top 85%', once: true }
+      });
+    }
+  }
+
+  function initFilters() {
+    var chips = $$('#filters .chip');
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        chips.forEach(function (c) { c.classList.remove('is-on'); });
+        chip.classList.add('is-on');
+        var cat = chip.dataset.cat;
+        $$('.card').forEach(function (card) {
+          var show = cat === 'all' || card.dataset.cat === cat;
+          if (show) {
+            card.style.display = '';
+            if (!reduced) gsap.fromTo(card, { opacity: 0, y: 16 },
+              { opacity: 1, y: 0, duration: .5, ease: 'expo.out' });
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        ScrollTrigger.refresh();
+      });
+    });
+  }
+
+  /* ---- modal ----------------------------------------------------------- */
+  var modal = $('#modal'), lastFocus = null;
+  function openModal(it) {
+    $('#modalT').textContent = it[2];
+    $('#modalBody').textContent = it[3] + ' — full clip coming soon.';
+    $('#modalPath').textContent = 'assets/videos/work-' + it[0] + '.mp4';
+    var v = $('#modalVid'), ph = $('#modalPh');
+    var url = 'assets/videos/work-' + it[0] + '.mp4';
+    v.style.display = 'none'; ph.style.display = '';
+    M.withVideo(url, function () {
+      v.onloadeddata = function () { v.style.display = 'block'; ph.style.display = 'none'; v.play().catch(function () {}); };
+      v.src = url; v.load();
+    });
+    lastFocus = document.activeElement;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('is-locked');
+    if (lenis) lenis.stop();
+    $('#modalX').focus();
+  }
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    var v = $('#modalVid'); v.pause(); v.removeAttribute('src'); v.load();
+    document.body.classList.remove('is-locked');
+    if (lenis) lenis.start();
+    if (lastFocus) lastFocus.focus();
+  }
+  $('#modalX').addEventListener('click', closeModal);
+  modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+
+  /* ---- sequences ------------------------------------------------------- */
+  function initSequences() {
+    // hero: parallax scrub as it leaves
+    var heroCanvas = $('.whero .layer--canvas');
+    if (heroCanvas) {
+      var hero = new Sequence(heroCanvas, 'work', { priority: 100 });
+      hero.load();
+      if (!reduced) {
+        ScrollTrigger.create({
+          trigger: '.whero', start: 'top top', end: 'bottom top', scrub: 0.5,
+          onUpdate: function (self) { hero.seek(self.progress); }
+        });
+      }
+    }
+    // end CTA
+    var cta = $('#cta');
+    if (cta) {
+      var seq = new Sequence($('.layer--canvas', cta), cta.dataset.seq, { priority: 20 });
+      if (reduced) { seq.load(null, function () { seq.draw(seq.count >> 1); }); }
+      else {
+        ScrollTrigger.create({ trigger: cta, start: 'top bottom+=150%', once: true,
+          onEnter: function () { seq.priority = 50; seq.load(); } });
+        ScrollTrigger.create({ trigger: cta, start: 'top top', end: 'bottom bottom', scrub: true,
+          onUpdate: function (self) { seq.seek(self.progress); } });
+      }
+    }
+  }
+
+  /* ---- menu (shared behaviour with the home page) ---------------------- */
+  function initMenu() {
+    var menu = $('#menu'), burger = $('#burger'), txt = $('#burgerTxt');
+    var links = $$('.menu__list a');
+    var seq = null, raf = 0, last = 0, frame = 0;
+    function loop(t) {
+      raf = requestAnimationFrame(loop);
+      if (t - last < 46) return;
+      last = t;
+      if (seq && seq.loaded > 1) { frame = (frame + 1) % seq.count; seq.draw(frame); }
+    }
+    function set(open) {
+      document.body.classList.toggle('menu-open', open);
+      document.body.classList.toggle('is-locked', open);
+      menu.classList.toggle('is-open', open);
+      menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (txt) txt.textContent = open ? 'Close' : 'Menu';
+      if (lenis) open ? lenis.stop() : lenis.start();
+      // link reveal is handled by CSS off .is-open — nothing to tween here
+      if (open) {
+        if (!reduced) {
+          if (!seq) { seq = new Sequence($('.menu__canvas', menu), 'menu', { priority: 40 }); seq.load(); }
+          cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop);
+        }
+      } else { cancelAnimationFrame(raf); raf = 0; }
+    }
+    burger.addEventListener('click', function () { set(!menu.classList.contains('is-open')); });
+    links.forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
+    w.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (modal.classList.contains('is-open')) closeModal();
+      else if (menu.classList.contains('is-open')) set(false);
+    });
+  }
+
+  function initChrome() {
+    $('#yr').textContent = new Date().getFullYear();
+    var href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(WA_TEXT);
+    ['#waBtn', '#menuWa', '#footWa'].forEach(function (s) { var el = $(s); if (el) el.href = href; });
+
+    var bar = $('#progress'), navUpdate = M.initNav($('#nav')), ticking = false;
+    function onScroll() {
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(function () {
+        var d = document.documentElement;
+        bar.style.transform = 'scaleX(' + (d.scrollTop / Math.max(1, d.scrollHeight - d.clientHeight)) + ')';
+        if (navUpdate) navUpdate(d.scrollTop);
+        ticking = false;
+      });
+    }
+    w.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+    $$('a[data-transition]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        if (reduced || e.metaKey || e.ctrlKey) return;
+        e.preventDefault();
+        gsap.to('#curtain', { scaleY: 1, duration: .55, ease: 'power3.inOut',
+          onComplete: function () { location.href = a.href; } });
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initScroll();
+    buildGrid();
+    initFilters();
+    initSequences();
+    initMenu();
+    initChrome();
+    M.initCursor();
+    M.initReveals();
+    M.initFades();
+    M.initMagnetic();
+    // page arrives from a curtain wipe — lift it
+    gsap.set('#curtain', { scaleY: 1, transformOrigin: '50% 0%' });
+    gsap.to('#curtain', { scaleY: 0, duration: .7, ease: 'expo.inOut', delay: .05 });
+  });
+})(window);

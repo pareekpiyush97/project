@@ -1,0 +1,13 @@
+{
+  "name": "apex-auto-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cinematic scroll-sequence site for APEX Auto Studio",
+  "scripts": {
+    "dev": "node server.js",
+    "build:seq": "node tools/build-sequences.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.0"
+  }
+}

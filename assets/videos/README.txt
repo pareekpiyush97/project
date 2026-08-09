@@ -1,12 +1,11 @@
-Drop your work clips here as .mp4 to make the service pop-up boxes play.
-Filenames must match the service slug exactly:
+Drop your clips here.
 
-  car-wash.mp4        ceramic-coating.mp4   matte-ppf.mp4
-  bodyshop.mp4        bodykit.mp4           sunfilm.mp4
-  detailing.mp4       coloured-ppf.mp4      ppf.mp4
-  coating.mp4
+Service clips (home page modal):
+  ppf.mp4, coloured-ppf.mp4, matte-ppf.mp4, ceramic-coating.mp4, coating.mp4,
+  detailing.mp4, car-wash.mp4, bodyshop.mp4, bodykit.mp4, sunfilm.mp4
 
-For the "Our Work" page grid, drop clips as:
-  work-01.mp4 ... work-09.mp4  (see work.html)
+Work clips (Our Work grid):
+  work-01.mp4 ... work-09.mp4
 
-Until a file exists, the box shows a "Footage coming soon" placeholder.
+A slot shows a placeholder until its file exists, then upgrades automatically.
+MP4 (H.264 + AAC) is the safest format. Keep each clip under ~10MB.

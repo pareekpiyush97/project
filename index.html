@@ -1,208 +1,268 @@
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>APEX AUTO STUDIO — Detailing · Paint Protection · Bodyshop</title>
-<meta name="description" content="APEX Auto Studio — ceramic coating, PPF, detailing, bodyshop and more. Cinematic car care." />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>APEX Auto Studio — Paint Protection, Ceramic &amp; Detailing</title>
+<meta name="description" content="APEX Auto Studio: paint protection film, ceramic coating, detailing, bodyshop and bodykit work. Booked in minutes on WhatsApp." />
+<meta name="theme-color" content="#08080a" />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="APEX Auto Studio — Paint Protection, Ceramic &amp; Detailing" />
+<meta property="og:description" content="Paint protection film, ceramic coating, detailing and bodyshop. Book on WhatsApp." />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css" />
-<link rel="preload" as="image" href="assets/seq/hero/ezgif-frame-001.jpg" fetchpriority="high" />
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-var.woff2" crossorigin />
+<link rel="preload" as="image" href="assets/seq/hero/1280/f0001.webp" fetchpriority="high" />
+<link rel="stylesheet" href="css/app.css" />
 
-<!-- ============ LOADER ============ -->
-<div id="loader">
-  <div class="loader__mark">APEX<span>.</span></div>
-  <div class="loader__bar"><div class="loader__fill" id="loaderFill"></div></div>
-  <div class="loader__pct" id="loaderPct">Loading the studio · 0%</div>
-</div>
+<a class="skip" href="#main">Skip to content</a>
 
-<!-- ============ FIXED CHROME ============ -->
-<div class="grain" aria-hidden="true"></div>
-<div class="cursor" id="cursor" aria-hidden="true"></div>
-<div class="scroll-progress" id="scrollProgress"></div>
-
-<header class="nav">
-  <a class="nav__brand" href="index.html">APEX<b>.</b></a>
-  <nav class="nav__links">
-    <a href="#book" class="nav__cta hide-sm" data-cursor>Book Now</a>
-    <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
-      <span class="nav__toggle-ico"><i></i><i></i></span>
-      <span class="nav__toggle-txt">Menu</span>
-    </button>
-  </nav>
-</header>
-
-<!-- ============ MENU BOX ============ -->
-<div class="menu" id="menu" aria-hidden="true">
-  <canvas class="menu__canvas" aria-hidden="true"></canvas>
-  <div class="menu__scrim" aria-hidden="true"></div>
-  <nav class="menu__links">
-    <a href="#top" data-cursor><span>01</span> Home</a>
-    <a href="#services" data-cursor><span>02</span> Services</a>
-    <a href="work.html" data-cursor><span>03</span> Our Work</a>
-    <a href="#book" data-cursor><span>04</span> Book</a>
-  </nav>
-  <div class="menu__foot">
-    <div><h4>Studio</h4><p>Your City · Auto Studio<br />Mon–Sun · 9–8</p></div>
-    <div><h4>WhatsApp</h4><a id="menuWa" href="#" target="_blank" rel="noopener" data-cursor>Chat with us →</a></div>
-    <div><h4>Follow</h4><p>Instagram · YouTube</p></div>
+<!-- ══ preloader ══════════════════════════════════════════════════════════ -->
+<div id="preload">
+  <div class="pl__inner">
+    <div class="pl__row">
+      <div class="pl__mark">Apex<i>.</i></div>
+      <div class="pl__pct"><span id="plNum">0</span><small>%</small></div>
+    </div>
+    <div class="pl__bar"><div class="pl__fill" id="plFill"></div></div>
+    <div class="pl__meta">
+      <span class="label">Auto Studio</span>
+      <span class="label" id="plMsg">Warming the booth</span>
+    </div>
   </div>
 </div>
 
-<main>
+<div class="rules" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="curtain" id="curtain" aria-hidden="true"></div>
 
-  <!-- ============ ACT 1 · HERO ============ -->
-  <section class="act act--hero" id="top" data-seq="hero" data-count="240">
-    <div class="act__sticky">
-      <canvas class="act__canvas"></canvas>
-      <div class="act__veil"></div>
-      <div class="act__overlay">
-        <div class="hero__inner wrap">
-          <div class="eyebrow hero__eyebrow">Detailing · Protection · Bodyshop</div>
-          <h1 class="display hero__title chrome-text">
-            <span class="lead">Reborn</span>
-            <span>In <span class="hot">Gloss</span></span>
+<!-- ══ nav ════════════════════════════════════════════════════════════════ -->
+<header class="nav" id="nav">
+  <a class="brand" href="index.html" aria-label="APEX Auto Studio, home">Apex<i></i></a>
+  <div class="nav__right">
+    <a class="nav__link" href="work.html" data-transition>Our Work</a>
+    <a class="btn" href="#book" data-magnetic data-cursor="Book"><span class="btn__dot"></span>Book</a>
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
+      <span class="burger__lines"><span></span><span></span></span>
+      <span class="burger__txt" id="burgerTxt">Menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- ══ menu ═══════════════════════════════════════════════════════════════ -->
+<div class="menu" id="menu" aria-hidden="true">
+  <canvas class="menu__canvas" aria-hidden="true"></canvas>
+  <div class="menu__scrim" aria-hidden="true"></div>
+  <div class="menu__inner">
+    <ul class="menu__list">
+      <li><a href="#top" data-cursor="Go"><em>01</em>Home</a></li>
+      <li><a href="#services" data-cursor="Go"><em>02</em>Services</a></li>
+      <li><a href="work.html" data-transition data-cursor="View"><em>03</em>Our Work</a></li>
+      <li><a href="#book" data-cursor="Go"><em>04</em>Book</a></li>
+    </ul>
+  </div>
+  <div class="menu__foot">
+    <div><h4 class="label">Studio</h4><p>Your City · Auto Studio</p></div>
+    <div><h4 class="label">Hours</h4><p>Mon–Sun · 09:00–20:00</p></div>
+    <div><h4 class="label">WhatsApp</h4><p><a id="menuWa" href="#" target="_blank" rel="noopener">Start a chat →</a></p></div>
+    <div><h4 class="label">Social</h4><p>Instagram · YouTube</p></div>
+  </div>
+</div>
+
+<!-- ══ chapter HUD ════════════════════════════════════════════════════════ -->
+<nav class="hud" id="hud" aria-label="Chapters">
+  <a href="#top"><i>Home</i><b></b></a>
+  <a href="#craft"><i>Craft</i><b></b></a>
+  <a href="#services"><i>Services</i><b></b></a>
+  <a href="#process"><i>Process</i><b></b></a>
+  <a href="#book"><i>Book</i><b></b></a>
+</nav>
+
+<main id="main">
+
+  <!-- ── 01 · hero ─────────────────────────────────────────────────────── -->
+  <section class="section pin hero" id="top" data-seq="hero" data-chapter="0">
+    <div class="stage">
+      <canvas class="layer layer--canvas" aria-label="Supercars on turntables in the APEX showroom"></canvas>
+      <div class="layer layer--scrim scrim-vignette"></div>
+      <div class="layer layer--scrim scrim-bottom"></div>
+      <div class="layer layer--content hero__content">
+        <div class="hero__title" id="heroTitle">
+          <div class="hero__kicker">
+            <b></b><span class="label label--signal">Est. 2019 — Paint protection &amp; detailing</span>
+          </div>
+          <h1 class="display d-xl">
+            <span class="l1">Flawless</span>
+            <span class="l2">Is A <span class="sig">Craft</span></span>
           </h1>
-          <p class="hero__sub">Where supercars go to be flawless again. Ceramic, PPF, paint &amp; body — obsessed over, panel by panel.</p>
         </div>
       </div>
-      <div class="hero__scroll">Scroll</div>
-    </div>
-  </section>
-
-  <!-- ============ STATEMENT · protection ============ -->
-  <section class="act act--statement" data-seq="protect" data-count="214">
-    <div class="act__sticky">
-      <canvas class="act__canvas"></canvas>
-      <div class="act__veil"></div>
-      <div class="act__overlay">
-        <div class="statement__inner wrap">
-          <p class="statement__line" id="statementLine">
-            <span class="statement__word">We</span>
-            <span class="statement__word">protect</span>
-            <span class="statement__word">what</span>
-            <span class="statement__word">you</span>
-            <span class="statement__word em">love</span>
-            <span class="statement__word">—</span>
-            <span class="statement__word">from</span>
-            <span class="statement__word">the</span>
-            <span class="statement__word">first</span>
-            <span class="statement__word">stone</span>
-            <span class="statement__word">chip</span>
-            <span class="statement__word">to</span>
-            <span class="statement__word">the</span>
-            <span class="statement__word">last</span>
-            <span class="statement__word">layer</span>
-            <span class="statement__word">of</span>
-            <span class="statement__word em">shine.</span>
-          </p>
-          <p class="statement__note">Nano-ceramic coatings, self-healing film and studio-grade correction. Built to survive the road, made to look like the showroom.</p>
-        </div>
+      <div class="hero__meta" id="heroMeta">
+        <p class="lede hero__lede">Film, ceramic and correction for cars that deserve the extra hour. <strong>Panel by panel.</strong></p>
+        <div class="scrollcue"><span class="label">Scroll</span><b></b></div>
       </div>
     </div>
   </section>
 
-  <!-- ============ ACT 2 · SERVICES ============ -->
-  <section class="act act--services" id="services" data-seq="services" data-count="264">
-    <div class="act__sticky">
-      <canvas class="act__canvas"></canvas>
-      <div class="act__veil act__veil--bottom"></div>
-      <div class="services__head">
-        <div class="wrap">
-          <div class="eyebrow">What we do</div>
-          <div class="services__count"><b id="svcCount">01</b> / 10 · tap to watch</div>
-        </div>
-      </div>
-      <div class="act__overlay">
-        <div class="wrap">
-          <ul class="services__list" id="servicesList">
-            <!-- filled by main.js -->
-          </ul>
-        </div>
-      </div>
+  <!-- ── ticker ────────────────────────────────────────────────────────── -->
+  <div class="marquee" id="marquee" data-speed="38" aria-hidden="true">
+    <div class="marquee__track">
+      <span>Paint Protection Film<i></i>Ceramic Coating<i></i>Detailing<i></i>Bodyshop<i></i>Coloured PPF<i></i>Bodykit<i></i>Sun Film<i></i></span>
     </div>
-  </section>
+  </div>
 
-  <!-- ============ ACT FINAL · BOOKING ============ -->
-  <section class="act act--book" id="book" data-seq="booking" data-count="46">
-    <div class="act__sticky">
-      <canvas class="act__canvas"></canvas>
-      <div class="act__veil"></div>
-      <div class="act__overlay">
-        <div class="book__inner wrap">
-          <div class="eyebrow" style="margin-bottom:18px">Ready when you are</div>
-          <h2 class="display book__title chrome-text">Book Your<br /><span class="hot">Slot</span></h2>
-          <p class="book__sub">Tell us the car and the service. We&rsquo;ll send back a quote and a date — all on WhatsApp.</p>
-          <a class="wa" id="waBtn" href="#" target="_blank" rel="noopener" data-cursor>
-            <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.6.2-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.6-.8-2.6-1.4-3.7-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5 0-.2-.6-1.6-.9-2.2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.9-.6 3 .7 2 2 3.5 3.9 4.7 2.5 1.5 3 .9 3.6.9.6 0 1.7-.7 2-1.4.2-.7.2-1.2.1-1.4 0 0-.2-.1-.5-.3zM12 2A10 10 0 0 0 3.5 17.2L2 22l5-1.3A10 10 0 1 0 12 2zm0 18c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 20 12a8 8 0 0 1-8 8z"/></svg>
-            Book on WhatsApp
-          </a>
-          <div class="book__meta">
-            <span>Open <b>Mon–Sun · 9–8</b></span>
-            <span><b>Your City</b> · Auto Studio</span>
-            <span>Pickup &amp; drop <b>available</b></span>
+  <!-- ── 02 · manifesto ────────────────────────────────────────────────── -->
+  <section class="section pin manifesto" id="craft" data-seq="craft" data-chapter="1">
+    <div class="stage">
+      <canvas class="layer layer--canvas" aria-label="A McLaren under studio lighting"></canvas>
+      <div class="layer layer--scrim scrim-left"></div>
+      <div class="layer layer--content manifesto__content">
+        <div class="manifesto__grid">
+          <span class="label label--signal">02 — The standard</span>
+          <p class="manifesto__line" id="manifestoLine">Anyone can wash a car. We rebuild the way light sits on it — then we <em>protect that</em> for years.</p>
+          <div class="manifesto__aside">
+            <div><span class="label">Correction</span><p class="lede" style="margin-top:8px">Swirls and etching removed under calibrated light, not hidden by filler.</p></div>
+            <div><span class="label">Protection</span><p class="lede" style="margin-top:8px">Self-healing film and nano-ceramic, installed in a filtered booth.</p></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ── 03 · services ─────────────────────────────────────────────────── -->
+  <section class="section pin services" id="services" data-seq="services" data-chapter="2">
+    <div class="stage">
+      <canvas class="layer layer--canvas" aria-label="A black McLaren in the LED detailing bay"></canvas>
+      <div class="layer layer--scrim scrim-left"></div>
+      <div class="layer layer--content services__content">
+        <div class="services__grid">
+          <div class="services__intro">
+            <span class="label label--signal">03 — What we do</span>
+            <h2 class="display d-md" style="margin:14px 0 18px">The<br />Menu</h2>
+            <div class="services__count"><b id="svcNum">01</b><span>of 10 — tap any line to watch the work</span></div>
+          </div>
+          <ul class="services__list" id="svcList"><!-- built by app.js --></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 · process (horizontal) ─────────────────────────────────────── -->
+  <section class="section process" id="process" data-seq="process" data-chapter="3">
+    <div class="stage">
+      <canvas class="layer layer--canvas" aria-label="The APEX workshop with vehicle lifts"></canvas>
+      <div class="layer layer--scrim scrim-soft"></div>
+      <div class="layer layer--content">
+        <div class="process__track" id="processTrack">
+          <div class="process__head">
+            <span class="label label--signal">04 — How it runs</span>
+            <h2 class="display d-md" style="margin:14px 0 16px">Four<br />Stages</h2>
+            <p class="lede">Every car takes the same route through the studio. No shortcuts, no surprises on the invoice.</p>
+          </div>
+          <article class="step"><div class="step__i">STAGE 01</div><h3>Intake &amp; Inspection</h3><p>Paint depth readings, panel-by-panel photos and a written scope before a single pad touches the car.</p></article>
+          <article class="step"><div class="step__i">STAGE 02</div><h3>Decontamination</h3><p>Chemical and mechanical decon, then a full strip wash so we correct paint — not the grime sitting on it.</p></article>
+          <article class="step"><div class="step__i">STAGE 03</div><h3>Correction</h3><p>Multi-stage machine polishing under calibrated lighting until the finish holds a clean reflection.</p></article>
+          <article class="step"><div class="step__i">STAGE 04</div><h3>Protection</h3><p>Film or coating applied in a filtered booth, cured, then re-inspected before the keys come back to you.</p></article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── numbers ───────────────────────────────────────────────────────── -->
+  <section class="section numbers">
+    <div class="shell">
+      <span class="label label--signal" data-fade>05 — By the numbers</span>
+      <div class="numbers__grid" style="margin-top:28px">
+        <div class="stat"><b><span data-count="1200">0</span><i>+</i></b><span class="label">Cars through the booth</span></div>
+        <div class="stat"><b><span data-count="9">0</span><i>yr</i></b><span class="label">Coating warranty</span></div>
+        <div class="stat"><b><span data-count="72">0</span><i>h</i></b><span class="label">Typical full build</span></div>
+        <div class="stat"><b><span data-count="4.9">0</span><i>★</i></b><span class="label">Owner rating</span></div>
+      </div>
+      <p class="label" style="margin-top:18px;color:var(--faint)">Placeholder figures — swap for your real numbers in index.html</p>
+    </div>
+  </section>
+
+  <!-- ── 05 · booking ──────────────────────────────────────────────────── -->
+  <section class="section pin booking" id="book" data-seq="booking" data-chapter="4">
+    <div class="stage">
+      <canvas class="layer layer--canvas" aria-label="A hypercar in the chrome showroom"></canvas>
+      <div class="layer layer--scrim scrim-vignette"></div>
+      <div class="layer layer--content booking__content">
+        <div class="booking__inner">
+          <span class="label label--signal">06 — Get it booked</span>
+          <h2 class="display d-lg booking__title">Bring Us<br />The <span class="sig">Car</span></h2>
+          <p class="lede booking__lede">Send the model and what you want done. You get a quote and a date back — no forms, no call centre.</p>
+          <a class="wa" id="waBtn" href="#" target="_blank" rel="noopener" data-magnetic="0.22" data-cursor="Chat">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.6.2-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.6-.8-2.6-1.4-3.7-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5 0-.2-.6-1.6-.9-2.2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.9-.6 3 .7 2 2 3.5 3.9 4.7 2.5 1.5 3 .9 3.6.9.6 0 1.7-.7 2-1.4.2-.7.2-1.2.1-1.4 0 0-.2-.1-.5-.3zM12 2A10 10 0 0 0 3.5 17.2L2 22l5-1.3A10 10 0 1 0 12 2zm0 18c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 20 12a8 8 0 0 1-8 8z"/></svg>
+            Book on WhatsApp
+          </a>
+          <div class="booking__meta">
+            <div><span class="label">Hours</span><b>Mon–Sun · 09:00–20:00</b></div>
+            <div><span class="label">Studio</span><b>Your City · Auto Studio</b></div>
+            <div><span class="label">Collection</span><b>Pickup &amp; drop available</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
-<!-- ============ FOOTER ============ -->
+<!-- ══ footer ═════════════════════════════════════════════════════════════ -->
 <footer class="footer">
-  <div class="wrap">
-    <div class="footer__brand">
-      APEX<b>.</b>
-      <p>Cinematic car care — detailing, paint protection and bodyshop, obsessed over panel by panel.</p>
+  <div class="footer__mark"><h2>Apex</h2></div>
+  <div class="shell">
+    <div class="footer__grid">
+      <div>
+        <h4 class="label">Studio</h4>
+        <p class="lede" style="font-size:.95rem">Paint protection, ceramic and correction — obsessed over panel by panel.</p>
+      </div>
+      <div><h4 class="label">Services</h4><ul>
+        <li><a href="#services">Paint Protection Film</a></li>
+        <li><a href="#services">Ceramic Coating</a></li>
+        <li><a href="#services">Detailing</a></li>
+        <li><a href="#services">Bodyshop</a></li>
+      </ul></div>
+      <div><h4 class="label">Studio</h4><ul>
+        <li><a href="work.html" data-transition>Our Work</a></li>
+        <li><a href="#book">Book on WhatsApp</a></li>
+        <li><a href="#top">Back to top</a></li>
+      </ul></div>
+      <div><h4 class="label">Contact</h4><ul>
+        <li><a id="footWa" href="#" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">YouTube</a></li>
+      </ul></div>
     </div>
-    <div>
-      <h4>Services</h4>
-      <ul>
-        <li><a href="#services" data-cursor>Ceramic Coating</a></li>
-        <li><a href="#services" data-cursor>PPF &amp; Coloured PPF</a></li>
-        <li><a href="#services" data-cursor>Detailing</a></li>
-        <li><a href="#services" data-cursor>Bodyshop &amp; Bodykit</a></li>
-      </ul>
+    <div class="footer__base">
+      <span class="label">© <span id="yr"></span> APEX Auto Studio</span>
+      <span class="label">Built for the obsessed</span>
     </div>
-    <div>
-      <h4>Studio</h4>
-      <ul>
-        <li><a href="work.html" data-cursor>Our Work</a></li>
-        <li><a href="#book" data-cursor>Book on WhatsApp</a></li>
-        <li><a href="#top" data-cursor>Back to top</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="wrap footer__base">
-    <span>© <span id="year"></span> APEX Auto Studio. All rights reserved.</span>
-    <span>Built for the obsessed.</span>
   </div>
 </footer>
 
-<!-- ============ VIDEO LIGHTBOX ============ -->
-<div class="vbox" id="vbox" aria-hidden="true">
-  <div class="vbox__panel">
-    <div class="vbox__bar">
-      <div class="vbox__title" id="vboxTitle">Service<span>.</span></div>
-      <button class="vbox__close" id="vboxClose" aria-label="Close">✕</button>
+<!-- ══ service modal ══════════════════════════════════════════════════════ -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalT" aria-hidden="true">
+  <div class="modal__panel">
+    <div class="modal__bar">
+      <h3 class="modal__t" id="modalT">Service</h3>
+      <button class="modal__x" id="modalX" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
     </div>
-    <div class="vbox__media">
-      <video id="vboxVideo" playsinline muted loop controls preload="none" style="display:none"></video>
-      <div class="vbox__placeholder" id="vboxPlaceholder">
-        <div class="ring">
-          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        </div>
-        <small>Footage coming soon</small>
-        <span id="vboxHint" style="font-size:.8rem;letter-spacing:.04em;color:#5c606a"></span>
+    <div class="modal__media">
+      <video id="modalVid" playsinline muted loop controls preload="none" style="display:none"></video>
+      <div class="modal__ph" id="modalPh">
+        <div class="ring"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div>
+        <span class="label">Footage coming soon</span>
+        <code id="modalPath"></code>
       </div>
     </div>
-    <p class="vbox__desc" id="vboxDesc"></p>
+    <p class="modal__body" id="modalBody"></p>
   </div>
 </div>
 
-<script src="js/vendor/gsap.min.js"></script>
-<script src="js/vendor/ScrollTrigger.min.js"></script>
-<script src="js/sequence.js"></script>
-<script src="js/main.js"></script>
+<script src="js/lib/gsap.min.js"></script>
+<script src="js/lib/ScrollTrigger.min.js"></script>
+<script src="js/lib/lenis.min.js"></script>
+<script src="js/seq-manifest.js"></script>
+<script src="js/core/sequence.js"></script>
+<script src="js/core/motion.js"></script>
+<script src="js/app.js"></script>
