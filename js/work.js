@@ -109,9 +109,14 @@ function initFinale() {
 function initChrome() {
   $('#year').textContent = new Date().getFullYear();
   const bar = $('#scrollProgress');
+  let ticking = false;
   const onScroll = () => {
-    const h = document.documentElement;
-    bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => {
+      const h = document.documentElement;
+      bar.style.transform = `scaleX(${(h.scrollTop / (h.scrollHeight - h.clientHeight)) || 0})`;
+      ticking = false;
+    });
   };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
 

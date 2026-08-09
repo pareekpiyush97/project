@@ -87,10 +87,13 @@ class Sequence {
 
   draw(i) {
     i = Math.max(0, Math.min(this.count - 1, Math.round(i)));
+    // scrub fires many times per frame — skip if the frame hasn't changed
+    if (i === this.current && this._painted) return;
     this.current = i;
     const img = this._pick(i);
     const { ctx, canvas } = this;
     if (!img) return;
+    this._painted = true;
     const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
     const cw = canvas.width, ch = canvas.height;
     const ir = iw / ih, cr = cw / ch;

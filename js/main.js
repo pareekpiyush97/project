@@ -83,18 +83,10 @@ function initAct(section) {
     trigger: section, start: 'top bottom+=80%',
     once: true, onEnter: () => seq.load()
   });
-  // scrub the sequence across the act; fade the text out near the end so it
-  // doesn't overlap the next section during the sticky hand-off — but NOT on
-  // the final booking act (nothing follows it, its CTA must stay visible)
-  const overlay = $('.act__overlay', section);
-  const fadeOut = !section.classList.contains('act--book');
+  // scrub the sequence across the act
   ScrollTrigger.create({
     trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.4,
-    onUpdate: self => {
-      const p = self.progress;
-      seq.seek(p);
-      if (overlay && fadeOut) overlay.style.opacity = p > 0.86 ? Math.max(0, (1 - p) / 0.14) : 1;
-    }
+    onUpdate: self => seq.seek(self.progress)
   });
   return { section, seq };
 }
@@ -146,9 +138,14 @@ function initChrome() {
   wa.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_TEXT)}`;
 
   const bar = $('#scrollProgress');
+  let ticking = false;
   const onScroll = () => {
-    const h = document.documentElement;
-    bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => {
+      const h = document.documentElement;
+      bar.style.transform = `scaleX(${(h.scrollTop / (h.scrollHeight - h.clientHeight)) || 0})`;
+      ticking = false;
+    });
   };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
