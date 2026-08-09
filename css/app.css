@@ -85,9 +85,14 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;}
 }
 .skip:focus{top:16px;}
 
-/* Lenis */
+/* Lenis — the full required stylesheet. NB: the document must be in standards
+   mode (<!DOCTYPE html>) or Lenis reads the wrong scroll metrics and the wheel
+   stops working. */
 html.lenis,html.lenis body{height:auto;}
 .lenis.lenis-smooth{scroll-behavior:auto !important;}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain;}
+.lenis.lenis-stopped{overflow:hidden;}
+.lenis.lenis-scrolling iframe{pointer-events:none;}
 
 /* -- 04 type -------------------------------------------------------------- */
 .display{
@@ -584,6 +589,16 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
   .hero__kicker b{width:20px;flex:none;}
   .manifesto__grid,.services__grid,.booking__inner{min-width:0;}
   .manifesto__aside{grid-template-columns:1fr;gap:14px;}
+}
+@media (max-width:560px){
+  /* expanded display type is wide — long names like "Paint Protection Film"
+     wrap to three lines and blow the ten rows past the stage. Drop to normal
+     width and size off vh so every row stays on one line. */
+  .svc__n{font-size:clamp(.78rem,2.1vh,1.15rem);font-variation-settings:"wdth" 100,"wght" 700;}
+  .svc__btn{padding:clamp(4px,.95vh,11px) 0;gap:10px;}
+  .svc__i{width:20px;font-size:.56rem;}
+  .svc__go{width:24px;height:24px;}
+  .svc__go svg{width:9px;height:9px;}
 }
 @media (max-width:420px){
   .hero__kicker .label{font-size:.54rem;}

@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>APEX Auto Studio — Paint Protection, Ceramic &amp; Detailing</title>
@@ -9,8 +12,13 @@
 <meta property="og:description" content="Paint protection film, ceramic coating, detailing and bodyshop. Book on WhatsApp." />
 
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-var.woff2" crossorigin />
-<link rel="preload" as="image" href="assets/seq/hero/1280/f0001.webp" fetchpriority="high" />
+<!-- preload the variant this viewport will actually request, so phones don't
+     pull a desktop-sized frame they never draw -->
+<link rel="preload" as="image" href="assets/seq/hero/1280/f0001.webp" fetchpriority="high" media="(min-width:769px)" />
+<link rel="preload" as="image" href="assets/seq/hero/720/f0001.webp" fetchpriority="high" media="(max-width:768px)" />
 <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
 
 <a class="skip" href="#main">Skip to content</a>
 
@@ -137,7 +145,7 @@
           <div class="services__intro">
             <span class="label label--signal">03 — What we do</span>
             <h2 class="display d-md" style="margin:14px 0 18px">The<br />Menu</h2>
-            <div class="services__count"><b id="svcNum">01</b><span>of 10 — tap any line to watch the work</span></div>
+            <div class="services__count"><b id="svcNum">01</b><span>of 10 — tap to watch</span></div>
           </div>
           <ul class="services__list" id="svcList"><!-- built by app.js --></ul>
         </div>
@@ -266,3 +274,5 @@
 <script src="js/core/sequence.js"></script>
 <script src="js/core/motion.js"></script>
 <script src="js/app.js"></script>
+</body>
+</html>
