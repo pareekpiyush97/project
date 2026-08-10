@@ -168,6 +168,9 @@
 
   /** Queue every frame belonging to pass `level`. Returns true if it added any. */
   Sequence.prototype._queuePass = function (level) {
+    // an unknown sequence name has count 0 — requesting "frame 0" of it would
+    // fire one guaranteed 404
+    if (!this.count) return false;
     var stride = PASSES[level], added = 0;
     // frame 0 first — it is what the poster/preloader waits on
     if (!this.requested[0]) { this._request(0, this.priority + 50); added++; }
@@ -237,6 +240,19 @@
     this.active = false;
     clearTimeout(this._denseTimer);
     dropQueued(this);
+  };
+
+  /** Queue every frame at once, in playback order.
+   *  For sequences played on a clock rather than scrubbed by scroll: a stride
+   *  pass is fine to scrub through (you land between frames either way) but
+   *  visibly steps when it has to play at a fixed rate. Only worth it for
+   *  user-initiated playback that is already gated behind an interaction. */
+  Sequence.prototype.rush = function (onProgress) {
+    if (onProgress) this._onProgress = onProgress;
+    this.active = true;
+    this.level = PASSES.length - 1;
+    this._queuePass(this.level);
+    return this;
   };
 
   /** Back-compat: load everything the way the old API did. */

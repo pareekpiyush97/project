@@ -224,7 +224,8 @@
       if (open) {
         if (!reduced) {
           // top priority: the menu is on screen right now
-          if (!seq) { seq = new Sequence($('.menu__canvas', menu), 'menu', { priority: 200 }); seq.load(); }
+          // rush, not load: plays on a 2.2s clock, so stride passes would step
+          if (!seq) { seq = new Sequence($('.menu__canvas', menu), 'menu', { priority: 200 }); seq.rush(); }
           cancelAnimationFrame(raf);
           last = 0; frame = 0;              // replay from the first frame
           raf = requestAnimationFrame(loop);

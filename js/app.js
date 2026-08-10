@@ -52,14 +52,30 @@
 
       if (reduced) { seq.preload(null, function () { seq.draw(Math.floor(seq.count / 2)); }); return; }
 
+      var isPinned = section.classList.contains('process');
+
       // Two-stage fetch. Approaching a section buys only the sparse skeleton
       // (~1 frame in 8); the dense passes are earned by actually arriving, so
       // a visitor who never scrolls past the hero never pays for five
       // sequences they did not see.
       ScrollTrigger.create({
         trigger: section, start: 'top bottom+=60%', once: true,
-        onEnter: function () { seq.preload(); }
+        onEnter: function () {
+          seq.preload();
+          // the pinned section never sleeps (see below), so it has no wake
+          // handler to densify it — do that here instead
+          if (isPinned) seq.activate();
+        }
       });
+
+      // .process is pinned by GSAP, which injects ~2000px of spacer and so
+      // shifts this element's start/end. ANY trigger created on it here
+      // resolves against the *unpinned* geometry: a scrub falls out of sync,
+      // and a sleep/wake pair releases the canvas while the section is still
+      // on screen — leaving a bare scrim gradient where the footage should be.
+      // initProcess() drives both from the pin itself; nothing more here.
+      if (isPinned) return;
+
       // hold the backing store — and the download budget — only while the
       // section is anywhere near view
       ScrollTrigger.create({
@@ -69,12 +85,6 @@
           else { seq.sleep(); seq.deactivate(); }
         }
       });
-
-      // .process is pinned by GSAP, which shifts its start/end. A separate
-      // scrub trigger on the same element resolves against the *unpinned*
-      // geometry and falls out of sync, so the footage freezes partway
-      // through. initProcess() drives that one from the pin itself.
-      if (section.classList.contains('process')) return;
 
       // scrub across the whole section
       ScrollTrigger.create({
@@ -280,7 +290,9 @@
         if (!reduced) {
           // top priority: the menu is what the user is looking at right now, so
           // its frames must jump ahead of the page sequences still queued
-          if (!seq) { seq = new Sequence($('.menu__canvas', menu), 'menu', { priority: 200 }); seq.load(); }
+          // rush, not load: this plays on a 2.2s clock, so stride passes would
+          // step visibly. The user opened the menu, so the bytes are wanted.
+          if (!seq) { seq = new Sequence($('.menu__canvas', menu), 'menu', { priority: 200 }); seq.rush(); }
           cancelAnimationFrame(raf);
           last = 0; frame = 0;              // replay from the first frame
           raf = requestAnimationFrame(loop);
