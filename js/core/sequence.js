@@ -18,7 +18,7 @@
 
   var MANIFEST = w.ZLAB_SEQ || {};
   var isMobile = matchMedia('(max-width: 768px)').matches;
-  var SRC_W = isMobile ? 560 : 1280;
+  var SRC_W = isMobile ? 900 : 1600;
   // Never allocate more backing pixels than the source image actually has —
   // upscaling a 1280px frame into a 1700px canvas costs fill rate every frame
   // and buys no detail.
@@ -52,6 +52,9 @@
     this.name = name;
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
+    // one draw per frame, so the better resampler is worth it on any upscale
+    this.ctx.imageSmoothingEnabled = true;
+    this.ctx.imageSmoothingQuality = 'high';
     this.width = meta ? (meta.sizes[SRC_W] ? SRC_W : Object.keys(meta.sizes)[0]) : SRC_W;
     this.count = meta ? meta.sizes[this.width] : 0;
     this.ext = meta ? meta.ext : 'webp';
@@ -180,6 +183,10 @@
     if (nw === this.canvas.width && nh === this.canvas.height) return;
     this.canvas.width = nw;
     this.canvas.height = nh;
+    // assigning width/height resets the whole 2D context, so quality hints
+    // have to be re-applied here or every resize silently drops back to 'low'
+    this.ctx.imageSmoothingEnabled = true;
+    this.ctx.imageSmoothingQuality = 'high';
     this.ctx.fillStyle = '#0a0a0c';
     this.ctx.fillRect(0, 0, nw, nh);
     this._painted = false;

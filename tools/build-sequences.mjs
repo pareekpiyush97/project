@@ -31,12 +31,13 @@ const CLIPS = {
   work:     'ezip - Copy (2)',   // purple + green, bright white studio
 };
 
+/* Resolution is set by the DEVICE pixels the frame has to fill, not the CSS
+   width. A 390px phone at dpr 3 is ~1170 real pixels across, so a 560px frame
+   gets upscaled ~2x and looks obviously soft. These widths keep the upscale
+   near 1x; frame counts are what we trade away for performance instead. */
 const VARIANTS = [
-  { w: 1280, q: 60, cap: 72 },   // desktop — 72 frames ≈ 1 frame / 35px scroll
-  // Mobile is deliberately much lighter: a phone repaints a full-screen canvas
-  // every scrolled frame at dpr 3, so both the pixel count and the number of
-  // decodes matter far more than resolution the screen cannot resolve anyway.
-  { w: 560,  q: 52, cap: 28 },
+  { w: 1600, q: 62, cap: 64 },   // desktop / large laptop
+  { w: 900,  q: 60, cap: 30 },   // phones — ~1.3x on a dpr-3 handset, sharp enough
 ];
 
 /** Evenly sample `n` items from a list, always keeping first and last. */

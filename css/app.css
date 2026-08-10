@@ -139,6 +139,24 @@ html.lenis,html.lenis body{height:auto;}
 .layer--scrim{z-index:2;pointer-events:none;}
 .layer--content{z-index:3;display:flex;align-items:center;}
 
+/* Anything sitting directly on footage needs its own contrast — the scrims
+   alone can't cover every frame, and --dim body copy disappears over a bright
+   panel. Brighter text plus a tight shadow keeps it readable on any frame. */
+/* .hero__meta sits outside .layer--content, so it must be listed explicitly */
+.layer--content .lede,.whero__inner .lede,.hero__meta .lede,.step p{
+  color:#dfe0e2;
+  text-shadow:0 1px 3px rgba(0,0,0,.92),0 4px 20px rgba(0,0,0,.65);
+}
+.layer--content .lede strong,.whero__inner .lede strong,.hero__meta .lede strong{color:#fff;}
+.layer--content .label,.whero__inner .label,.hero__meta .label{
+  text-shadow:0 1px 3px rgba(0,0,0,.9),0 2px 12px rgba(0,0,0,.6);
+}
+.layer--content .display,.whero__inner .display{
+  text-shadow:0 2px 10px rgba(0,0,0,.5);
+}
+/* the process cards have their own solid panel, so no shadow needed there */
+.step p{text-shadow:none;color:var(--dim);}
+
 /* scrims: precise, so footage stays visible but text never fights it */
 .scrim-vignette{background:radial-gradient(115% 85% at 50% 45%,transparent 32%,rgba(6,6,8,.72) 100%);}
 .scrim-bottom{background:linear-gradient(180deg,rgba(6,6,8,.5) 0%,transparent 24%,transparent 62%,rgba(6,6,8,.82) 100%);}
