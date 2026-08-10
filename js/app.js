@@ -94,11 +94,31 @@
     });
   }
 
+  /* ---- sticky detach point ---------------------------------------------
+     Fraction of a section's own height at which its sticky stage stops being
+     pinned and starts scrolling away: (height - 100vh) / height.
+
+     Only needed where an end is expressed as a percentage of section height
+     (ScrollTrigger's '% top'), because that scales differently from the detach
+     point as the section gets shorter. Triggers ending at 'bottom bottom'
+     normalise progress over (height - 100vh) instead, so for those the stage
+     is pinned across the whole 0..1 range and no correction applies. */
+  function unstickAt(sel) {
+    var el = $(sel);
+    if (!el) return 1;
+    var h = el.getBoundingClientRect().height;
+    return h > 0 ? Math.max(0.2, 1 - (w.innerHeight / h)) : 1;
+  }
+
   /* ---- hero: title parts out as you scroll ----------------------------- */
   function initHero() {
     if (reduced) return;
     var tl = gsap.timeline({
-      scrollTrigger: { trigger: '.hero', start: 'top top', end: '60% top', scrub: true }
+      scrollTrigger: {
+        trigger: '.hero', start: 'top top', scrub: true,
+        end: function () { return (unstickAt('.hero') - 0.04) * 100 + '% top'; },
+        invalidateOnRefresh: true
+      }
     });
     tl.to('#heroTitle', { yPercent: -18, opacity: 0, filter: 'blur(6px)', ease: 'none' }, 0)
       .to('#heroMeta',  { yPercent: 40, opacity: 0, ease: 'none' }, 0);
@@ -154,9 +174,10 @@
 
     if (reduced) { items.forEach(function (el) { el.classList.add('is-in'); }); return; }
 
-    // A sticky stage un-sticks over its final 100vh (here ≈ progress .81),
-    // so every row must have landed before that or the last ones reveal
-    // while the section is already scrolling away.
+    // Progress here is normalised over (height - 100vh), so the sticky stage
+    // stays pinned for the whole 0..1 range and only leaves after it. Landing
+    // the last row at .72 therefore holds at any section height — these are
+    // fractions of the range, not of the scroll distance.
     var N = items.length, START = 0.02, END = 0.72;
     // The rows are a pure function of one index, so derive that index and bail
     // unless it changed — otherwise this rewrites 20 class lists per tick.
@@ -199,7 +220,10 @@
       ease: 'none',
       scrollTrigger: {
         trigger: section, start: 'top top', pin: true, scrub: 0.6,
-        end: function () { return '+=' + (distance() + w.innerHeight * 0.5); },
+        // 0.75, not 1:1 — the track then travels a little faster than the
+        // wheel, which cuts ~1 screen of scrolling off the pin without the
+        // cards reading as rushed
+        end: function () { return '+=' + (distance() * 0.75 + w.innerHeight * 0.25); },
         invalidateOnRefresh: true,
         // This pin injects ~2000px of spacer, which moves every section below
         // it. Without a higher refresh priority those triggers recalculate

@@ -35,6 +35,18 @@
   // upscaling a 1600px frame into a wider canvas costs fill rate every frame
   // and buys no detail.
   var MAX_BACKING = SRC_W;
+
+  /* The width cap alone is not enough on a phone. A portrait viewport
+     cover-fits a landscape frame, so the canvas ends up far TALLER than the
+     source: 390x844 at dpr 3 is a ~900x1900 backing store, and filling it
+     means upscaling a 900x506 frame about 3.8x — on every scrubbed frame.
+     Capping the pixel ratio and the total backing area cuts that fill cost
+     ~2.4x and costs no real detail, because the source has none to give at
+     that size. Desktop is unaffected: MAX_BACKING already binds there. */
+  var coarse = matchMedia('(pointer: coarse)').matches;
+  var MAX_DPR = coarse ? 1.5 : 2;
+  var MAX_PIXELS = coarse ? 1.1e6 : 3.2e6;
+
   var WARM_BACK = 3;    // frames behind the playhead to keep decoded
   var WARM_AHEAD = 10;  // frames ahead (scrolling down is the common case)
   var WARM_STEP = 3;    // only recompute the warm window after this much drift
@@ -343,8 +355,12 @@
     if (this.asleep) return;                 // stay released until woken
     var r = this.canvas.getBoundingClientRect();
     if (!r.width || !r.height) return;
-    var dpr = Math.min(w.devicePixelRatio || 1, 2);
+    var dpr = Math.min(w.devicePixelRatio || 1, MAX_DPR);
     var scale = Math.min(dpr, MAX_BACKING / Math.max(r.width, 1));
+    // the backing store must keep the canvas box's aspect ratio (the browser
+    // stretches it to fit), so trim area with a uniform scale, never per-axis
+    var px = r.width * r.height * scale * scale;
+    if (px > MAX_PIXELS) scale *= Math.sqrt(MAX_PIXELS / px);
     var nw = Math.max(1, Math.round(r.width * scale));
     var nh = Math.max(1, Math.round(r.height * scale));
     if (nw === this.canvas.width && nh === this.canvas.height) return;

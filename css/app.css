@@ -349,7 +349,7 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
 .menu__foot a:hover{color:var(--signal);}
 
 /* -- 08 hero -------------------------------------------------------------- */
-.hero{height:320svh;}
+.hero{height:200svh;}
 .hero__content{flex-direction:column;justify-content:center;padding-inline:var(--pad);}
 .hero__kicker{display:flex;align-items:center;gap:14px;margin-bottom:clamp(14px,2vh,26px);}
 .hero__kicker b{display:block;width:clamp(28px,5vw,64px);height:1px;background:var(--signal);}
@@ -380,7 +380,7 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
 .marquee__track i{width:7px;height:7px;background:var(--signal);border-radius:50%;flex:none;}
 
 /* -- 10 manifesto --------------------------------------------------------- */
-.manifesto{height:260svh;}
+.manifesto{height:165svh;}
 .manifesto__content{padding-inline:var(--pad);}
 .manifesto__grid{
   width:min(var(--shell),100%);margin-inline:auto;display:grid;
@@ -402,7 +402,7 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
 }
 
 /* -- 11 services ---------------------------------------------------------- */
-.services{height:520svh;}
+.services{height:300svh;}
 .services__content{align-items:stretch;padding:calc(var(--nav-h) + 4vh) var(--pad) 5vh;}
 .services__grid{
   width:min(var(--shell),100%);margin-inline:auto;display:grid;
@@ -450,7 +450,7 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
   .svc__btn:hover .svc__go{opacity:1;transform:none;background:var(--signal);border-color:var(--signal);}
 }
 @media (max-width:900px){
-  .services{height:560svh;}
+  .services{height:330svh;}
   .services__grid{grid-template-columns:1fr;gap:12px;align-content:center;}
   .services__intro h2{display:none;}
   .services__intro{padding-top:0;}
@@ -500,7 +500,7 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
 .stat span{display:block;margin-top:12px;}
 
 /* -- 14 booking ----------------------------------------------------------- */
-.booking{height:230svh;}
+.booking{height:160svh;}
 .booking__content{justify-content:center;text-align:center;padding-inline:var(--pad);}
 .booking__inner{width:min(var(--shell),100%);margin-inline:auto;}
 .booking__title{margin:16px 0 22px;}
@@ -589,7 +589,7 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
   .card,.card--wide,.card--tall{grid-column:span 12;aspect-ratio:16/11;}
 }
 
-.endcta{position:relative;height:180svh;}
+.endcta{position:relative;height:140svh;}
 
 /* -- 17 modal ------------------------------------------------------------- */
 .modal{
@@ -629,9 +629,9 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
      animated one and the column rules are a decorative one — neither is worth
      that budget on a handset. */
   .grain,.rules{display:none;}
-  .hero{height:280svh;}
-  .manifesto{height:240svh;}
-  .booking{height:200svh;}
+  .hero{height:185svh;}
+  .manifesto{height:160svh;}
+  .booking{height:150svh;}
   .lede{font-size:.98rem;}
   /* the long eyebrow wraps on narrow screens — tighten it so it cannot
      collide with the display type below */
