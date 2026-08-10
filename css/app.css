@@ -127,7 +127,13 @@ html.lenis,html.lenis body{height:auto;}
 /* NB: no overflow on .pin — an overflow value on the ancestor silently
    disables position:sticky on .stage. Clipping belongs on .stage itself. */
 .pin{position:relative;}
-.stage{position:sticky;top:0;height:100svh;overflow:hidden;}
+.stage{
+  position:sticky;top:0;height:100svh;overflow:hidden;
+  /* Own compositing layer. Without it mobile GPUs re-rasterise the sticky
+     content during fast scroll and leave a ghosted/doubled copy of the text. */
+  transform:translateZ(0);
+  backface-visibility:hidden;
+}
 .layer{position:absolute;inset:0;width:100%;height:100%;}
 .layer--canvas{z-index:1;background:var(--void);}
 .layer--scrim{z-index:2;pointer-events:none;}

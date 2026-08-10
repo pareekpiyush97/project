@@ -172,6 +172,11 @@
         trigger: section, start: 'top top', pin: true, scrub: 0.6,
         end: function () { return '+=' + (distance() + w.innerHeight * 0.5); },
         invalidateOnRefresh: true,
+        // This pin injects ~2000px of spacer, which moves every section below
+        // it. Without a higher refresh priority those triggers recalculate
+        // against the pre-pin layout and end up ~2000px too early — which is
+        // why the booking footage never scrubbed.
+        refreshPriority: 1,
         // Reveal each card from the pin's own progress. Deriving it here is far
         // sturdier than a second ScrollTrigger bound via containerAnimation.
         onUpdate: function (self) {
