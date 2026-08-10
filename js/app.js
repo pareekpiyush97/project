@@ -50,30 +50,32 @@
       var seq = new Sequence(canvas, name, { priority: name === 'hero' ? 100 : 20 });
       seqs[name] = seq;
 
-      if (reduced) { seq.load(null, function () { seq.draw(Math.floor(seq.count / 2)); }); return; }
+      if (reduced) { seq.preload(null, function () { seq.draw(Math.floor(seq.count / 2)); }); return; }
+
+      // Two-stage fetch. Approaching a section buys only the sparse skeleton
+      // (~1 frame in 8); the dense passes are earned by actually arriving, so
+      // a visitor who never scrolls past the hero never pays for five
+      // sequences they did not see.
+      ScrollTrigger.create({
+        trigger: section, start: 'top bottom+=60%', once: true,
+        onEnter: function () { seq.preload(); }
+      });
+      // hold the backing store — and the download budget — only while the
+      // section is anywhere near view
+      ScrollTrigger.create({
+        trigger: section, start: 'top bottom+=100%', end: 'bottom top-=100%',
+        onToggle: function (self) {
+          if (self.isActive) { seq.wake(); seq.activate(); }
+          else { seq.sleep(); seq.deactivate(); }
+        }
+      });
 
       // .process is pinned by GSAP, which shifts its start/end. A separate
       // scrub trigger on the same element resolves against the *unpinned*
       // geometry and falls out of sync, so the footage freezes partway
       // through. initProcess() drives that one from the pin itself.
-      if (section.classList.contains('process')) {
-        ScrollTrigger.create({
-          trigger: section, start: 'top bottom+=150%', once: true,
-          onEnter: function () { seq.priority = 50; seq.load(); }
-        });
-        return;
-      }
+      if (section.classList.contains('process')) return;
 
-      // start fetching once the section is within ~1.5 screens
-      ScrollTrigger.create({
-        trigger: section, start: 'top bottom+=150%', once: true,
-        onEnter: function () { seq.priority = 50; seq.load(); }
-      });
-      // hold the backing store only while the section is anywhere near view
-      ScrollTrigger.create({
-        trigger: section, start: 'top bottom+=100%', end: 'bottom top-=100%',
-        onToggle: function (self) { self.isActive ? seq.wake() : seq.sleep(); }
-      });
       // scrub across the whole section
       ScrollTrigger.create({
         trigger: section, start: 'top top', end: 'bottom bottom', scrub: true,
@@ -107,11 +109,18 @@
     if (!line) return;
     var words = M.splitWords(line);      // keeps the <em> accent intact
     if (reduced) { words.forEach(function (s) { s.classList.add('on'); }); return; }
+    // Touch the DOM only when the lit count actually moves. Rewriting every
+    // word's class on every scroll tick invalidates style for the whole line
+    // 60 times a second for nothing.
+    var litNow = -1;
     ScrollTrigger.create({
       trigger: '.manifesto', start: 'top top', end: 'bottom bottom', scrub: true,
       onUpdate: function (self) {
         var lit = Math.round(gsap.utils.clamp(0, 1, (self.progress - .05) / .45) * words.length);
-        words.forEach(function (s, i) { s.classList.toggle('on', i < lit); });
+        if (lit === litNow) return;
+        var from = Math.min(lit, litNow), to = Math.max(lit, litNow);
+        for (var i = Math.max(0, from); i < to; i++) words[i].classList.toggle('on', i < lit);
+        litNow = lit;
       }
     });
   }
@@ -139,21 +148,22 @@
     // so every row must have landed before that or the last ones reveal
     // while the section is already scrolling away.
     var N = items.length, START = 0.02, END = 0.72;
+    // The rows are a pure function of one index, so derive that index and bail
+    // unless it changed — otherwise this rewrites 20 class lists per tick.
+    var shown = -1;
     ScrollTrigger.create({
       trigger: '.services', start: 'top top', end: 'bottom bottom', scrub: true,
       onUpdate: function (self) {
-        var active = -1;
-        for (var i = 0; i < N; i++) {
-          var t = START + (i / (N - 1)) * (END - START);
-          var on = self.progress >= t;
-          items[i].classList.toggle('is-in', on);
-          items[i].classList.remove('is-on');
-          if (on) active = i;
-        }
-        if (active >= 0) {
-          items[active].classList.add('is-on');
-          num.textContent = String(active + 1).padStart(2, '0');
-        } else { num.textContent = '01'; }
+        var span = (END - START) / (N - 1);
+        var active = Math.floor((self.progress - START) / span + 1e-6);
+        active = Math.max(-1, Math.min(N - 1, active));
+        if (active === shown) return;
+        var from = Math.min(active, shown), to = Math.max(active, shown);
+        for (var i = Math.max(0, from); i <= to; i++) items[i].classList.toggle('is-in', i <= active);
+        if (shown >= 0) items[shown].classList.remove('is-on');
+        if (active >= 0) items[active].classList.add('is-on');
+        num.textContent = String(Math.max(0, active) + 1).padStart(2, '0');
+        shown = active;
       }
     });
   }
@@ -164,6 +174,15 @@
     if (!section || !track || reduced) return;
     var steps = $$('.step', track);
     var distance = function () { return Math.max(0, track.scrollWidth - w.innerWidth); };
+    // offsetLeft is a layout read; cache it and refresh only when geometry can
+    // actually have changed
+    var offsets = [], revealed = 0;
+    function measure() {
+      offsets = steps.map(function (s) { return s.offsetLeft; });
+    }
+    measure();
+    ScrollTrigger.addEventListener('refreshInit', function () { revealed = 0; });
+    ScrollTrigger.addEventListener('refresh', measure);
 
     gsap.to(track, {
       x: function () { return -distance(); },
@@ -183,9 +202,12 @@
           // the footage scrubs off the *pin's* progress, so it stays locked to
           // the horizontal track for the whole pinned range
           if (seqs.process) seqs.process.seek(self.progress);
+          // reveal is one-way, so only ever look at the next card — and read
+          // offsetLeft once per card instead of on every tick (it forces layout)
+          if (revealed >= steps.length) return;
           var x = distance() * self.progress;
-          for (var i = 0; i < steps.length; i++) {
-            if (steps[i].offsetLeft - x < w.innerWidth * 0.82) steps[i].classList.add('is-in');
+          while (revealed < steps.length && offsets[revealed] - x < w.innerWidth * 0.82) {
+            steps[revealed++].classList.add('is-in');
           }
         }
       }
@@ -298,13 +320,22 @@
     ['#waBtn', '#menuWa', '#footWa'].forEach(function (sel) { var el = $(sel); if (el) el.href = href; });
 
     var bar = $('#progress'), navUpdate = M.initNav($('#nav')), ticking = false;
+    // scrollHeight is a layout read — sampling it on every scroll tick forces a
+    // reflow mid-scroll. It only changes when the page is re-measured anyway.
+    var maxScroll = 1;
+    function remeasure() {
+      var d = document.documentElement;
+      maxScroll = Math.max(1, d.scrollHeight - d.clientHeight);
+    }
+    remeasure();
+    ScrollTrigger.addEventListener('refresh', remeasure);
+
     function onScroll() {
       if (ticking) return; ticking = true;
       requestAnimationFrame(function () {
-        var d = document.documentElement;
-        var p = d.scrollTop / Math.max(1, d.scrollHeight - d.clientHeight);
-        bar.style.transform = 'scaleX(' + p + ')';
-        if (navUpdate) navUpdate(d.scrollTop);
+        var y = w.scrollY || document.documentElement.scrollTop;
+        bar.style.transform = 'scaleX(' + (y / maxScroll) + ')';
+        if (navUpdate) navUpdate(y);
         ticking = false;
       });
     }
@@ -378,11 +409,14 @@
     }
 
     if (!hero) { reveal(); return; }
-    hero.load(function (p) {
+    // Only the sparse first pass gates the curtain — that is ~8 frames, not 64.
+    // The dense passes stream in behind the hero once it is on screen.
+    hero.preload(function (p) {
       var pct = Math.min(99, Math.round(p * 100));
       gsap.to(fill, { scaleX: p, duration: .4, ease: 'power2.out', overwrite: true });
       num.textContent = pct;
     }, reveal);
+    hero.activate();
     setTimeout(reveal, 7000);   // never trap the user behind a slow network
   }
 

@@ -168,7 +168,8 @@
     var heroCanvas = $('.whero .layer--canvas');
     if (heroCanvas) {
       var hero = new Sequence(heroCanvas, 'proof', { priority: 100 });
-      hero.load();
+      hero.preload();        // sparse pass gates nothing
+      hero.activate();       // then densify behind the visible hero
       if (!reduced) {
         ScrollTrigger.create({
           trigger: '.whero', start: 'top top', end: 'bottom top', scrub: 0.5,
@@ -180,10 +181,15 @@
     var cta = $('#cta');
     if (cta) {
       var seq = new Sequence($('.layer--canvas', cta), cta.dataset.seq, { priority: 20 });
-      if (reduced) { seq.load(null, function () { seq.draw(seq.count >> 1); }); }
+      if (reduced) { seq.preload(null, function () { seq.draw(seq.count >> 1); }); }
       else {
-        ScrollTrigger.create({ trigger: cta, start: 'top bottom+=150%', once: true,
-          onEnter: function () { seq.priority = 50; seq.load(); } });
+        ScrollTrigger.create({ trigger: cta, start: 'top bottom+=60%', once: true,
+          onEnter: function () { seq.preload(); } });
+        ScrollTrigger.create({ trigger: cta, start: 'top bottom+=100%', end: 'bottom top-=100%',
+          onToggle: function (self) {
+            if (self.isActive) { seq.wake(); seq.activate(); }
+            else { seq.sleep(); seq.deactivate(); }
+          } });
         ScrollTrigger.create({ trigger: cta, start: 'top top', end: 'bottom bottom', scrub: true,
           onUpdate: function (self) { seq.seek(self.progress); } });
       }
@@ -240,12 +246,21 @@
     ['#waBtn', '#menuWa', '#footWa'].forEach(function (s) { var el = $(s); if (el) el.href = href; });
 
     var bar = $('#progress'), navUpdate = M.initNav($('#nav')), ticking = false;
+    // scrollHeight is a layout read — keep it out of the scroll path
+    var maxScroll = 1;
+    function remeasure() {
+      var d = document.documentElement;
+      maxScroll = Math.max(1, d.scrollHeight - d.clientHeight);
+    }
+    remeasure();
+    ScrollTrigger.addEventListener('refresh', remeasure);
+
     function onScroll() {
       if (ticking) return; ticking = true;
       requestAnimationFrame(function () {
-        var d = document.documentElement;
-        bar.style.transform = 'scaleX(' + (d.scrollTop / Math.max(1, d.scrollHeight - d.clientHeight)) + ')';
-        if (navUpdate) navUpdate(d.scrollTop);
+        var y = w.scrollY || document.documentElement.scrollTop;
+        bar.style.transform = 'scaleX(' + (y / maxScroll) + ')';
+        if (navUpdate) navUpdate(y);
         ticking = false;
       });
     }

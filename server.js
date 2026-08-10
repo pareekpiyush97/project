@@ -1,8 +1,9 @@
 // minimal static file server for local preview
 const http = require('http'), fs = require('fs'), path = require('path');
-const ROOT = __dirname, PORT = 4970;
+const ROOT = __dirname, PORT = Number(process.env.PORT) || 4970;
 const MIME = { '.html':'text/html', '.css':'text/css', '.js':'text/javascript',
   '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.png':'image/png', '.svg':'image/svg+xml',
+  '.webp':'image/webp', '.woff2':'font/woff2', '.json':'application/json',
   '.mp4':'video/mp4', '.webm':'video/webm', '.txt':'text/plain', '.ico':'image/x-icon' };
 http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]);
