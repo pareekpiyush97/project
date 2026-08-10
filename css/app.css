@@ -157,6 +157,13 @@ html.lenis,html.lenis body{height:auto;}
 /* the process cards have their own solid panel, so no shadow needed there */
 .step p{text-shadow:none;color:var(--dim);}
 
+/* --- deliberate colour swaps (extra class raises specificity over the
+       generic overlay rules above) --------------------------------------- */
+/* hero eyebrow reads as a tagline, so it stays white rather than accented */
+.hero__kicker .label.label--signal{color:#fff;}
+/* booking lede carries the accent instead */
+.layer--content .lede.booking__lede{color:var(--signal);}
+
 /* scrims: precise, so footage stays visible but text never fights it */
 .scrim-vignette{background:radial-gradient(115% 85% at 50% 45%,transparent 32%,rgba(6,6,8,.72) 100%);}
 .scrim-bottom{background:linear-gradient(180deg,rgba(6,6,8,.5) 0%,transparent 24%,transparent 62%,rgba(6,6,8,.82) 100%);}
