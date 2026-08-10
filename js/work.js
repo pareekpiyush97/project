@@ -6,20 +6,20 @@
 (function (w) {
   'use strict';
 
-  var WHATSAPP = '910000000000';
-  var WA_TEXT  = "Hi APEX — I saw your work and I'd like a quote.\nCar: \nService: ";
+  var WHATSAPP = '918745028280';
+  var WA_TEXT  = "Hi Z Lab Design — I saw your work and I'd like a quote.\nCar: \nService: ";
 
-  /* id, category, title, service label, grid size */
+  /* clip basename, category, title, service label, grid size, poster image */
   var WORK = [
-    ['01', 'ppf',       'Matte Black GT',    'Full-front PPF', 'wide'],
-    ['02', 'ceramic',   'Chameleon 911',     'Ceramic + wheels', ''],
-    ['03', 'detailing', 'Concours Revival',  'Paint correction', 'tall'],
-    ['04', 'bodyshop',  'Panel Respray',     'Bodyshop', ''],
-    ['05', 'ppf',       'Track Build',       'Coloured PPF', ''],
-    ['06', 'ceramic',   'Daily Driver',      '9-year coating', 'wide'],
-    ['07', 'detailing', 'Interior Reset',    'Full detail', ''],
-    ['08', 'bodyshop',  'Widebody Fit',      'Bodykit', ''],
-    ['09', 'ppf',       'Showroom Fresh',    'PPF + sun film', '']
+    ['ppf-03',  'ppf',       'Range Rover',   'Full-body PPF',    'wide', 'car-rover-purple.jpg'],
+    ['cppf-02', 'cppf',      'Colour Change', 'Coloured PPF',     '',     'cppf-bmw.jpg'],
+    ['detail-01','detailing','Concours Detail','Full detail',     'tall', 'car-maybach.jpg'],
+    ['coat-01', 'ceramic',   'Ceramic Build', 'Ceramic coating',  '',     'car-benz-road.jpg'],
+    ['cppf-03', 'cppf',      'Satin Wrap',    'Coloured PPF',     '',     'cppf-rover.jpg'],
+    ['coat-02', 'ceramic',   'Graphene Layer','Graphene coating', 'wide', 'car-bmw-blue.jpg'],
+    ['matte-01','ppf',       'Matte Finish',  'Matte PPF',        '',     'car-audi-matte.jpg'],
+    ['ppf-04',  'ppf',       'Front Armour',  'Paint protection', '',     'car-black-duo.jpg'],
+    ['wash-01', 'detailing', 'Wash Bay',      'Maintenance wash', '',     'wash-bay.jpg']
   ];
 
   var M = w.APEX.motion, $ = M.$, $$ = M.$$, reduced = M.reduced;
@@ -38,26 +38,44 @@
   /* ---- gallery --------------------------------------------------------- */
   function buildGrid() {
     var grid = $('#grid');
-    grid.innerHTML = WORK.map(function (it) {
+    grid.innerHTML = WORK.map(function (it, i) {
       var mod = it[4] ? ' card--' + it[4] : '';
+      var poster = it[5] ? '<img class="card__poster" src="assets/img/' + it[5] + '" alt="" loading="lazy" />' : '';
       return '<article class="card' + mod + '" data-cat="' + it[1] + '" data-n="' + it[0] + '" ' +
         'tabindex="0" role="button" aria-label="' + it[2] + ' — play clip" data-cursor="Play">' +
-        '<div class="card__ph"><svg viewBox="0 0 24 24" aria-hidden="true">' +
-        '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg></div>' +
+        '<div class="card__ph">' + poster + '</div>' +
         '<video muted loop playsinline preload="none"></video>' +
         '<div class="card__meta"><div><div class="card__c">' + it[3] + '</div>' +
         '<div class="card__t">' + it[2] + '</div></div>' +
-        '<div class="idx">' + it[0] + '</div></div></article>';
+        '<div class="idx">' + String(i + 1).padStart(2, '0') + '</div></div></article>';
     }).join('');
 
     var cards = $$('.card', grid);
     cards.forEach(function (card) {
       var v = $('video', card), ph = $('.card__ph', card);
-      var url = 'assets/videos/work-' + card.dataset.n + '.mp4';
-      M.withVideo(url, function () {
-        v.onloadeddata = function () { ph.style.display = 'none'; };
-        v.src = url;
-        v.load();
+      // The poster carries the card, so a clip only downloads when the user
+      // shows intent. Auto-playing nine of these would pull ~45MB unprompted.
+      var url = 'assets/videos/' + card.dataset.n + '.mp4';
+      var armed = false;
+      function arm() {
+        if (armed) return; armed = true;
+        v.onloadeddata = function () { ph.style.opacity = '0'; };
+        v.src = url; v.load();
+      }
+      // Require a short dwell: scrolling moves cards *under* a stationary
+      // pointer, which fires pointerenter on nearly every card and would arm
+      // the whole grid during one flick.
+      var dwell = 0;
+      card.addEventListener('pointerenter', function () {
+        clearTimeout(dwell);
+        dwell = setTimeout(function () {
+          arm();
+          var p = v.play(); if (p) p.catch(function () {});
+        }, 180);
+      });
+      card.addEventListener('pointerleave', function () {
+        clearTimeout(dwell);
+        v.pause();
       });
 
       function open() {
@@ -70,16 +88,15 @@
       });
     });
 
-    // play only what is on screen
+    // pause anything that scrolls out of view (a card can stay "hovered"
+    // after the pointer leaves via scrolling rather than moving)
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (es) {
         es.forEach(function (e) {
           var v = $('video', e.target);
-          if (!v) return;
-          if (e.isIntersecting) { var p = v.play(); if (p) p.catch(function () {}); }
-          else v.pause();
+          if (v && !e.isIntersecting) v.pause();
         });
-      }, { threshold: 0.3 });
+      }, { threshold: 0.1 });
       cards.forEach(function (c) { io.observe(c); });
     }
 
@@ -119,9 +136,9 @@
   function openModal(it) {
     $('#modalT').textContent = it[2];
     $('#modalBody').textContent = it[3] + ' — full clip coming soon.';
-    $('#modalPath').textContent = 'assets/videos/work-' + it[0] + '.mp4';
+    $('#modalPath').textContent = 'assets/videos/' + it[0] + '.mp4';
     var v = $('#modalVid'), ph = $('#modalPh');
-    var url = 'assets/videos/work-' + it[0] + '.mp4';
+    var url = 'assets/videos/' + it[0] + '.mp4';
     v.style.display = 'none'; ph.style.display = '';
     M.withVideo(url, function () {
       v.onloadeddata = function () { v.style.display = 'block'; ph.style.display = 'none'; v.play().catch(function () {}); };

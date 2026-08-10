@@ -5,20 +5,21 @@
   'use strict';
 
   /* ---- studio config — edit these ------------------------------------- */
-  var WHATSAPP = '910000000000';                     // country code, no '+'
-  var WA_TEXT  = "Hi APEX — I'd like to book my car in.\nCar: \nService: ";
+  var WHATSAPP = '918745028280';                     // country code, no '+'
+  var WA_TEXT  = "Hi Z Lab Design — I'd like to book my car in.\nCar: \nService: ";
 
+  /* [name, clip basename in assets/videos/, description] */
   var SERVICES = [
-    ['Paint Protection Film', 'ppf',            'Invisible, self-healing armour over the clear coat. Track days very welcome.'],
-    ['Coloured PPF',          'coloured-ppf',   'Change the colour, keep the paint underneath untouched. Fully reversible.'],
-    ['Matte PPF',             'matte-ppf',      'Keeps matte exactly matte, and takes the stone chips so the panel does not.'],
-    ['Ceramic Coating',       'ceramic-coating','A liquid-glass shell — slick, hydrophobic, years of depth in the gloss.'],
-    ['Coating',               'coating',        'Wheels, glass, trim and interior, each coated to repel its own kind of mess.'],
-    ['Detailing',             'detailing',      'Every pore of paint and leather taken back to zero-mile condition.'],
-    ['Car Wash',              'car-wash',       'Foam, decontaminate, hand-dry. The weekly ritual your paint actually deserves.'],
-    ['Bodyshop',              'bodyshop',       'Dent, scratch and respray work colour-matched until the repair disappears.'],
-    ['Bodykit',               'bodykit',        'Splitters, diffusers and wings fitted with panel gaps that actually line up.'],
-    ['Sun Film',              'sunfilm',        'Heat and UV stopped at the glass. Cabin stays cool, interior stays new.']
+    ['Paint Protection Film', 'ppf-01',    'Invisible, self-healing armour over the clear coat. Track days very welcome.'],
+    ['Coloured PPF',          'cppf-01',   'Change the colour, keep the paint underneath untouched. Fully reversible.'],
+    ['Matte PPF',             'matte-01',  'Keeps matte exactly matte, and takes the stone chips so the panel does not.'],
+    ['Ceramic Coating',       'coat-01',   'A liquid-glass shell — slick, hydrophobic, years of depth in the gloss.'],
+    ['Graphene Coating',      'coat-02',   'Harder, slicker and more heat-tolerant than ceramic alone. Our longest-lasting layer.'],
+    ['Paint Correction',      'ppf-02',    'Swirls and etching machined out under calibrated light — never filled or hidden.'],
+    ['Detailing',             'detail-01', 'Every pore of paint, glass and trim taken back to zero-mile condition.'],
+    ['Interior Spa',          'coat-03',   'Leather, alcantara and fabric deep-cleaned, conditioned and sealed.'],
+    ['Sunfilm',               'sun-01',    'Heat and UV stopped at the glass. Cabin stays cool, interior stays new.'],
+    ['Car Wash',              'wash-01',   'Foam, decontaminate, hand-dry. The weekly ritual your paint actually deserves.']
   ];
 
   var M = w.APEX.motion, $ = M.$, $$ = M.$$, reduced = M.reduced;
