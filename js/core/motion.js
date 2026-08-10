@@ -188,6 +188,11 @@
   }
 
   w.ZLAB = w.ZLAB || {};
+  /* Back-compat alias. Browsers cache each script separately, so a returning
+     visitor can end up running an older cached app.js (which reads w.APEX)
+     against this newer file. Without the alias that throws immediately and
+     takes every animation on the page down with it. */
+  w.APEX = w.ZLAB;
   w.ZLAB.motion = {
     withVideo: withVideo,
     reduced: reduced, $: $, $$: $$,
