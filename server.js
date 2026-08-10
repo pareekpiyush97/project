@@ -15,4 +15,4 @@ http.createServer((req, res) => {
       'Cache-Control': 'no-cache' });
     res.end(data);
   });
-}).listen(PORT, () => console.log('APEX preview on http://localhost:' + PORT));
+}).listen(PORT, () => console.log('Z Lab preview on http://localhost:' + PORT));

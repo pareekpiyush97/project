@@ -22,7 +22,7 @@
     ['wash-01', 'detailing', 'Wash Bay',      'Maintenance wash', '',     'wash-bay.jpg']
   ];
 
-  var M = w.APEX.motion, $ = M.$, $$ = M.$$, reduced = M.reduced;
+  var M = w.ZLAB.motion, $ = M.$, $$ = M.$$, reduced = M.reduced;
   gsap.registerPlugin(ScrollTrigger);
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 

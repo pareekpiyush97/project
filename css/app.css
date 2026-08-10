@@ -1,5 +1,5 @@
 /* ============================================================================
-   APEX AUTO STUDIO — "Graphite & Signal"
+   Z LAB DESIGN — "Graphite & Signal"
    A motorsport-telemetry system: hairline rules, monospace indices, expanded
    display type, one high-visibility accent, footage as the photography layer.
 
@@ -600,6 +600,10 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
 /* -- 18 responsive -------------------------------------------------------- */
 @media (max-width:860px){
   :root{--nav-h:64px;}
+  /* Phones composite a full-screen layer per scrolled frame. The grain is an
+     animated one and the column rules are a decorative one — neither is worth
+     that budget on a handset. */
+  .grain,.rules{display:none;}
   .hero{height:280svh;}
   .manifesto{height:240svh;}
   .booking{height:200svh;}

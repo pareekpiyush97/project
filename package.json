@@ -1,8 +1,8 @@
 {
-  "name": "apex-auto-studio",
+  "name": "z-lab-design",
   "version": "1.0.0",
   "private": true,
-  "description": "Cinematic scroll-sequence site for APEX Auto Studio",
+  "description": "Cinematic scroll-sequence site for Z Lab Design",
   "scripts": {
     "dev": "node server.js",
     "build:seq": "node tools/build-sequences.mjs"

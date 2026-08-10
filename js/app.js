@@ -22,7 +22,7 @@
     ['Car Wash',              'wash-01',   'Foam, decontaminate, hand-dry. The weekly ritual your paint actually deserves.']
   ];
 
-  var M = w.APEX.motion, $ = M.$, $$ = M.$$, reduced = M.reduced;
+  var M = w.ZLAB.motion, $ = M.$, $$ = M.$$, reduced = M.reduced;
   gsap.registerPlugin(ScrollTrigger);
 
   /* keep the page at the top on reload — a mid-scroll restore breaks pinning */
@@ -92,7 +92,7 @@
       .to('#heroMeta',  { yPercent: 40, opacity: 0, ease: 'none' }, 0);
 
     // entrance (runs once the preloader lifts)
-    w.APEX.heroIn = function () {
+    w.ZLAB.heroIn = function () {
       var t = gsap.timeline({ defaults: { ease: 'expo.out' } });
       t.from('.hero__kicker', { y: 26, opacity: 0, duration: 1 })
        .from(M.splitWords($('.hero__title h1 .l1')), { yPercent: 115, duration: 1.25, stagger: .07 }, '-=.75')
@@ -278,6 +278,9 @@
 
   /* ---- chapter HUD ----------------------------------------------------- */
   function initHud() {
+    var hud = $('#hud');
+    // the HUD is display:none under 1100px — don't pay for its triggers there
+    if (!hud || !hud.offsetParent) return;
     var dots = $$('#hud a');
     $$('[data-chapter]').forEach(function (sec) {
       var i = +sec.dataset.chapter;
@@ -367,7 +370,7 @@
         onComplete: function () {
           $('#preload').remove();
           ScrollTrigger.refresh();
-          if (w.APEX.heroIn) w.APEX.heroIn();
+          if (w.ZLAB.heroIn) w.ZLAB.heroIn();
         }
       });
       tl.to('#preload .pl__inner', { opacity: 0, y: -18, duration: .5, ease: 'power2.in' })

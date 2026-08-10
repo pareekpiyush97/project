@@ -187,8 +187,8 @@
     }).catch(function () { probeCache[url] = false; });
   }
 
-  w.APEX = w.APEX || {};
-  w.APEX.motion = {
+  w.ZLAB = w.ZLAB || {};
+  w.ZLAB.motion = {
     withVideo: withVideo,
     reduced: reduced, $: $, $$: $$,
     splitWords: splitWords,

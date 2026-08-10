@@ -16,9 +16,9 @@
 (function (w) {
   'use strict';
 
-  var MANIFEST = w.APEX_SEQ || {};
+  var MANIFEST = w.ZLAB_SEQ || {};
   var isMobile = matchMedia('(max-width: 768px)').matches;
-  var SRC_W = isMobile ? 720 : 1280;
+  var SRC_W = isMobile ? 560 : 1280;
   // Never allocate more backing pixels than the source image actually has —
   // upscaling a 1280px frame into a 1700px canvas costs fill rate every frame
   // and buys no detail.

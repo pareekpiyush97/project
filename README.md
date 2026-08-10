@@ -1,4 +1,4 @@
-# APEX AUTO STUDIO
+# Z LAB DESIGN
 
 A scroll-driven site for a paint-protection / detailing studio. The car footage
 isn't video — each chapter is a **canvas image sequence scrubbed by scroll**, so
