@@ -249,25 +249,21 @@
   }
 
   /* ---- video modal ----------------------------------------------------- */
-  var modal = $('#modal'), lastFocus = null;
+  var modal = $('#modal'), lastFocus = null, releaseTrap = null;
   function openModal(i) {
     var s = SERVICES[i];
+    var url = 'assets/videos/' + s[1] + '.mp4';
     $('#modalT').textContent = s[0];
     $('#modalBody').textContent = s[2];
-    $('#modalPath').textContent = 'assets/videos/' + s[1] + '.mp4';
-    var v = $('#modalVid'), ph = $('#modalPh');
-    var url = 'assets/videos/' + s[1] + '.mp4';
-    v.style.display = 'none'; ph.style.display = '';
-    M.withVideo(url, function () {
-      v.onloadeddata = function () { v.style.display = 'block'; ph.style.display = 'none'; v.play().catch(function () {}); };
-      v.src = url; v.load();
-    });
+    $('#modalPath').textContent = url;
+    M.playInto($('#modalVid'), $('#modalPh'), url);
     lastFocus = document.activeElement;
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('is-locked');
     if (lenis) lenis.stop();
     $('#modalX').focus();
+    releaseTrap = M.trapFocus(modal);
   }
   function closeModal() {
     modal.classList.remove('is-open');
@@ -275,7 +271,8 @@
     var v = $('#modalVid'); v.pause(); v.removeAttribute('src'); v.load();
     document.body.classList.remove('is-locked');
     if (lenis) lenis.start();
-    if (lastFocus) lastFocus.focus();
+    if (releaseTrap) { releaseTrap(); releaseTrap = null; }
+    M.returnFocus(modal, lastFocus);
   }
   $('#modalX').addEventListener('click', closeModal);
   modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
@@ -284,7 +281,7 @@
   function initMenu() {
     var menu = $('#menu'), burger = $('#burger'), txt = $('#burgerTxt');
     var links = $$('.menu__list a');
-    var seq = null, raf = 0, last = 0, frame = 0;
+    var seq = null, raf = 0, last = 0, frame = 0, releaseMenuTrap = null;
 
     // Plays through exactly once per opening, then holds the last frame — a
     // looping backdrop reads as a stuck GIF behind the nav. Driven by elapsed
@@ -321,8 +318,12 @@
           last = 0; frame = 0;              // replay from the first frame
           raf = requestAnimationFrame(loop);
         }
+        links[0].focus();
+        releaseMenuTrap = M.trapFocus(menu);
       } else {
         cancelAnimationFrame(raf); raf = 0;
+        if (releaseMenuTrap) { releaseMenuTrap(); releaseMenuTrap = null; }
+        burger.focus();
       }
     }
     burger.addEventListener('click', function () { set(!menu.classList.contains('is-open')); });

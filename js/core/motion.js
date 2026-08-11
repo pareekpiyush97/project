@@ -174,17 +174,61 @@
     };
   }
 
-  /* Attach a clip only once we know it exists. Probing with HEAD keeps the
-     console clean while the studio's footage is still being filmed, and the
-     slot upgrades itself the moment a file is dropped in assets/videos/. */
-  var probeCache = {};
-  function withVideo(url, onFound) {
-    if (probeCache[url] === false) return;
-    if (probeCache[url] === true) { onFound(); return; }
-    fetch(url, { method: 'HEAD' }).then(function (r) {
-      probeCache[url] = r.ok;
-      if (r.ok) onFound();
-    }).catch(function () { probeCache[url] = false; });
+  /** Point a <video> at a clip, showing `ph` until it can actually play and
+      falling back to it if the file is missing.
+
+      This used to HEAD-probe the URL first, from a time when the footage was
+      still being filmed. Every clip referenced now exists, so the probe only
+      bought a wasted round-trip before playback and an aborted request in the
+      network panel. The element's own error event covers the missing case. */
+  function playInto(video, placeholder, url) {
+    video.style.display = 'none';
+    placeholder.style.display = '';
+    video.onloadeddata = function () {
+      video.style.display = 'block';
+      placeholder.style.display = 'none';
+      var p = video.play();
+      if (p) p.catch(function () { /* autoplay refused — controls are there */ });
+    };
+    video.onerror = function () {
+      video.style.display = 'none';
+      placeholder.style.display = '';
+    };
+    video.src = url;
+    video.load();
+  }
+
+  /** Hand focus back after closing an overlay.
+      `element.focus()` on a stale or unfocusable trigger is a silent no-op, so
+      focus would simply stay on whatever is inside the now-hidden overlay —
+      invisible, and the next Tab resumes from nowhere. Fall back to blurring. */
+  function returnFocus(overlay, trigger) {
+    if (trigger && trigger.isConnected && trigger !== document.body) {
+      trigger.focus();
+      if (document.activeElement === trigger) return;
+    }
+    if (overlay.contains(document.activeElement)) document.activeElement.blur();
+  }
+
+  /** Keep Tab inside an open overlay; returns a function that releases it.
+      Without this, tabbing out of a dialog walks the page behind it while the
+      overlay still covers the screen — focus goes somewhere the user cannot
+      see. Capture phase so it runs before anything else handles the key. */
+  function trapFocus(container) {
+    var SEL = 'a[href],button:not([disabled]),input,select,textarea,' +
+              'video[controls],[tabindex]:not([tabindex="-1"])';
+    function onKey(e) {
+      if (e.key !== 'Tab') return;
+      var items = $$(SEL, container).filter(function (el) {
+        return el.offsetWidth || el.offsetHeight || el.getClientRects().length;
+      });
+      if (!items.length) return;
+      var first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+    document.addEventListener('keydown', onKey, true);
+    return function release() { document.removeEventListener('keydown', onKey, true); };
   }
 
   w.ZLAB = w.ZLAB || {};
@@ -194,7 +238,9 @@
      takes every animation on the page down with it. */
   w.APEX = w.ZLAB;
   w.ZLAB.motion = {
-    withVideo: withVideo,
+    playInto: playInto,
+    trapFocus: trapFocus,
+    returnFocus: returnFocus,
     reduced: reduced, $: $, $$: $$,
     splitWords: splitWords,
     initReveals: initReveals,

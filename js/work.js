@@ -51,14 +51,35 @@
     }).join('');
 
     var cards = $$('.card', grid);
+
+    /* The poster carries the card, so a clip only downloads when the user
+       shows intent. But intent alone was not a budget: each clip is 3.5-7.5MB
+       and every card that earned a hover stayed resident, so wandering across
+       the grid could pull ~45MB and hold all nine decoded. Keep at most
+       MAX_LIVE and release the least recently used. */
+    var MAX_LIVE = 2, live = [];
+    function release(card) {
+      var v = $('video', card);
+      v.pause();
+      v.removeAttribute('src');
+      v.load();
+      $('.card__ph', card).style.opacity = '';
+      card._armed = false;
+    }
+    function keepLive(card) {
+      var i = live.indexOf(card);
+      if (i >= 0) live.splice(i, 1);
+      live.push(card);
+      while (live.length > MAX_LIVE) release(live.shift());
+    }
+
     cards.forEach(function (card) {
       var v = $('video', card), ph = $('.card__ph', card);
-      // The poster carries the card, so a clip only downloads when the user
-      // shows intent. Auto-playing nine of these would pull ~45MB unprompted.
       var url = 'assets/videos/' + card.dataset.n + '.mp4';
-      var armed = false;
       function arm() {
-        if (armed) return; armed = true;
+        keepLive(card);
+        if (card._armed) return;
+        card._armed = true;
         v.onloadeddata = function () { ph.style.opacity = '0'; };
         v.src = url; v.load();
       }
@@ -111,10 +132,19 @@
 
   function initFilters() {
     var chips = $$('#filters .chip');
+    // is-on is the only visual cue for the active filter; aria-pressed is the
+    // same fact for anyone not looking at it
+    chips.forEach(function (c) {
+      c.setAttribute('aria-pressed', c.classList.contains('is-on') ? 'true' : 'false');
+    });
     chips.forEach(function (chip) {
       chip.addEventListener('click', function () {
-        chips.forEach(function (c) { c.classList.remove('is-on'); });
+        chips.forEach(function (c) {
+          c.classList.remove('is-on');
+          c.setAttribute('aria-pressed', 'false');
+        });
         chip.classList.add('is-on');
+        chip.setAttribute('aria-pressed', 'true');
         var cat = chip.dataset.cat;
         $$('.card').forEach(function (card) {
           var show = cat === 'all' || card.dataset.cat === cat;
@@ -132,24 +162,20 @@
   }
 
   /* ---- modal ----------------------------------------------------------- */
-  var modal = $('#modal'), lastFocus = null;
+  var modal = $('#modal'), lastFocus = null, releaseTrap = null;
   function openModal(it) {
-    $('#modalT').textContent = it[2];
-    $('#modalBody').textContent = it[3] + ' — full clip coming soon.';
-    $('#modalPath').textContent = 'assets/videos/' + it[0] + '.mp4';
-    var v = $('#modalVid'), ph = $('#modalPh');
     var url = 'assets/videos/' + it[0] + '.mp4';
-    v.style.display = 'none'; ph.style.display = '';
-    M.withVideo(url, function () {
-      v.onloadeddata = function () { v.style.display = 'block'; ph.style.display = 'none'; v.play().catch(function () {}); };
-      v.src = url; v.load();
-    });
+    $('#modalT').textContent = it[2];
+    $('#modalBody').textContent = it[3] + '.';
+    $('#modalPath').textContent = url;
+    M.playInto($('#modalVid'), $('#modalPh'), url);
     lastFocus = document.activeElement;
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('is-locked');
     if (lenis) lenis.stop();
     $('#modalX').focus();
+    releaseTrap = M.trapFocus(modal);
   }
   function closeModal() {
     modal.classList.remove('is-open');
@@ -157,7 +183,8 @@
     var v = $('#modalVid'); v.pause(); v.removeAttribute('src'); v.load();
     document.body.classList.remove('is-locked');
     if (lenis) lenis.start();
-    if (lastFocus) lastFocus.focus();
+    if (releaseTrap) { releaseTrap(); releaseTrap = null; }
+    M.returnFocus(modal, lastFocus);
   }
   $('#modalX').addEventListener('click', closeModal);
   modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
@@ -200,7 +227,7 @@
   function initMenu() {
     var menu = $('#menu'), burger = $('#burger'), txt = $('#burgerTxt');
     var links = $$('.menu__list a');
-    var seq = null, raf = 0, last = 0, frame = 0;
+    var seq = null, raf = 0, last = 0, frame = 0, releaseMenuTrap = null;
     // plays through exactly once per opening, then holds the last frame
     var MENU_PLAY_MS = 2200;
     function loop(t) {
@@ -230,7 +257,13 @@
           last = 0; frame = 0;              // replay from the first frame
           raf = requestAnimationFrame(loop);
         }
-      } else { cancelAnimationFrame(raf); raf = 0; }
+        links[0].focus();
+        releaseMenuTrap = M.trapFocus(menu);
+      } else {
+        cancelAnimationFrame(raf); raf = 0;
+        if (releaseMenuTrap) { releaseMenuTrap(); releaseMenuTrap = null; }
+        burger.focus();
+      }
     }
     burger.addEventListener('click', function () { set(!menu.classList.contains('is-open')); });
     links.forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
