@@ -2,3 +2,11 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
+.claude/
+# superseded frame-pipeline output: the deployed manifest only knows 900/1600
+assets/seq/*/md/
+assets/seq/*/sm/
+assets/seq/*/poster.jpg
+assets/seq/finale/
+assets/seq/protect/
+tools/build_frames.py
