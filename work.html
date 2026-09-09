@@ -2,6 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<script>
+/* Same domain, two builds. This is the desktop build: the scroll sequences
+   assume a monitor, a mouse and a steady connection, so a coarse-pointer
+   device gets mobile.html instead. Each guard keys on the PRIMARY pointer,
+   one value per device, so the pages can never bounce a visitor back and
+   forth; a touchscreen laptop reports fine (its trackpad) and stays here.
+   ?full=1 forces this build and sticks for the tab. */
+(function () {
+  try {
+    var qs = location.search;
+    if (/[?&]full=1/.test(qs)) { sessionStorage.setItem("zlab-full", "1"); return; }
+    if (sessionStorage.getItem("zlab-full") === "1") return;
+    if (matchMedia("(pointer:coarse)").matches) location.replace("mobile.html" + qs + "#work");
+  } catch (e) {}
+})();
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Our Work — Z Lab Design</title>
 <meta name="description" content="Recent paint protection, coloured PPF, ceramic coating and detailing builds from Z Lab Design, Indirapuram." />
@@ -9,9 +26,9 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-var.woff2" crossorigin />
-<link rel="preload" as="image" href="assets/seq/proof/1600/f0001.webp" fetchpriority="high" media="(min-width:769px)" />
-<link rel="preload" as="image" href="assets/seq/proof/900/f0001.webp" fetchpriority="high" media="(max-width:768px)" />
-<link rel="stylesheet" href="css/app.css?v=10" />
+<!-- one desktop tier: coarse pointers are routed to mobile.html -->
+<link rel="preload" as="image" href="assets/seq/proof/1920/f0001.webp" fetchpriority="high" />
+<link rel="stylesheet" href="css/app.css?v=11" />
 </head>
 <body>
 
@@ -151,16 +168,20 @@
         <code id="modalPath"></code>
       </div>
     </div>
-    <p class="modal__body" id="modalBody"></p>
+    <div class="modal__scroll">
+      <p class="modal__body" id="modalBody"></p>
+      <div id="modalDetail"></div>
+    </div>
   </div>
 </div>
 
-<script src="js/lib/gsap.min.js?v=10"></script>
-<script src="js/lib/ScrollTrigger.min.js?v=10"></script>
-<script src="js/lib/lenis.min.js?v=10"></script>
-<script src="js/seq-manifest.js?v=10"></script>
-<script src="js/core/sequence.js?v=10"></script>
-<script src="js/core/motion.js?v=10"></script>
-<script src="js/work.js?v=10"></script>
+<script src="js/lib/gsap.min.js?v=11"></script>
+<script src="js/lib/ScrollTrigger.min.js?v=11"></script>
+<script src="js/lib/lenis.min.js?v=11"></script>
+<script src="js/seq-manifest.js?v=11"></script>
+<script src="js/details.js?v=11"></script>
+<script src="js/core/sequence.js?v=11"></script>
+<script src="js/core/motion.js?v=11"></script>
+<script src="js/work.js?v=11"></script>
 </body>
 </html>

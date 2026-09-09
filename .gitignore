@@ -3,7 +3,7 @@ node_modules/
 Thumbs.db
 *.log
 .claude/
-# superseded frame-pipeline output: the deployed manifest only knows 900/1600
+# superseded frame-pipeline output: the deployed manifest knows 1920/1200
 assets/seq/*/md/
 assets/seq/*/sm/
 assets/seq/*/poster.jpg

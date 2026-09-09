@@ -255,6 +255,8 @@
     var url = 'assets/videos/' + s[1] + '.mp4';
     $('#modalT').textContent = s[0];
     $('#modalBody').textContent = s[2];
+    // the spec sheet lives in js/details.js so all three surfaces agree
+    $('#modalDetail').innerHTML = w.ZLAB_DETAILS ? w.ZLAB_DETAILS.html(s[0]) : '';
     $('#modalPath').textContent = url;
     M.playInto($('#modalVid'), $('#modalPh'), url);
     lastFocus = document.activeElement;

@@ -2,11 +2,16 @@
    sequence.js — scroll-scrubbed canvas image sequence
    ----------------------------------------------------------------------------
    Memory note (this is the whole trick):
-   A decoded 1280x720 frame costs ~3.7MB of RAM. Holding 72 of them decoded is
-   ~265MB per sequence, which is what kills phones and forces the browser to
-   re-decode mid-scroll (the stutter). So we keep the *compressed* Image objects
-   (~70KB each, trivial) and explicitly pre-decode only a rolling window around
+   A decoded 1920x1080 frame costs ~8.3MB of RAM. Holding 120 of them decoded
+   is ~1GB per sequence, which nothing will keep, so the browser re-decodes
+   mid-scroll and that is the stutter. So we keep the *compressed* Image objects
+   (~83KB each, trivial) and explicitly pre-decode only a rolling window around
    the playhead via img.decode(), which runs off the main thread.
+
+   Motion note (the third half):
+   Density alone still steps. paint() takes a FRACTIONAL position and blends the
+   two frames it sits between, then settles on a whole frame one tick after the
+   scrub stops — a blend held at rest is a visible double exposure.
 
    Bandwidth note (the other half):
    Fetching every frame of every sequence up front is ~20MB on the home page,
@@ -14,7 +19,7 @@
    frames arrive in *passes* of decreasing stride — 1 frame in 8 first, then
    1 in 4, 1 in 2, then the rest. A sparse pass is already scrubbable (_pick
    falls back to the nearest frame it holds), so the sequence is usable after
-   ~8 requests instead of 64, and only a sequence the user has actually reached
+   ~15 requests instead of 120, and only a sequence the user has actually reached
    ever pays for the dense passes.
    ========================================================================== */
 (function (w) {
@@ -23,18 +28,21 @@
   var MANIFEST = w.ZLAB_SEQ || {};
 
   /* ---- source variant --------------------------------------------------
-     Phones draw into a canvas a few hundred px wide, so a 1600px frame is
-     downsampled away — pure waste. Data-saver and 2G get the small set too. */
+     Coarse pointers are routed to mobile.html, which has no sequences at all,
+     so the small tier is now for weak DESKTOPS: data-saver, 2G, ~2GB of RAM,
+     or someone who forced ?full=1 onto a phone. */
   var conn = navigator.connection || {};
   var thrifty = !!conn.saveData ||
                 /(^|\W)(slow-)?2g$/.test(conn.effectiveType || '') ||
                 (navigator.deviceMemory || 8) <= 2;
   var isMobile = matchMedia('(max-width: 768px)').matches;
-  var SRC_W = (isMobile || thrifty) ? 900 : 1600;
-  // Never allocate more backing pixels than the source image actually has —
-  // upscaling a 1600px frame into a wider canvas costs fill rate every frame
-  // and buys no detail.
-  var MAX_BACKING = SRC_W;
+  var SRC_W = (isMobile || thrifty) ? 1200 : 1920;
+  /* The frames are 1920x1080 natively, so 1920 buys real detail. Backing the
+     canvas at source width and letting the compositor stretch it is softer
+     than resampling once ourselves at 'high', which is what a 2K/4K monitor
+     wants — but only where there is source detail to resample, so the thrifty
+     tier stays pinned to its own width. */
+  var MAX_BACKING = SRC_W < 1920 ? SRC_W : 2560;
 
   /* The width cap alone is not enough on a phone. A portrait viewport
      cover-fits a landscape frame, so the canvas ends up far TALLER than the
@@ -45,12 +53,15 @@
      that size. Desktop is unaffected: MAX_BACKING already binds there. */
   var coarse = matchMedia('(pointer: coarse)').matches;
   var MAX_DPR = coarse ? 1.5 : 2;
-  var MAX_PIXELS = coarse ? 1.1e6 : 3.2e6;
+  // 2560x1440 is 3.69e6, so the desktop net has to sit above that or it binds
+  // before MAX_BACKING does and quietly undoes the 2K backing store
+  var MAX_PIXELS = coarse ? 1.1e6 : 4.2e6;
 
   var WARM_BACK = 3;    // frames behind the playhead to keep decoded
   var WARM_AHEAD = 10;  // frames ahead (scrolling down is the common case)
   var WARM_STEP = 3;    // only recompute the warm window after this much drift
   var PICK_RADIUS = 16; // how far _pick will hunt before giving up
+  var BLEND_MIN = 0.02; // below this the second frame is not worth a blit
 
   // Stride schedule. Pass 0 is what a merely-approaching sequence gets; the
   // rest are earned by actually arriving at the section.
@@ -114,6 +125,7 @@
     this._painted = false;
     this._raf = 0;
     this._pending = -1;
+    this._drawn = -1;                           // last position handed to paint()
     this._warmedAt = -999;
     this._hq = true;
     this._hqTimer = 0;
@@ -167,7 +179,7 @@
             });
           } else if (self.frame >= 0 && Math.abs(i - self.frame) <= 1) {
             // a frame landed right where the playhead is sitting — show it
-            self._decode(i, function () { self._painted = false; self.draw(self.frame); });
+            self._decode(i, function () { self._painted = false; self.paint(self.frame); });
           }
           self._fireProgress();
           done();
@@ -305,17 +317,29 @@
     return this.imgs[i] || this.imgs[0] || null;
   };
 
-  /** Scrub position 0..1. Batched to one paint per animation frame. */
+  /** Scrub position 0..1. Batched to one paint per animation frame.
+   *  The position stays FRACTIONAL so paint() can cross-fade the two frames it
+   *  sits between: at ~120 frames a section that is the difference between
+   *  continuous motion and stepping from still to still. */
   Sequence.prototype.seek = function (p) {
-    var i = Math.round(Math.max(0, Math.min(1, p)) * (this.count - 1));
-    if (i === this._pending) return;
-    this._pending = i;
+    var pos = Math.max(0, Math.min(1, p)) * (this.count - 1);
+    if (pos === this._pending) return;
+    this._pending = pos;
     this._scrubbing();
+    this._tick();
+  };
+
+  Sequence.prototype._tick = function () {
     if (this._raf) return;
     var self = this;
     this._raf = requestAnimationFrame(function () {
       self._raf = 0;
-      self.draw(self._pending);
+      var moving = self._pending !== self._drawn;
+      self._drawn = self._pending;
+      // Idle scrub: land on a whole frame. A cross-fade held at rest is a
+      // visible double exposure, so the last paint of a gesture must be clean.
+      self.paint(moving ? self._pending : Math.round(self._pending));
+      if (moving) self._tick();       // one extra tick to perform the settle
     });
   };
 
@@ -329,18 +353,15 @@
       self._hq = true;
       self._applyHints();
       self._painted = false;
-      self.draw(self.frame);
+      self.paint(self.frame);
     }, 140);
   };
 
-  Sequence.prototype.draw = function (i) {
-    i = Math.max(0, Math.min(this.count - 1, i | 0));
-    if (i === this.frame && this._painted) return;
-    var img = this._pick(i);
-    this.frame = i;
-    this._warm(i);
-    if (!img || !img.width) return;
+  /** Draw a whole frame index — menu playback, first paint, redraw on resize. */
+  Sequence.prototype.draw = function (i) { this.paint(i | 0); };
 
+  /** Cover-fit blit of one decoded frame. */
+  Sequence.prototype._blit = function (img) {
     var ctx = this.ctx, cv = this.canvas;
     var cw = cv.width, ch = cv.height;
     var ir = img.width / img.height, cr = cw / ch;
@@ -348,6 +369,28 @@
     if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0; }
     else { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2; }
     ctx.drawImage(img, dx, dy, dw, dh);
+  };
+
+  /** Paint a FRACTIONAL position, cross-fading the two frames it sits between. */
+  Sequence.prototype.paint = function (pos) {
+    pos = Math.max(0, Math.min(this.count - 1, pos || 0));
+    if (pos === this.frame && this._painted) return;
+    var i = Math.floor(pos), f = pos - i;
+    var base = this._pick(i);
+    this.frame = pos;
+    this._warm(i);
+    if (!base || !base.width) return;
+
+    this._blit(base);
+    /* Blend toward the next frame only when it is genuinely decoded: waiting on
+       it would stall the paint, a half-decoded blit flickers, and during the
+       early stride passes (1 frame in 8) the neighbour simply is not there yet
+       — those passes fall back to a clean single blit. */
+    if (f > BLEND_MIN && this.ready[i + 1] === true && this.imgs[i + 1]) {
+      this.ctx.globalAlpha = f;
+      this._blit(this.imgs[i + 1]);
+      this.ctx.globalAlpha = 1;
+    }
     this._painted = true;
   };
 
@@ -372,7 +415,7 @@
     this.ctx.fillStyle = '#0a0a0c';
     this.ctx.fillRect(0, 0, nw, nh);
     this._painted = false;
-    if (this.frame >= 0) this.draw(this.frame);
+    if (this.frame >= 0) this.paint(this.frame);
   };
 
   /** Release the backing store while the section is far off screen. Five
@@ -388,7 +431,7 @@
     if (!this.asleep) return;
     this.asleep = false;
     this.resize();
-    if (this.frame >= 0) this.draw(this.frame);
+    if (this.frame >= 0) this.paint(this.frame);
   };
 
   Sequence.prototype.destroy = function () {

@@ -1,44 +1,52 @@
 /**
- * build-sequences.mjs — turns raw ezGif frame dumps into responsive WebP
- * scroll sequences plus a manifest the front-end reads at runtime.
+ * build-sequences.mjs — turns the raw ezGif frame dumps into the WebP scroll
+ * sequences the desktop site scrubs, plus a manifest the front-end reads.
  *
  *   node tools/build-sequences.mjs
  *
- * Source frames stay untouched in ~/Downloads/ezGif. Output:
+ * Source frames stay untouched in Downloads/mywebpage/ezGif. Output:
  *   assets/seq/<name>/<width>/f0001.webp
- *   assets/seq/manifest.json
+ *   assets/seq/manifest.json  +  js/seq-manifest.js
  *
- * Why: 1600 raw ~110KB JPEGs is ~54MB and mobile cannot keep that decoded,
- * which is what makes scroll-scrubbing stutter. Sampling to ~80 desktop /
- * 44 mobile frames at sane widths cuts it by roughly 10x.
+ * Desktop-only site: phones get mobile.html, which has no canvas sequences at
+ * all, so there is exactly ONE tier here and it is sized for a real monitor.
+ * 1920 is the ceiling because that is what the source dumps are — going wider
+ * would be upscaling, which costs bytes and fill rate and buys no detail. If
+ * higher-res masters ever arrive, raise TIER.w and re-run.
+ *
+ * Frame COUNT is what buys smooth scrubbing, and it is cheap next to width:
+ * measured on these dark showroom frames, 1920/q68 lands at ~83KB, barely
+ * above the old 1600/q62 (~68KB). So the budget goes into density.
  */
 import sharp from 'sharp';
 import { readdir, mkdir, writeFile, rm } from 'node:fs/promises';
 import path from 'node:path';
 
-const SRC = 'C:/Users/DELL/Downloads/ezGif';
+const SRC = 'C:/Users/DELL/Downloads/mywebpage/ezGif';
 const OUT = path.resolve('assets/seq');
 
-/** role -> source folder. Each clip gets exactly one job on the site. */
-const CLIPS = {
-  hero:     'ezip',              // red Ferrari, dark turntable showroom
-  craft:    'ezip - Copy (5)',   // white McLaren, glass reflections
-  services: 'ezip - Copy (3)',   // black McLaren, LED detailing bay
-  process:  'ezip - Copy (7)',   // workshop, lifts + robots
-  proof:    'ezip - Copy (4)',   // BODYSHOP, silver + lime
-  booking:  'ezip - Copy (6)',   // grey hypercar, chrome showroom
-  menu:     'ezip - Copy',       // chameleon Porsche (colour-shifting)
-  work:     'ezip - Copy (2)',   // purple + green, bright white studio
-};
-
-/* Resolution is set by the DEVICE pixels the frame has to fill, not the CSS
-   width. A 390px phone at dpr 3 is ~1170 real pixels across, so a 560px frame
-   gets upscaled ~2x and looks obviously soft. These widths keep the upscale
-   near 1x; frame counts are what we trade away for performance instead. */
-const VARIANTS = [
-  { w: 1600, q: 62, cap: 64 },   // desktop / large laptop
-  { w: 900,  q: 60, cap: 30 },   // phones — ~1.3x on a dpr-3 handset, sharp enough
+/* Two tiers, and the small one is NOT for phones — they get mobile.html, which
+   has no sequences at all. It is what sequence.js falls back to on data-saver,
+   2G or a ~2GB machine, so it trades frames for bytes rather than detail. */
+const TIERS = [
+  { w: 1920, q: 68, effort: 6, share: 1 },      // full density
+  { w: 1200, q: 64, effort: 6, share: 0.5 },    // thrifty: half the frames
 ];
+const JOBS = 6;          // parallel sharp pipelines; 120 at once spikes RAM
+
+/** role -> [source folder, frame cap]. Each clip gets exactly one job.
+ *  Caps: scrubbed sections get density; `menu` only plays a 2.2s intro, and
+ *  `booking` has just 46 source frames so it takes all of them. */
+const CLIPS = {
+  hero:     ['ezip',            120],  // red Ferrari, dark turntable showroom
+  craft:    ['ezip - Copy (5)', 120],  // white McLaren, glass reflections
+  services: ['ezip - Copy (3)', 120],  // black McLaren, LED bay — 720p source
+  process:  ['ezip - Copy (7)', 120],  // workshop, lifts + robots
+  proof:    ['ezip - Copy (4)', 120],  // BODYSHOP, silver + lime (work.html)
+  booking:  ['ezip - Copy (6)',  46],  // grey hypercar, chrome showroom
+  menu:     ['ezip - Copy',      72],  // chameleon Porsche, menu backdrop
+  work:     ['ezip - Copy (2)', 120],  // purple + green, bright white studio
+};
 
 /** Evenly sample `n` items from a list, always keeping first and last. */
 function sample(list, n) {
@@ -48,36 +56,44 @@ function sample(list, n) {
   return out;
 }
 
+/** Run `fn` over `items` at most `limit` at a time. */
+async function pool(items, limit, fn) {
+  let next = 0;
+  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (next < items.length) { const i = next++; await fn(items[i], i); }
+  });
+  await Promise.all(workers);
+}
+
 const manifest = {};
 let totalBytes = 0;
 
-for (const [name, folder] of Object.entries(CLIPS)) {
+for (const [name, [folder, cap]] of Object.entries(CLIPS)) {
   const dir = path.join(SRC, folder);
   const files = (await readdir(dir)).filter(f => /\.jpe?g$/i.test(f)).sort();
   if (!files.length) { console.warn(`! ${name}: no frames in ${folder}`); continue; }
 
-  // frame count differs per variant, so it is recorded per size
+  await rm(path.join(OUT, name), { recursive: true, force: true });  // drops the old 900/1600 tiers
   const sizes = {};
 
-  for (const v of VARIANTS) {
-    const picks = sample(files, v.cap);
-    sizes[v.w] = picks.length;
-    const destDir = path.join(OUT, name, String(v.w));
-    await rm(destDir, { recursive: true, force: true });
+  for (const tier of TIERS) {
+    const picks = sample(files, Math.round(cap * tier.share));
+    const destDir = path.join(OUT, name, String(tier.w));
     await mkdir(destDir, { recursive: true });
 
-    let bytes = 0;
-    await Promise.all(picks.map(async (file, i) => {
+    let bytes = 0, w = 0, h = 0;
+    await pool(picks, JOBS, async (file, i) => {
       const dest = path.join(destDir, `f${String(i + 1).padStart(4, '0')}.webp`);
       const info = await sharp(path.join(dir, file))
-        .resize({ width: v.w, withoutEnlargement: true })
-        .webp({ quality: v.q, effort: 4 })
+        .resize({ width: tier.w, withoutEnlargement: true })
+        .webp({ quality: tier.q, effort: tier.effort })
         .toFile(dest);
-      bytes += info.size;
-    }));
+      bytes += info.size; w = info.width; h = info.height;
+    });
 
     totalBytes += bytes;
-    console.log(`  ${name}/${v.w}  ${picks.length} frames  ${(bytes / 1048576).toFixed(2)} MB`);
+    sizes[tier.w] = picks.length;
+    console.log(`  ${name}/${tier.w}  ${picks.length} frames  ${w}x${h}  ${(bytes / 1048576).toFixed(2)} MB`);
   }
 
   manifest[name] = { ext: 'webp', sizes };

@@ -166,7 +166,8 @@
   function openModal(it) {
     var url = 'assets/videos/' + it[0] + '.mp4';
     $('#modalT').textContent = it[2];
-    $('#modalBody').textContent = it[3] + '.';
+    $('#modalBody').textContent = it[3] + ' — finished at the studio in Indirapuram.';
+    $('#modalDetail').innerHTML = w.ZLAB_DETAILS ? w.ZLAB_DETAILS.html(it[2]) : '';
     $('#modalPath').textContent = url;
     M.playInto($('#modalVid'), $('#modalPh'), url);
     lastFocus = document.activeElement;

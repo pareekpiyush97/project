@@ -643,13 +643,51 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
 .modal__t{font-variation-settings:"wdth" 116,"wght" 700;text-transform:uppercase;font-size:1.32rem;letter-spacing:-.01em;}
 .modal__x{width:40px;height:40px;border:1px solid var(--line-2);border-radius:var(--r-round);display:grid;place-items:center;transition:all .3s;}
 .modal__x:hover{background:var(--signal);color:var(--signal-ink);border-color:var(--signal);transform:rotate(90deg);}
-.modal__media{position:relative;aspect-ratio:16/9;background:repeating-linear-gradient(45deg,#101014 0 14px,#15151a 14px 28px);display:grid;place-items:center;}
-.modal__media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000;}
+.modal__media{position:relative;aspect-ratio:16/9;max-height:min(44vh,440px);background:repeating-linear-gradient(45deg,#101014 0 14px,#15151a 14px 28px);display:grid;place-items:center;}
+.modal__media video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;}
 .modal__ph{text-align:center;padding:24px;}
 .modal__ph .ring{width:64px;height:64px;border:1px solid var(--line-2);border-radius:var(--r-round);display:grid;place-items:center;margin:0 auto 14px;}
 .modal__ph .ring svg{width:20px;height:20px;fill:var(--signal);}
 .modal__ph code{font-family:var(--f-mono);font-size:var(--fs-xs);color:var(--faint);display:block;margin-top:8px;}
-.modal__body{padding:18px 20px 24px;color:var(--dim);font-size:var(--fs-base);max-width:64ch;}
+.modal__body{padding:18px 20px 4px;color:var(--dim);font-size:var(--fs-base);max-width:64ch;}
+
+/* the detail sheet under the clip — markup comes from js/details.js, so these
+   same class names are styled again (differently) in css/mobile.css.
+   Wide panels put the two lists side by side: a clip already owns most of the
+   panel height, and stacking them buried the spec rows behind a scrollbar. */
+.detail{
+  padding:18px 20px 26px;
+  display:grid;grid-template-columns:1fr minmax(230px,320px);gap:0 36px;
+  align-content:start;
+}
+.detail__h{margin:0 0 10px;color:var(--faint);}
+.detail__h:nth-of-type(1){grid-column:1;grid-row:1;}
+.detail__scope{grid-column:1;grid-row:2;margin:0;padding:0;list-style:none;counter-reset:step;}
+.detail__h:nth-of-type(2){grid-column:2;grid-row:1;}
+.detail__spec{grid-column:2;grid-row:2;margin:0;}
+.detail__scope li{
+  position:relative;padding:9px 0 9px 38px;
+  border-top:1px solid var(--line);color:var(--text);font-size:var(--fs-base);line-height:1.5;
+}
+.detail__scope li:first-child{border-top:0;padding-top:2px;}
+.detail__scope li::before{
+  counter-increment:step;content:counter(step,decimal-leading-zero);
+  position:absolute;left:0;top:11px;
+  font-family:var(--f-mono);font-size:var(--fs-xs);color:var(--signal);
+}
+.detail__scope li:first-child::before{top:4px;}
+.detail__spec dt{
+  padding:9px 0 0;border-top:1px solid var(--line);
+  font-family:var(--f-mono);font-size:var(--fs-xs);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--faint);
+}
+.detail__spec dd{margin:0;padding:2px 0 9px;color:var(--text);font-size:var(--fs-base);line-height:1.45;}
+.detail__spec dt:first-child{border-top:0;padding-top:2px;}
+@media (max-width:860px){
+  .detail{grid-template-columns:1fr;}
+  .detail__h,.detail__scope,.detail__spec{grid-column:1;grid-row:auto;}
+  .detail__h:nth-of-type(2){margin-top:26px;}
+}
 
 /* page transition curtain */
 .curtain{

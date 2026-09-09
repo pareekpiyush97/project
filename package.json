@@ -5,7 +5,8 @@
   "description": "Cinematic scroll-sequence site for Z Lab Design",
   "scripts": {
     "dev": "node server.js",
-    "build:seq": "node tools/build-sequences.mjs"
+    "build:seq": "node tools/build-sequences.mjs",
+    "build:img": "node tools/build-mobile-images.mjs"
   },
   "devDependencies": {
     "sharp": "^0.34.0"

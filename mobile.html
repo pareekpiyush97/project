@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<script>
+/* Same domain, two builds. This is the phone build; a machine with a mouse gets
+   the full scroll build instead. Each guard keys on the PRIMARY pointer, which
+   is a single value per device, so the two pages can never bounce a visitor
+   back and forth. A touchscreen laptop reports fine (its trackpad) and stays on
+   desktop. ?m=1 pins this build for the tab. */
+(function () {
+  try {
+    if (/[?&]m=1/.test(location.search)) { sessionStorage.setItem("zlab-mobile", "1"); return; }
+    if (sessionStorage.getItem("zlab-mobile") === "1") return;
+    if (matchMedia("(pointer:fine)").matches) location.replace("index.html?full=1" + location.hash);
+  } catch (e) {}
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Z Lab Design — Paint Protection, Ceramic &amp; Detailing</title>
+<meta name="description" content="Z Lab Design, Indirapuram — paint protection film, coloured PPF, ceramic and graphene coating, detailing and paint correction. Book on WhatsApp." />
+<meta name="theme-color" content="#0a0a0c" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Z Lab Design — Paint Protection, Ceramic &amp; Detailing" />
+<meta property="og:description" content="Paint protection film, coloured PPF, ceramic coating and detailing. Indirapuram, Ghaziabad." />
+<meta property="og:site_name" content="Z Lab Design" />
+<meta property="og:image" content="https://pareekpiyush97.github.io/project/assets/img/car-maybach.jpg" />
+<meta property="og:url" content="https://pareekpiyush97.github.io/project/mobile.html" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-var.woff2" crossorigin />
+<link rel="preload" as="image" href="assets/img/m/car-benz-road.webp" fetchpriority="high" />
+<link rel="stylesheet" href="css/mobile.css?v=9" />
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ══ app bar ════════════════════════════════════════════════════════════ -->
+<header class="appbar" id="appbar">
+  <div class="appbar__in">
+    <a class="appbar__logo" href="#home" aria-label="Z Lab Design, home">
+      <img src="assets/brand/logo-sm.webp" alt="Z Lab Design" width="320" height="121" />
+    </a>
+    <div class="appbar__right">
+      <a class="iconbtn" href="tel:+918745028280" aria-label="Call the studio">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 21A12.5 12.5 0 0 1 3 8.5V6a2 2 0 0 1 2-2h2.2a1 1 0 0 1 1 .82l.7 3.3a1 1 0 0 1-.53 1.1l-1.4.7a9.6 9.6 0 0 0 4.6 4.6l.7-1.4a1 1 0 0 1 1.1-.53l3.3.7a1 1 0 0 1 .82 1V19a2 2 0 0 1-2 2z"/></svg>
+      </a>
+      <a class="iconbtn" href="https://instagram.com/zlabdesign" target="_blank" rel="noopener" aria-label="Z Lab Design on Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ── hero ──────────────────────────────────────────────────────────── -->
+  <section class="hero" id="home">
+    <div class="hero__bg">
+      <img src="assets/img/m/car-benz-road.webp" alt="A finished car leaving the Z Lab Design studio"
+           width="854" height="1280" fetchpriority="high" />
+    </div>
+    <div class="hero__in">
+      <span class="label label--sig label--dot">Indirapuram · Ghaziabad</span>
+      <h1 class="d1">Flawless<br />is <span class="sig">a craft.</span></h1>
+      <p class="lede">Film, ceramic and correction for cars that deserve the extra hour. Panel by panel, in a filtered booth.</p>
+      <div class="hero__cta">
+        <a class="btn btn--wa" id="heroWa" href="#" target="_blank" rel="noopener" data-haptic>
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.6.2-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.6-.8-2.6-1.4-3.7-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5 0-.2-.6-1.6-.9-2.2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.9-.6 3 .7 2 2 3.5 3.9 4.7 2.5 1.5 3 .9 3.6.9.6 0 1.7-.7 2-1.4.2-.7.2-1.2.1-1.4 0 0-.2-.1-.5-.3zM12 2A10 10 0 0 0 3.5 17.2L2 22l5-1.3A10 10 0 1 0 12 2zm0 18c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 20 12a8 8 0 0 1-8 8z"/></svg>
+          Book on WhatsApp
+        </a>
+        <a class="btn btn--line" href="#work">See the work</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── stats ─────────────────────────────────────────────────────────── -->
+  <div class="wrap">
+    <div class="stats">
+      <div><b class="tnum">1200<i>+</i></b><span class="label">Cars through the booth</span></div>
+      <div><b class="tnum">9<i>yr</i></b><span class="label">Coating warranty</span></div>
+      <div><b class="tnum">4.9<i>★</i></b><span class="label">Owner rating</span></div>
+    </div>
+  </div>
+
+  <!-- ── ticker ────────────────────────────────────────────────────────── -->
+  <div class="tick" aria-hidden="true">
+    <div class="tick__track" id="tickTrack">
+      <span>Paint Protection Film<i></i>Ceramic Coating<i></i>Coloured PPF<i></i>Graphene Coating<i></i>Detailing<i></i>Paint Correction<i></i>Sunfilm<i></i>Interior Spa<i></i></span>
+    </div>
+  </div>
+
+  <!-- ── services ──────────────────────────────────────────────────────── -->
+  <section class="sec" id="services">
+    <div class="wrap sec__head">
+      <span class="label label--dot rv">02 — What we do</span>
+      <h2 class="d2 rv">Ten services,<br /><span class="sig">one studio.</span></h2>
+      <p class="lede rv">Swipe the rail, tap a card to watch that work happen.</p>
+    </div>
+    <div class="rail rail--full" id="svcRail" role="group" aria-label="Services"><!-- built by mobile.js --></div>
+    <div class="wrap">
+      <p class="sec__note rv"><span class="label">Swipe →</span> or pick a service when you book below.</p>
+    </div>
+  </section>
+
+  <!-- ── process ───────────────────────────────────────────────────────── -->
+  <section class="sec" id="process">
+    <div class="wrap">
+      <div class="sec__head">
+        <span class="label label--dot rv">03 — How it runs</span>
+        <h2 class="d2 rv">Every car takes<br /><span class="sig">the same route.</span></h2>
+      </div>
+      <ul class="tl">
+        <li class="rv"><span class="label">Stage 01</span><h3 class="d3">Intake &amp; inspection</h3><p>Paint depth readings, panel-by-panel photos and a written scope before a single pad touches the car.</p></li>
+        <li class="rv"><span class="label">Stage 02</span><h3 class="d3">Decontamination</h3><p>Chemical and mechanical decon, then a full strip wash so we correct paint — not the grime sitting on it.</p></li>
+        <li class="rv"><span class="label">Stage 03</span><h3 class="d3">Correction</h3><p>Multi-stage machine polishing under calibrated lighting until the finish holds a clean reflection.</p></li>
+        <li class="rv"><span class="label">Stage 04</span><h3 class="d3">Protection</h3><p>Film or coating applied in a filtered booth, cured, then re-inspected before the keys come back to you.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── work ──────────────────────────────────────────────────────────── -->
+  <section class="sec" id="work">
+    <div class="wrap">
+      <div class="sec__head">
+        <span class="label label--dot rv">04 — Portfolio</span>
+        <h2 class="d2 rv">Cars that <span class="sig">left finished.</span></h2>
+      </div>
+      <div class="chips" id="chips" role="group" aria-label="Filter work by service"><!-- built by mobile.js --></div>
+      <div class="grid" id="grid"><!-- built by mobile.js --></div>
+    </div>
+  </section>
+
+  <!-- ── booking ───────────────────────────────────────────────────────── -->
+  <section class="sec" id="book">
+    <div class="wrap">
+      <div class="sec__head">
+        <span class="label label--dot rv">05 — Get it booked</span>
+        <h2 class="d2 rv">Bring us <span class="sig">the car.</span></h2>
+        <p class="lede rv">Pick what you want done and your message is written for you. No forms, no call centre.</p>
+      </div>
+
+      <div class="book rv">
+        <span class="label">Choose a service</span>
+        <div class="picker" id="picker" role="group" aria-label="Choose a service"><!-- built by mobile.js --></div>
+
+        <p class="book__preview" id="preview" aria-live="polite">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h9"/></svg>
+          <span id="previewTxt">Your message: <b>a quote for my car</b></span>
+        </p>
+
+        <a class="btn btn--wa btn--wide" id="bookWa" href="#" target="_blank" rel="noopener" data-haptic>
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.6.2-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.6-.8-2.6-1.4-3.7-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5 0-.2-.6-1.6-.9-2.2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.9-.6 3 .7 2 2 3.5 3.9 4.7 2.5 1.5 3 .9 3.6.9.6 0 1.7-.7 2-1.4.2-.7.2-1.2.1-1.4 0 0-.2-.1-.5-.3zM12 2A10 10 0 0 0 3.5 17.2L2 22l5-1.3A10 10 0 1 0 12 2zm0 18c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 20 12a8 8 0 0 1-8 8z"/></svg>
+          Send on WhatsApp
+        </a>
+
+        <div class="rows">
+          <div><span class="label">Hours</span><b>Mon–Sun · 09:00–20:00</b></div>
+          <div><span class="label">Studio</span><b>Shakti Khand 3,<br />Indirapuram</b></div>
+          <div><span class="label">Collection</span><b>Pickup &amp; drop</b></div>
+          <div><span class="label">Directions</span>
+            <a class="rowlink" href="https://maps.google.com/?q=Unit+No.+335,+Shakti+Khand+3,+Indirapuram,+Ghaziabad+201014"
+               target="_blank" rel="noopener">Open in Maps →</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ══ footer ═════════════════════════════════════════════════════════════ -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__mark">Z Lab</div>
+    <p>Paint protection, ceramic and correction — obsessed over panel by panel. Unit No. 335, Shakti Khand 3, Indirapuram, Ghaziabad 201014.</p>
+    <div class="foot__links">
+      <div>
+        <h4 class="label">Services</h4>
+        <ul>
+          <li><a href="#services">Paint Protection Film</a></li>
+          <li><a href="#services">Coloured PPF</a></li>
+          <li><a href="#services">Ceramic Coating</a></li>
+          <li><a href="#services">Detailing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="label">Studio</h4>
+        <ul>
+          <li><a href="#work">Our work</a></li>
+          <li><a href="#process">How it runs</a></li>
+          <li><a href="#book">Book</a></li>
+          <li><a href="#home">Back to top</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="label">Contact</h4>
+        <ul>
+          <li><a href="tel:+918745028280">+91 87450 28280</a></li>
+          <li><a id="footWa" href="#" target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href="https://instagram.com/zlabdesign" target="_blank" rel="noopener">@zlabdesign</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="label">Hours</h4>
+        <ul><li><span>Mon–Sun</span></li><li><span>09:00 – 20:00</span></li></ul>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© <span id="yr"></span> Z Lab Design</span>
+      <a href="index.html?full=1">Desktop site →</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ tab bar ════════════════════════════════════════════════════════════ -->
+<nav class="tabbar" aria-label="Primary">
+  <div class="tabbar__in">
+    <a class="tab" href="#home" data-tab="home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>
+      <span>Home</span>
+    </a>
+    <a class="tab" href="#services" data-tab="services">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13.5 4.8 8A2 2 0 0 1 6.7 6.6h10.6A2 2 0 0 1 19.2 8L21 13.5V18a1 1 0 0 1-1 1h-1.5a1 1 0 0 1-1-1v-.6H6.5V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M3.4 13.6h17.2"/><circle cx="7.2" cy="16" r=".6" fill="currentColor" stroke="none"/><circle cx="16.8" cy="16" r=".6" fill="currentColor" stroke="none"/></svg>
+      <span>Services</span>
+    </a>
+    <a class="tab" href="#work" data-tab="work">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg>
+      <span>Work</span>
+    </a>
+    <a class="tab" href="#book" data-tab="book">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v3M17 4v3"/><rect x="3.5" y="6.5" width="17" height="14" rx="3"/><path d="M3.5 11h17M8.5 15h7"/></svg>
+      <span>Book</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ══ bottom sheet ═══════════════════════════════════════════════════════ -->
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetT">
+  <div class="sheet__scrim" id="sheetScrim"></div>
+  <div class="sheet__panel" id="sheetPanel">
+    <div class="sheet__grab" id="sheetGrab"><div class="sheet__grip"></div></div>
+    <div class="sheet__bar">
+      <div>
+        <span class="label label--sig" id="sheetKind">Service</span>
+        <h3 class="d2" id="sheetT" style="font-size:1.5rem;margin-top:4px">Service</h3>
+      </div>
+      <button class="iconbtn" id="sheetX" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg>
+      </button>
+    </div>
+    <div class="sheet__body">
+      <div class="sheet__media">
+        <video id="sheetVid" playsinline controls preload="none"></video>
+        <div class="sheet__shim" id="sheetShim"></div>
+      </div>
+      <p class="sheet__copy" id="sheetCopy"></p>
+      <div id="sheetDetail"></div>
+      <a class="btn btn--wa btn--wide" id="sheetWa" href="#" target="_blank" rel="noopener" data-haptic>Book this service</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/details.js?v=1"></script>
+<script src="js/mobile.js?v=5"></script>
+</body>
+</html>
