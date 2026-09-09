@@ -26,9 +26,11 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-var.woff2" crossorigin />
-<!-- one desktop tier: coarse pointers are routed to mobile.html -->
-<link rel="preload" as="image" href="assets/seq/proof/1920/f0001.webp" fetchpriority="high" />
-<link rel="stylesheet" href="css/app.css?v=11" />
+<!-- coarse pointers are routed to mobile.html; the media gate has to match
+     the isMobile rule in sequence.js or a narrow window preloads a tier it
+     will never draw -->
+<link rel="preload" as="image" href="assets/seq/proof/1920/f0001.webp" fetchpriority="high" media="(min-width:769px)" />
+<link rel="stylesheet" href="css/app.css?v=12" />
 </head>
 <body>
 
@@ -175,13 +177,13 @@
   </div>
 </div>
 
-<script src="js/lib/gsap.min.js?v=11"></script>
-<script src="js/lib/ScrollTrigger.min.js?v=11"></script>
-<script src="js/lib/lenis.min.js?v=11"></script>
-<script src="js/seq-manifest.js?v=11"></script>
-<script src="js/details.js?v=11"></script>
-<script src="js/core/sequence.js?v=11"></script>
-<script src="js/core/motion.js?v=11"></script>
-<script src="js/work.js?v=11"></script>
+<script src="js/lib/gsap.min.js?v=12"></script>
+<script src="js/lib/ScrollTrigger.min.js?v=12"></script>
+<script src="js/lib/lenis.min.js?v=12"></script>
+<script src="js/seq-manifest.js?v=12"></script>
+<script src="js/details.js?v=12"></script>
+<script src="js/core/sequence.js?v=12"></script>
+<script src="js/core/motion.js?v=12"></script>
+<script src="js/work.js?v=12"></script>
 </body>
 </html>
