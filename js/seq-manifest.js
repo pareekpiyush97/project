@@ -10,8 +10,8 @@ window.ZLAB_SEQ = {
   "services": {
     "ext": "webp",
     "sizes": {
-      "1200": 60,
-      "1920": 120
+      "1200": 120,
+      "1920": 240
     }
   },
   "process": {

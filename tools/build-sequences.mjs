@@ -55,7 +55,9 @@ const CLIPS = {
   hero:     ['hero-reveal',     240],  // sports car reveal — every frame of the 24fps clip
   // craft: the manifesto chapter plays assets/videos/craft.mp4 outright instead
   // of scrubbing frames, so its sequence is no longer built or shipped
-  services: ['ezip - Copy (3)', 120],  // black McLaren, LED bay — 720p source
+  // services shares the hero's source on purpose — same reveal, scrubbed again
+  // behind The Menu. Its frames are already de-watermarked by the hero build.
+  services: ['hero-reveal',     240],
   process:  ['ezip - Copy (7)', 120],  // workshop, lifts + robots
   proof:    ['ezip - Copy (4)', 120],  // BODYSHOP, silver + lime (work.html)
   booking:  ['ezip - Copy (6)',  46],  // grey hypercar, chrome showroom
