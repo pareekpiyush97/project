@@ -9,17 +9,23 @@
  *   assets/seq/manifest.json  +  js/seq-manifest.js
  *
  * Desktop-only site: phones get mobile.html, which has no canvas sequences at
- * all, so there is exactly ONE tier here and it is sized for a real monitor.
- * 1920 is the ceiling because that is what the source dumps are — going wider
- * would be upscaling, which costs bytes and fill rate and buys no detail. If
- * higher-res masters ever arrive, raise TIER.w and re-run.
+ * all, so both tiers here are sized for a real monitor — 1920 for the machine
+ * in front of you, 1200 for one on a metered or starved connection.
+ *
+ * The tier WIDTHS are a ceiling, not a target: withoutEnlargement means a clip
+ * whose source is smaller keeps its own pixels and simply lives in the 1920
+ * folder — hero and services are both 1280x720 that way. Upscaling would cost
+ * bytes and fill rate and buy no detail.
+ *
+ * A clip can come from a video: extract it losslessly first, e.g.
+ *   ffmpeg -i clip.mp4 -fps_mode passthrough <SRC>/<folder>/f%04d.png
  *
  * Frame COUNT is what buys smooth scrubbing, and it is cheap next to width:
  * measured on these dark showroom frames, 1920/q68 lands at ~83KB, barely
  * above the old 1600/q62 (~68KB). So the budget goes into density.
  */
 import sharp from 'sharp';
-import { readdir, mkdir, writeFile, rm } from 'node:fs/promises';
+import { readdir, readFile, mkdir, writeFile, rm } from 'node:fs/promises';
 import path from 'node:path';
 
 const SRC = 'C:/Users/DELL/Downloads/mywebpage/ezGif';
@@ -38,7 +44,7 @@ const JOBS = 6;          // parallel sharp pipelines; 120 at once spikes RAM
  *  Caps: scrubbed sections get density; `menu` only plays a 2.2s intro, and
  *  `booking` has just 46 source frames so it takes all of them. */
 const CLIPS = {
-  hero:     ['ezip',            120],  // red Ferrari, dark turntable showroom
+  hero:     ['hero-reveal',     240],  // sports car reveal — every frame of the 24fps clip
   craft:    ['ezip - Copy (5)', 120],  // white McLaren, glass reflections
   services: ['ezip - Copy (3)', 120],  // black McLaren, LED bay — 720p source
   process:  ['ezip - Copy (7)', 120],  // workshop, lifts + robots
@@ -65,12 +71,25 @@ async function pool(items, limit, fn) {
   await Promise.all(workers);
 }
 
-const manifest = {};
+/* `node tools/build-sequences.mjs hero craft` rebuilds just those; no args = all.
+   Rebuilding all eight is ~7 minutes, which is a silly price for one clip.
+   A partial run has to START from the manifest on disk, or it would publish a
+   manifest listing only the clips it rebuilt and the other seven would 404. */
+const only = process.argv.slice(2);
+let manifest = {};
+if (only.length) {
+  try {
+    manifest = JSON.parse(await readFile(path.join(OUT, 'manifest.json'), 'utf8'));
+  } catch { console.warn('! no existing manifest to merge into — building all'); }
+}
 let totalBytes = 0;
 
 for (const [name, [folder, cap]] of Object.entries(CLIPS)) {
+  if (only.length && !only.includes(name)) continue;
   const dir = path.join(SRC, folder);
-  const files = (await readdir(dir)).filter(f => /\.jpe?g$/i.test(f)).sort();
+  // PNG too: a clip extracted with ffmpeg comes out lossless, so the WebP below
+  // is the only generation of loss the frames ever take
+  const files = (await readdir(dir)).filter(f => /\.(jpe?g|png)$/i.test(f)).sort();
   if (!files.length) { console.warn(`! ${name}: no frames in ${folder}`); continue; }
 
   await rm(path.join(OUT, name), { recursive: true, force: true });  // drops the old 900/1600 tiers
