@@ -16,6 +16,7 @@
     ['Ceramic Coating',       'coat-01',   'A liquid-glass shell — slick, hydrophobic, years of depth in the gloss.'],
     ['Graphene Coating',      'coat-02',   'Harder, slicker and more heat-tolerant than ceramic alone. Our longest-lasting layer.'],
     ['Paint Correction',      'ppf-02',    'Swirls and etching machined out under calibrated light — never filled or hidden.'],
+    ['Bodykit',              'bodykit-01','Kits test-fitted, prepped and painted to match the car before anything is bonded on.'],
     ['Detailing',             'detail-01', 'Every pore of paint, glass and trim taken back to zero-mile condition.'],
     ['Interior Spa',          'coat-03',   'Leather, alcantara and fabric deep-cleaned, conditioned and sealed.'],
     ['Sunfilm',               'sun-01',    'Heat and UV stopped at the glass. Cabin stays cool, interior stays new.'],
@@ -168,6 +169,8 @@
 
     var items = $$('.svc', list);
     var num = $('#svcNum');
+    var total = $('#svcTotal');
+    if (total) total.textContent = SERVICES.length;   // never hardcode the count
     $$('.svc__btn', list).forEach(function (b) {
       b.addEventListener('click', function () { openModal(+b.dataset.i); });
     });

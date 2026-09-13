@@ -26,6 +26,7 @@
     ['Ceramic Coating',       'coat-01',   'A liquid-glass shell — slick, hydrophobic, years of depth in the gloss.',      'car-black-duo'],
     ['Graphene Coating',      'coat-02',   'Harder, slicker and more heat-tolerant than ceramic alone. Our longest layer.','car-maybach'],
     ['Paint Correction',      'ppf-02',    'Swirls and etching machined out under calibrated light — never filled.',       'cppf-bmw'],
+    ['Bodykit',              'bodykit-01','Kits test-fitted, prepped and painted to match before anything is bonded on.', 'car-rover-bodykit'],
     ['Detailing',             'detail-01', 'Every pore of paint, glass and trim taken back to zero-mile condition.',       'car-rover-purple'],
     ['Interior Spa',          'coat-03',   'Leather, alcantara and fabric deep-cleaned, conditioned and sealed.',          'car-maybach'],
     ['Sunfilm',               'sun-01',    'Heat and UV stopped at the glass. Cabin stays cool, interior stays new.',      'car-bmw-blue'],
@@ -51,7 +52,7 @@
   ];
 
   /* the picker offers the services people actually ask for by name */
-  var PICKS = ['Paint Protection Film', 'Coloured PPF', 'Ceramic Coating', 'Detailing', 'Paint Correction', 'Not sure yet'];
+  var PICKS = ['Paint Protection Film', 'Coloured PPF', 'Ceramic Coating', 'Detailing', 'Paint Correction', 'Bodykit', 'Not sure yet'];
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };

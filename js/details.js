@@ -79,6 +79,13 @@
       'Heat-shrunk to the curve and squeegeed out',
       'Cured, then checked for clarity and clean edges'
     ],
+    bodykit: [
+      'Panel gaps and mounting points measured on the car first',
+      'Kit dry-fitted before a single part is prepped',
+      'Primed, blocked and painted to match the existing finish',
+      'Bonded and mechanically fixed, then the gaps set by hand',
+      'Final inspection under LED before handover'
+    ],
     wash: [
       'Pre-rinse and snow foam, left to dwell',
       'Contact wash with wheels and arches done first',
@@ -112,6 +119,10 @@
     'Paint Correction': { proc: 'correction', specs: {
       Service: 'Multi-stage paint correction', Finish: 'Corrected clear coat',
       Coverage: 'Every painted panel', Studio: STUDIO } },
+
+    'Bodykit': { proc: 'bodykit', specs: {
+      Service: 'Bodykit fitment and finishing', Finish: 'Painted to match the car',
+      Coverage: 'Splitters, skirts, diffusers, arches', Studio: STUDIO } },
 
     'Detailing': { proc: 'detail', specs: {
       Service: 'Full detail', Finish: 'Zero-mile condition',
