@@ -38,7 +38,7 @@
      the isMobile rule in sequence.js or a narrow window preloads a tier it
      will never draw -->
 <link rel="preload" as="image" href="assets/seq/hero/1920/f0001.webp" fetchpriority="high" media="(min-width:769px)" />
-<link rel="stylesheet" href="css/app.css?v=15" />
+<link rel="stylesheet" href="css/app.css?v=16" />
 </head>
 <body>
 
@@ -140,12 +140,12 @@
   </div>
 
   <!-- ── 02 · manifesto ────────────────────────────────────────────────── -->
-  <!-- no data-seq: this chapter plays a video once instead of scrubbing frames -->
+  <!-- no data-seq: this chapter loops a video instead of scrubbing frames -->
   <section class="section pin manifesto" id="craft" data-chapter="1">
     <div class="stage">
       <video class="layer layer--video" id="craftVid"
              src="assets/videos/craft.mp4" poster="assets/img/craft-poster.webp"
-             muted playsinline preload="metadata"
+             muted loop playsinline preload="metadata"
              aria-label="A car being designed in the studio"></video>
       <div class="layer layer--scrim scrim-left"></div>
       <div class="layer layer--content manifesto__content">
@@ -295,13 +295,13 @@
   </div>
 </div>
 
-<script src="js/lib/gsap.min.js?v=15"></script>
-<script src="js/lib/ScrollTrigger.min.js?v=15"></script>
-<script src="js/lib/lenis.min.js?v=15"></script>
-<script src="js/seq-manifest.js?v=15"></script>
-<script src="js/details.js?v=15"></script>
-<script src="js/core/sequence.js?v=15"></script>
-<script src="js/core/motion.js?v=15"></script>
-<script src="js/app.js?v=15"></script>
+<script src="js/lib/gsap.min.js?v=16"></script>
+<script src="js/lib/ScrollTrigger.min.js?v=16"></script>
+<script src="js/lib/lenis.min.js?v=16"></script>
+<script src="js/seq-manifest.js?v=16"></script>
+<script src="js/details.js?v=16"></script>
+<script src="js/core/sequence.js?v=16"></script>
+<script src="js/core/motion.js?v=16"></script>
+<script src="js/app.js?v=16"></script>
 </body>
 </html>

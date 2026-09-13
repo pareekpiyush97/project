@@ -134,11 +134,11 @@
     };
   }
 
-  /* ---- manifesto backdrop: a video, played once ------------------------
-     Not a scrubbed sequence like the other chapters. It starts when the
-     section arrives and pauses when it leaves, and it never loops or rewinds:
-     coming back resumes where it stopped, and once it ends it holds its last
-     frame. Muted and playsinline, or no browser would autoplay it at all. */
+  /* ---- manifesto backdrop: a looping video -----------------------------
+     Not a scrubbed sequence like the other chapters. It loops while the
+     section is on screen and pauses the moment it leaves — a 1080p clip
+     decoding behind content nobody is looking at is pure battery and main
+     thread. Muted and playsinline, or no browser would autoplay it at all. */
   function initCraftVideo() {
     var v = $('#craftVid');
     if (!v) return;
@@ -146,11 +146,8 @@
     if (reduced || !('IntersectionObserver' in w)) return;
     new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) {
-          if (!v.ended) v.play().catch(function () {});
-        } else if (!v.paused) {
-          v.pause();
-        }
+        if (e.isIntersecting) v.play().catch(function () {});
+        else if (!v.paused) v.pause();
       });
     }, { threshold: 0.35 }).observe(v);
   }
