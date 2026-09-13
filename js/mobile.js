@@ -67,22 +67,24 @@
       '?text=' + encodeURIComponent('Hi Z Lab Design — I\'d like to book ' + line + '.\nCar: \nWhen: ');
   }
 
-  /* ---- service rail ---------------------------------------------------- */
+  /* ---- service list ---------------------------------------------------- */
   function buildServices() {
-    $('#svcRail').innerHTML = SERVICES.map(function (s, i) {
-      return '<button class="scard rv" data-i="' + i + '" ' +
+    var n = SERVICES.length;
+    $('#svcList').innerHTML = SERVICES.map(function (s, i) {
+      return '<button class="svc rv" data-i="' + i + '" ' +
         'style="transition-delay:' + Math.min(i, 4) * 45 + 'ms" ' +
         'aria-label="' + esc(s[0]) + ' — watch the clip">' +
-        '<img class="scard__img" src="' + IMG + s[3] + '.webp" alt="" loading="lazy" decoding="async" />' +
-        '<span class="scard__veil"></span>' +
-        '<span class="scard__no">' + String(i + 1).padStart(2, '0') + ' / 10</span>' +
-        '<span class="scard__play">' + PLAY + '</span>' +
-        '<span class="scard__cap"><span class="scard__t">' + esc(s[0]) + '</span>' +
-        '<span class="scard__d">' + esc(s[2]) + '</span></span>' +
+        '<img class="svc__img" src="' + IMG + s[3] + '.webp" alt="" loading="lazy" decoding="async" />' +
+        '<span class="svc__body">' +
+        '<span class="svc__no">' + String(i + 1).padStart(2, '0') + ' / ' + n + '</span>' +
+        '<span class="svc__t">' + esc(s[0]) + '</span>' +
+        '<span class="svc__d">' + esc(s[2]) + '</span>' +
+        '</span>' +
+        '<span class="svc__play">' + PLAY + '</span>' +
         '</button>';
     }).join('');
 
-    $$('#svcRail .scard').forEach(function (b) {
+    $$('#svcList .svc').forEach(function (b) {
       b.addEventListener('click', function () {
         var s = SERVICES[+b.dataset.i];
         openSheet('Service', s[0], s[1], s[2]);
