@@ -14,19 +14,23 @@
  *
  * The tier WIDTHS are a ceiling, not a target: withoutEnlargement means a clip
  * whose source is smaller keeps its own pixels and simply lives in the 1920
- * folder — hero and services are both 1280x720 that way. Upscaling would cost
- * bytes and fill rate and buy no detail.
+ * folder — hero is 1280x720 that way. Upscaling would cost bytes and fill rate
+ * and buy no detail.
  *
  * A clip can come from a video: extract it losslessly first, e.g.
  *   ffmpeg -i clip.mp4 -fps_mode passthrough <SRC>/<folder>/f%04d.png
  *
- * hero-reveal is generated footage and carried a Gemini sparkle at
- * x 1137-1183, y 577-623 of its 1280x720 frames. It is painted out at
- * EXTRACTION time, so re-extracting without this filter brings it back:
- *   ffmpeg -i _source.mp4 -vf "delogo=x=1131:y=571:w=59:h=59" \
- *          -fps_mode passthrough <SRC>/hero-reveal/f%04d.png
- * Verified after: no pixel over luma 90 in that corner, and the patched box
- * sits within ~2.7 levels of its neighbours.
+ * GENERATED FOOTAGE CARRIES A WATERMARK, and it is painted out at EXTRACTION
+ * time — re-extracting without the filter quietly brings it back. Each clip
+ * puts it somewhere different, so measure, never assume:
+ *   hero-reveal      Gemini sparkle, 1280x720 frames, mark x 1137-1183 y 577-623
+ *                    delogo=x=1131:y=571:w=59:h=59
+ *   services-design  Gemini sparkle, 1920x1080 frames, mark x 1703-1778 y 862-937
+ *                    delogo=x=1695:y=854:w=92:h=92
+ * (assets/videos/craft.mp4 carried a "Veo" wordmark instead, at x 1865-1895
+ *  y 1042-1055, removed the same way when that file was encoded.)
+ * Verify after: the patched box should sit within a couple of luma levels of
+ * the regions either side of it, and the mark should be visibly gone in a crop.
  *
  * Frame COUNT is what buys smooth scrubbing, and it is cheap next to width:
  * measured on these dark showroom frames, 1920/q68 lands at ~83KB, barely
@@ -55,9 +59,7 @@ const CLIPS = {
   hero:     ['hero-reveal',     240],  // sports car reveal — every frame of the 24fps clip
   // craft: the manifesto chapter plays assets/videos/craft.mp4 outright instead
   // of scrubbing frames, so its sequence is no longer built or shipped
-  // services shares the hero's source on purpose — same reveal, scrubbed again
-  // behind The Menu. Its frames are already de-watermarked by the hero build.
-  services: ['hero-reveal',     240],
+  services: ['services-design', 240],  // blue coupe in the design hall — 1080p source
   process:  ['ezip - Copy (7)', 120],  // workshop, lifts + robots
   proof:    ['ezip - Copy (4)', 120],  // BODYSHOP, silver + lime (work.html)
   booking:  ['ezip - Copy (6)',  46],  // grey hypercar, chrome showroom
