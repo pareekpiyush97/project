@@ -134,6 +134,27 @@
     };
   }
 
+  /* ---- manifesto backdrop: a video, played once ------------------------
+     Not a scrubbed sequence like the other chapters. It starts when the
+     section arrives and pauses when it leaves, and it never loops or rewinds:
+     coming back resumes where it stopped, and once it ends it holds its last
+     frame. Muted and playsinline, or no browser would autoplay it at all. */
+  function initCraftVideo() {
+    var v = $('#craftVid');
+    if (!v) return;
+    // reduced motion: leave it on the poster rather than moving unbidden
+    if (reduced || !('IntersectionObserver' in w)) return;
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          if (!v.ended) v.play().catch(function () {});
+        } else if (!v.paused) {
+          v.pause();
+        }
+      });
+    }, { threshold: 0.35 }).observe(v);
+  }
+
   /* ---- manifesto: words illuminate with scroll ------------------------- */
   function initManifesto() {
     var line = $('#manifestoLine');
@@ -412,6 +433,7 @@
     initScroll();
     initSequences();
     initHero();
+    initCraftVideo();
     initManifesto();
     initServices();
     initProcess();

@@ -140,9 +140,13 @@
   </div>
 
   <!-- ── 02 · manifesto ────────────────────────────────────────────────── -->
-  <section class="section pin manifesto" id="craft" data-seq="craft" data-chapter="1">
+  <!-- no data-seq: this chapter plays a video once instead of scrubbing frames -->
+  <section class="section pin manifesto" id="craft" data-chapter="1">
     <div class="stage">
-      <canvas class="layer layer--canvas" aria-label="A McLaren under studio lighting"></canvas>
+      <video class="layer layer--video" id="craftVid"
+             src="assets/videos/craft.mp4" poster="assets/img/craft-poster.webp"
+             muted playsinline preload="metadata"
+             aria-label="A car being designed in the studio"></video>
       <div class="layer layer--scrim scrim-left"></div>
       <div class="layer layer--content manifesto__content">
         <div class="manifesto__grid">

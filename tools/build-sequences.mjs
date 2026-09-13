@@ -53,7 +53,8 @@ const JOBS = 6;          // parallel sharp pipelines; 120 at once spikes RAM
  *  `booking` has just 46 source frames so it takes all of them. */
 const CLIPS = {
   hero:     ['hero-reveal',     240],  // sports car reveal — every frame of the 24fps clip
-  craft:    ['ezip - Copy (5)', 120],  // white McLaren, glass reflections
+  // craft: the manifesto chapter plays assets/videos/craft.mp4 outright instead
+  // of scrubbing frames, so its sequence is no longer built or shipped
   services: ['ezip - Copy (3)', 120],  // black McLaren, LED bay — 720p source
   process:  ['ezip - Copy (7)', 120],  // workshop, lifts + robots
   proof:    ['ezip - Copy (4)', 120],  // BODYSHOP, silver + lime (work.html)

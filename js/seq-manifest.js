@@ -7,13 +7,6 @@ window.ZLAB_SEQ = {
       "1920": 240
     }
   },
-  "craft": {
-    "ext": "webp",
-    "sizes": {
-      "1200": 60,
-      "1920": 120
-    }
-  },
   "services": {
     "ext": "webp",
     "sizes": {

@@ -168,6 +168,9 @@ html.lenis,html.lenis body{height:auto;}
 }
 .layer{position:absolute;inset:0;width:100%;height:100%;}
 .layer--canvas{z-index:1;background:var(--void);}
+/* the manifesto chapter plays a real video rather than scrubbing a sequence,
+   so it needs the same cover-fit the canvas gets for free */
+.layer--video{z-index:1;background:var(--void);object-fit:cover;}
 .layer--scrim{z-index:2;pointer-events:none;}
 .layer--content{z-index:3;display:flex;align-items:center;}
 
