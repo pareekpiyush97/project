@@ -20,6 +20,14 @@
  * A clip can come from a video: extract it losslessly first, e.g.
  *   ffmpeg -i clip.mp4 -fps_mode passthrough <SRC>/<folder>/f%04d.png
  *
+ * hero-reveal is generated footage and carried a Gemini sparkle at
+ * x 1137-1183, y 577-623 of its 1280x720 frames. It is painted out at
+ * EXTRACTION time, so re-extracting without this filter brings it back:
+ *   ffmpeg -i _source.mp4 -vf "delogo=x=1131:y=571:w=59:h=59" \
+ *          -fps_mode passthrough <SRC>/hero-reveal/f%04d.png
+ * Verified after: no pixel over luma 90 in that corner, and the patched box
+ * sits within ~2.7 levels of its neighbours.
+ *
  * Frame COUNT is what buys smooth scrubbing, and it is cheap next to width:
  * measured on these dark showroom frames, 1920/q68 lands at ~83KB, barely
  * above the old 1600/q62 (~68KB). So the budget goes into density.
