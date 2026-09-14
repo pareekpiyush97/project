@@ -47,7 +47,10 @@
   --fs-sm:.78rem;
   --fs-base:.95rem;
   --fs-md:1.05rem;
-  --fs-d1:clamp(3.1rem,14.2vw,15rem);
+  /* hero headline only. Sized so "Is A Craft" stays on ONE line and the block
+     clears both the nav above it and the lede below — at 14.2vw it wrapped to
+     a third line and collided with both. */
+  --fs-d1:clamp(2.5rem,9vw,9rem);
   --fs-d2:clamp(2.5rem,8.4vw,7.6rem);
   --fs-d3:clamp(2rem,5.2vw,4.4rem);
   --fs-d4:clamp(1.5rem,3.1vw,2.5rem);
@@ -384,7 +387,13 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
 
 /* -- 08 hero -------------------------------------------------------------- */
 .hero{height:var(--sec-md);}
-.hero__content{flex-direction:column;justify-content:center;padding-inline:var(--pad);}
+/* Every other chapter reserves the nav height; the hero had padding-inline
+   only, so its kicker sat under the fixed logo. The bottom figure reserves
+   room for .hero__meta, which is absolutely positioned down there. */
+.hero__content{
+  flex-direction:column;justify-content:center;
+  padding:calc(var(--nav-h) + 3vh) var(--pad) clamp(130px,20vh,200px);
+}
 .hero__kicker{display:flex;align-items:center;gap:14px;margin-bottom:clamp(14px,2vh,26px);}
 .hero__kicker b{display:block;width:clamp(28px,5vw,64px);height:1px;background:var(--signal);}
 .hero__title{width:min(var(--shell),100%);margin-inline:auto;}
