@@ -403,7 +403,9 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.03em;line-height:1;}
 
 /* -- 16 footer ------------------------------------------------------------ */
 .foot{padding-block:var(--s8) var(--s7);border-top:1px solid var(--line);}
-.foot__mark{font-size:2.2rem;font-weight:700;letter-spacing:-.04em;line-height:1;}
+/* the real wordmark, not a typed approximation of it — same white asset the
+   app bar uses, so the two agree */
+.foot__mark img{height:52px;width:auto;}
 .foot p{margin-top:var(--s3);font-size:.85rem;line-height:1.55;color:var(--text-2);}
 .foot__links{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5) var(--s3);margin-top:var(--s6);}
 .foot h4{margin:0 0 var(--s3);}
