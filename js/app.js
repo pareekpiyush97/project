@@ -61,29 +61,14 @@
 
       if (reduced) { seq.preload(null, function () { seq.draw(Math.floor(seq.count / 2)); }); return; }
 
-      var isPinned = section.classList.contains('process');
-
       // Two-stage fetch. Approaching a section buys only the sparse skeleton
       // (~1 frame in 8); the dense passes are earned by actually arriving, so
-      // a visitor who never scrolls past the hero never pays for five
-      // sequences they did not see.
+      // a visitor who never scrolls past the hero never pays for sequences
+      // they did not see.
       ScrollTrigger.create({
         trigger: section, start: 'top bottom+=60%', once: true,
-        onEnter: function () {
-          seq.preload();
-          // the pinned section never sleeps (see below), so it has no wake
-          // handler to densify it — do that here instead
-          if (isPinned) seq.activate();
-        }
+        onEnter: function () { seq.preload(); }
       });
-
-      // .process is pinned by GSAP, which injects ~2000px of spacer and so
-      // shifts this element's start/end. ANY trigger created on it here
-      // resolves against the *unpinned* geometry: a scrub falls out of sync,
-      // and a sleep/wake pair releases the canvas while the section is still
-      // on screen — leaving a bare scrim gradient where the footage should be.
-      // initProcess() drives both from the pin itself; nothing more here.
-      if (isPinned) return;
 
       // hold the backing store — and the download budget — only while the
       // section is anywhere near view
@@ -227,55 +212,6 @@
         if (active >= 0) items[active].classList.add('is-on');
         num.textContent = String(Math.max(0, active) + 1).padStart(2, '0');
         shown = active;
-      }
-    });
-  }
-
-  /* ---- process: vertical scroll drives a horizontal track -------------- */
-  function initProcess() {
-    var section = $('.process'), track = $('#processTrack');
-    if (!section || !track || reduced) return;
-    var steps = $$('.step', track);
-    var distance = function () { return Math.max(0, track.scrollWidth - w.innerWidth); };
-    // offsetLeft is a layout read; cache it and refresh only when geometry can
-    // actually have changed
-    var offsets = [], revealed = 0;
-    function measure() {
-      offsets = steps.map(function (s) { return s.offsetLeft; });
-    }
-    measure();
-    ScrollTrigger.addEventListener('refreshInit', function () { revealed = 0; });
-    ScrollTrigger.addEventListener('refresh', measure);
-
-    gsap.to(track, {
-      x: function () { return -distance(); },
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section, start: 'top top', pin: true, scrub: 0.6,
-        // 0.75, not 1:1 — the track then travels a little faster than the
-        // wheel, which cuts ~1 screen of scrolling off the pin without the
-        // cards reading as rushed
-        end: function () { return '+=' + (distance() * 0.75 + w.innerHeight * 0.25); },
-        invalidateOnRefresh: true,
-        // This pin injects ~2000px of spacer, which moves every section below
-        // it. Without a higher refresh priority those triggers recalculate
-        // against the pre-pin layout and end up ~2000px too early — which is
-        // why the booking footage never scrubbed.
-        refreshPriority: 1,
-        // Reveal each card from the pin's own progress. Deriving it here is far
-        // sturdier than a second ScrollTrigger bound via containerAnimation.
-        onUpdate: function (self) {
-          // the footage scrubs off the *pin's* progress, so it stays locked to
-          // the horizontal track for the whole pinned range
-          if (seqs.process) seqs.process.seek(self.progress);
-          // reveal is one-way, so only ever look at the next card — and read
-          // offsetLeft once per card instead of on every tick (it forces layout)
-          if (revealed >= steps.length) return;
-          var x = distance() * self.progress;
-          while (revealed < steps.length && offsets[revealed] - x < w.innerWidth * 0.82) {
-            steps[revealed++].classList.add('is-in');
-          }
-        }
       }
     });
   }
@@ -445,7 +381,6 @@
     initLayerVideos();
     initManifesto();
     initServices();
-    initProcess();
     initMenu();
     initHud();
     initChrome();

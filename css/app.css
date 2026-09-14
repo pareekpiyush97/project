@@ -497,16 +497,22 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
   .services__count{display:flex;align-items:baseline;gap:2px;}
 }
 
-/* -- 12 process (horizontal) ---------------------------------------------- */
+/* -- 12 process ------------------------------------------------------------
+   Was a GSAP-pinned horizontal track. The backdrop is a looping clip now, so
+   sideways travel revealed nothing that standing still does not — the four
+   stages share one screen: copy on the left, a 2x2 of cards on the right. */
 .process{position:relative;}
-/* GSAP pins this section, so the stage must not also try to stick */
-.process .stage{position:relative;}
-.process__track{display:flex;height:100svh;align-items:center;will-change:transform;}
-.process__head{
-  flex:none;width:min(46vw,560px);padding-inline:var(--pad);
+.process__grid{
+  display:grid;grid-template-columns:minmax(280px,34%) 1fr;
+  gap:clamp(24px,4vw,64px);align-items:center;
+  width:100%;max-width:var(--shell);margin-inline:auto;padding-inline:var(--pad);
+}
+.process__head{max-width:36ch;}
+.process__steps{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:clamp(12px,1.6vw,20px);
 }
 .step{
-  flex:none;width:min(78vw,420px);margin-right:clamp(18px,3vw,44px);
   border:1px solid var(--line);
   /* No backdrop-filter here: inside a transformed track it makes mobile GPUs
      blit the layer twice, which shows up as ghosted/doubled text. A solid
@@ -516,14 +522,22 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
 }
 .step::after{
   content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--signal);
-  transform:scaleX(0);transform-origin:0 50%;transition:transform .6s var(--e-out);
+  transform-origin:0 50%;
 }
-.step.is-in::after{transform:none;}
-.step__i{font-family:var(--f-mono);font-size:var(--fs-xs);color:var(--signal);letter-spacing:.2em;}
-.step h3{margin:16px 0 12px;font-variation-settings:"wdth" 114,"wght" 700;text-transform:uppercase;
-  font-size:clamp(1.3rem,2.4vw,2rem);line-height:1.02;letter-spacing:-.01em;}
-.step p{margin:0;color:var(--dim);font-size:var(--fs-base);line-height:1.62;}
-@media (max-width:900px){.process__head{width:86vw;}}
+.step__i{font-family:var(--f-mono);font-size:var(--fs-xs);color:var(--signal);letter-spacing:.2em;
+  text-transform:uppercase;}
+.step h3{margin:12px 0 10px;font-variation-settings:"wdth" 114,"wght" 700;text-transform:uppercase;
+  font-size:clamp(1.05rem,1.5vw,1.35rem);line-height:1.05;letter-spacing:-.01em;}
+.step p{margin:0;color:var(--dim);font-size:var(--fs-sm);line-height:1.55;}
+
+/* one column of copy above a 2x2, then a single stack on a phone-width window */
+@media (max-width:1100px){
+  .process__grid{grid-template-columns:1fr;gap:clamp(20px,3vw,32px);align-content:center;}
+  .process__head{max-width:none;}
+}
+@media (max-width:640px){
+  .process__steps{grid-template-columns:1fr;}
+}
 
 /* -- 13 numbers ----------------------------------------------------------- */
 .numbers{padding:clamp(70px,11vh,150px) 0;border-top:1px solid var(--line);background:var(--ink);}
@@ -784,6 +798,5 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
   .svc{opacity:1 !important;transform:none !important;}
   .hero,.manifesto,.services,.booking,.endcta{height:auto;}
   .stage{position:relative;height:auto;min-height:100svh;}
-  .process__track{flex-wrap:wrap;height:auto;}
-  .step{width:100%;margin:0 0 14px;}
+  .process__steps{grid-template-columns:1fr;}
 }

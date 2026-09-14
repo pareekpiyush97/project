@@ -61,7 +61,8 @@ const CLIPS = {
   // of scrubbing frames, so its sequence is no longer built or shipped
   // services: The Menu plays assets/videos/services.mp4 outright, same as the
   // manifesto chapter, so its sequence is no longer built or shipped
-  process:  ['ezip - Copy (7)', 120],  // workshop, lifts + robots
+  // process: the Four Stages chapter plays assets/videos/process.mp4 outright,
+  // so its sequence is no longer built or shipped
   proof:    ['ezip - Copy (4)', 120],  // BODYSHOP, silver + lime (work.html)
   booking:  ['ezip - Copy (6)',  46],  // grey hypercar, chrome showroom
   menu:     ['ezip - Copy',      72],  // chameleon Porsche, menu backdrop

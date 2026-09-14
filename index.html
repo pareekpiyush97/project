@@ -38,7 +38,7 @@
      the isMobile rule in sequence.js or a narrow window preloads a tier it
      will never draw -->
 <link rel="preload" as="image" href="assets/seq/hero/1920/f0001.webp" fetchpriority="high" media="(min-width:769px)" />
-<link rel="stylesheet" href="css/app.css?v=23" />
+<link rel="stylesheet" href="css/app.css?v=24" />
 </head>
 <body>
 
@@ -183,22 +183,31 @@
     </div>
   </section>
 
-  <!-- ── 04 · process (horizontal) ─────────────────────────────────────── -->
-  <section class="section process" id="process" data-seq="process" data-chapter="3">
+  <!-- ── 04 · process ──────────────────────────────────────────────────────
+       No data-seq and no horizontal pin: the backdrop is a looping clip now,
+       so dragging four cards sideways had nothing left to reveal. All four
+       stages sit on one screen instead, which also gives ~2000px of pin
+       spacer back to the page. -->
+  <section class="section pin process" id="process" data-chapter="3">
     <div class="stage">
-      <canvas class="layer layer--canvas" aria-label="The Z Lab Design workshop"></canvas>
-      <div class="layer layer--scrim scrim-soft"></div>
+      <video class="layer layer--video" id="processVid"
+             src="assets/videos/process.mp4" poster="assets/img/process-poster.webp"
+             muted loop playsinline preload="metadata"
+             aria-label="A sports car revealed in the Z Lab Design studio"></video>
+      <div class="layer layer--scrim scrim-left"></div>
       <div class="layer layer--content">
-        <div class="process__track" id="processTrack">
+        <div class="process__grid">
           <div class="process__head">
             <span class="label label--signal">04 — How it runs</span>
             <h2 class="display d-md" style="margin:14px 0 16px">Four<br />Stages</h2>
             <p class="lede">Every car takes the same route through the studio. No shortcuts, no surprises on the invoice.</p>
           </div>
-          <article class="step"><div class="step__i">STAGE 01</div><h3>Intake &amp; Inspection</h3><p>Paint depth readings, panel-by-panel photos and a written scope before a single pad touches the car.</p></article>
-          <article class="step"><div class="step__i">STAGE 02</div><h3>Decontamination</h3><p>Chemical and mechanical decon, then a full strip wash so we correct paint — not the grime sitting on it.</p></article>
-          <article class="step"><div class="step__i">STAGE 03</div><h3>Correction</h3><p>Multi-stage machine polishing under calibrated lighting until the finish holds a clean reflection.</p></article>
-          <article class="step"><div class="step__i">STAGE 04</div><h3>Protection</h3><p>Film or coating applied in a filtered booth, cured, then re-inspected before the keys come back to you.</p></article>
+          <div class="process__steps">
+            <article class="step" data-fade><div class="step__i">Stage 01</div><h3>Intake &amp; Inspection</h3><p>Paint depth readings, panel-by-panel photos and a written scope before a single pad touches the car.</p></article>
+            <article class="step" data-fade="0.06"><div class="step__i">Stage 02</div><h3>Decontamination</h3><p>Chemical and mechanical decon, then a full strip wash so we correct paint — not the grime sitting on it.</p></article>
+            <article class="step" data-fade="0.12"><div class="step__i">Stage 03</div><h3>Correction</h3><p>Multi-stage machine polishing under calibrated lighting until the finish holds a clean reflection.</p></article>
+            <article class="step" data-fade="0.18"><div class="step__i">Stage 04</div><h3>Protection</h3><p>Film or coating applied in a filtered booth, cured, then re-inspected before the keys come back to you.</p></article>
+          </div>
         </div>
       </div>
     </div>
@@ -311,13 +320,13 @@
   </div>
 </div>
 
-<script src="js/lib/gsap.min.js?v=23"></script>
-<script src="js/lib/ScrollTrigger.min.js?v=23"></script>
-<script src="js/lib/lenis.min.js?v=23"></script>
-<script src="js/seq-manifest.js?v=23"></script>
-<script src="js/details.js?v=23"></script>
-<script src="js/core/sequence.js?v=23"></script>
-<script src="js/core/motion.js?v=23"></script>
-<script src="js/app.js?v=23"></script>
+<script src="js/lib/gsap.min.js?v=24"></script>
+<script src="js/lib/ScrollTrigger.min.js?v=24"></script>
+<script src="js/lib/lenis.min.js?v=24"></script>
+<script src="js/seq-manifest.js?v=24"></script>
+<script src="js/details.js?v=24"></script>
+<script src="js/core/sequence.js?v=24"></script>
+<script src="js/core/motion.js?v=24"></script>
+<script src="js/app.js?v=24"></script>
 </body>
 </html>
