@@ -508,6 +508,16 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
   width:100%;max-width:var(--shell);margin-inline:auto;padding-inline:var(--pad);
 }
 .process__head{max-width:36ch;}
+/* This chapter is the one where the footage is the point -- a detailer actually
+   working the paint -- so it gets a lighter wash than the other stages. The
+   cards are solid panels, so they stay legible over the bright bodywork. */
+.process .scrim-left{
+  background:linear-gradient(90deg,
+    rgb(var(--void-rgb) / .88) 0%,
+    rgb(var(--void-rgb) / .52) 32%,
+    rgb(var(--void-rgb) / .08) 60%,
+    rgb(var(--void-rgb) / .20) 100%);
+}
 .process__steps{
   display:grid;grid-template-columns:repeat(2,1fr);
   gap:clamp(12px,1.6vw,20px);
