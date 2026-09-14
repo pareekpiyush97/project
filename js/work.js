@@ -1,7 +1,8 @@
 /* ============================================================================
    work.js — "Our Work" gallery
-   Drop assets/videos/work-01.mp4 … to fill the cards; until then each slot
-   shows a placeholder with the exact filename it is waiting for.
+   Each card names a real clip in assets/videos/ (see the WORK table below). A
+   card whose file is missing falls back to its poster and says so, so a new
+   entry can be added before its footage exists.
    ========================================================================== */
 (function (w) {
   'use strict';
