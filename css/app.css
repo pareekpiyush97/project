@@ -197,7 +197,6 @@ html.lenis,html.lenis body{height:auto;}
 /* hero eyebrow reads as a tagline, so it stays white rather than accented */
 .hero__kicker .label.label--signal{color:#fff;}
 /* booking lede carries the accent instead */
-.layer--content .lede.booking__lede{color:var(--signal);}
 
 /* scrims: precise, so footage stays visible but text never fights it */
 .scrim-vignette{background:radial-gradient(115% 85% at 50% 45%,transparent 32%,rgb(var(--void-rgb) / .72) 100%);}
@@ -566,7 +565,6 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
 .booking__content{justify-content:center;text-align:center;padding-inline:var(--pad);}
 .booking__inner{width:min(var(--shell),100%);margin-inline:auto;}
 .booking__title{margin:16px 0 22px;}
-.booking__lede{margin:0 auto 34px;text-align:center;}
 .wa{
   display:inline-flex;align-items:center;gap:13px;background:var(--wa);color:#04120a;
   padding:19px 32px;border-radius:var(--r-pill);font-family:var(--f-mono);font-size:var(--fs-sm);
