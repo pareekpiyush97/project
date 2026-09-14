@@ -184,6 +184,14 @@
   function playInto(video, placeholder, url) {
     video.style.display = 'none';
     placeholder.style.display = '';
+    /* Publish the clip's own shape to CSS. The studio footage is vertical and
+       the modal is not, so the stacked layout sizes the media box from this
+       instead of parking a 9:16 clip in a wide black band. */
+    video.onloadedmetadata = function () {
+      if (!video.videoWidth || !video.videoHeight || !video.parentNode) return;
+      video.parentNode.style.setProperty('--clip-ar',
+        (video.videoWidth / video.videoHeight).toFixed(4));
+    };
     video.onloadeddata = function () {
       video.style.display = 'block';
       placeholder.style.display = 'none';

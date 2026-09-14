@@ -30,7 +30,7 @@
      the isMobile rule in sequence.js or a narrow window preloads a tier it
      will never draw -->
 <link rel="preload" as="image" href="assets/seq/proof/1920/f0001.webp" fetchpriority="high" media="(min-width:769px)" />
-<link rel="stylesheet" href="css/app.css?v=20" />
+<link rel="stylesheet" href="css/app.css?v=23" />
 </head>
 <body>
 
@@ -123,7 +123,6 @@
 </main>
 
 <footer class="footer">
-  <div class="footer__mark"><h2>Z Lab</h2></div>
   <div class="shell">
     <div class="footer__grid">
       <div>
@@ -162,17 +161,21 @@
         <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5"/></svg>
       </button>
     </div>
-    <div class="modal__media">
-      <video id="modalVid" playsinline muted loop controls preload="none" style="display:none"></video>
-      <div class="modal__ph" id="modalPh">
-        <div class="ring"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div>
-        <span class="label">Footage coming soon</span>
-        <code id="modalPath"></code>
+    <!-- clip beside the spec sheet: the studio footage is vertical, so a
+         full-width player was mostly black bars -->
+    <div class="modal__main">
+      <div class="modal__media">
+        <video id="modalVid" playsinline muted loop controls preload="none" style="display:none"></video>
+        <div class="modal__ph" id="modalPh">
+          <div class="ring"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div>
+          <span class="label">Footage coming soon</span>
+          <code id="modalPath"></code>
+        </div>
       </div>
-    </div>
-    <div class="modal__scroll">
+      <div class="modal__scroll" data-lenis-prevent>
       <p class="modal__body" id="modalBody"></p>
       <div id="modalDetail"></div>
+    </div>
     </div>
     <!-- outside the scroll region on purpose: the booking CTA must be reachable
          without first scrolling past the spec sheet -->
@@ -185,13 +188,13 @@
   </div>
 </div>
 
-<script src="js/lib/gsap.min.js?v=20"></script>
-<script src="js/lib/ScrollTrigger.min.js?v=20"></script>
-<script src="js/lib/lenis.min.js?v=20"></script>
-<script src="js/seq-manifest.js?v=20"></script>
-<script src="js/details.js?v=20"></script>
-<script src="js/core/sequence.js?v=20"></script>
-<script src="js/core/motion.js?v=20"></script>
-<script src="js/work.js?v=20"></script>
+<script src="js/lib/gsap.min.js?v=23"></script>
+<script src="js/lib/ScrollTrigger.min.js?v=23"></script>
+<script src="js/lib/lenis.min.js?v=23"></script>
+<script src="js/seq-manifest.js?v=23"></script>
+<script src="js/details.js?v=23"></script>
+<script src="js/core/sequence.js?v=23"></script>
+<script src="js/core/motion.js?v=23"></script>
+<script src="js/work.js?v=23"></script>
 </body>
 </html>
