@@ -637,9 +637,27 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
 }
 .modal.is-open{display:grid;opacity:1;}
 .modal__panel{
-  width:min(940px,100%);background:var(--panel);border:1px solid var(--line-2);
+  width:min(1040px,100%);max-height:min(92vh,1040px);
+  display:flex;flex-direction:column;
+  background:var(--panel);border:1px solid var(--line-2);
   border-radius:var(--r-xs);overflow:hidden;transform:translateY(22px) scale(.98);
   transition:transform .5s var(--e-out);box-shadow:0 50px 130px rgba(0,0,0,.6);
+}
+/* The panel is a column: title bar and clip hold their size, the spec sheet
+   takes what is left and scrolls inside it, and the booking CTA is pinned
+   below both so it is reachable without scrolling past anything. */
+.modal__bar,.modal__media,.modal__foot{flex:none;}
+.modal__scroll{overflow-y:auto;overscroll-behavior:contain;}
+.modal__foot{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:16px 20px;border-top:1px solid var(--line);background:var(--panel);
+}
+.modal__foot .label{color:var(--faint);}
+.modal__wa{padding:14px 24px;box-shadow:0 12px 40px rgba(37,211,102,.22);}
+@media (max-width:640px){
+  .modal__foot{flex-direction:column;align-items:stretch;gap:12px;}
+  .modal__foot .label{text-align:center;}
+  .modal__wa{justify-content:center;}
 }
 .modal.is-open .modal__panel{transform:none;}
 .modal__bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line);}

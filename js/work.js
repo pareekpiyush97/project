@@ -168,6 +168,10 @@
     $('#modalT').textContent = it[2];
     $('#modalBody').textContent = it[3] + ' — finished at the studio in Indirapuram.';
     $('#modalDetail').innerHTML = w.ZLAB_DETAILS ? w.ZLAB_DETAILS.html(it[2]) : '';
+    // it[3] is the service ('Full-body PPF'); it[2] is the car's nickname,
+    // which would make the message read 'book Range Rover'
+    $('#modalWa').href = 'https://wa.me/' + WHATSAPP + '?text=' +
+      encodeURIComponent("Hi Z Lab Design — I'd like to book " + it[3] + ".\nCar: \nWhen: ");
     $('#modalPath').textContent = url;
     M.playInto($('#modalVid'), $('#modalPh'), url);
     lastFocus = document.activeElement;

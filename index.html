@@ -38,7 +38,7 @@
      the isMobile rule in sequence.js or a narrow window preloads a tier it
      will never draw -->
 <link rel="preload" as="image" href="assets/seq/hero/1920/f0001.webp" fetchpriority="high" media="(min-width:769px)" />
-<link rel="stylesheet" href="css/app.css?v=19" />
+<link rel="stylesheet" href="css/app.css?v=20" />
 </head>
 <body>
 
@@ -296,16 +296,25 @@
       <p class="modal__body" id="modalBody"></p>
       <div id="modalDetail"></div>
     </div>
+    <!-- outside the scroll region on purpose: the booking CTA must be reachable
+         without first scrolling past the spec sheet -->
+    <div class="modal__foot">
+      <span class="label" id="modalFootNote">Book it straight through WhatsApp</span>
+      <a class="wa modal__wa" id="modalWa" href="#" target="_blank" rel="noopener" data-cursor="Chat">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.6.2-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.6-.8-2.6-1.4-3.7-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5 0-.2-.6-1.6-.9-2.2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.9-.6 3 .7 2 2 3.5 3.9 4.7 2.5 1.5 3 .9 3.6.9.6 0 1.7-.7 2-1.4.2-.7.2-1.2.1-1.4 0 0-.2-.1-.5-.3zM12 2A10 10 0 0 0 3.5 17.2L2 22l5-1.3A10 10 0 1 0 12 2zm0 18c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 20 12a8 8 0 0 1-8 8z"/></svg>
+        Book this service
+      </a>
+    </div>
   </div>
 </div>
 
-<script src="js/lib/gsap.min.js?v=19"></script>
-<script src="js/lib/ScrollTrigger.min.js?v=19"></script>
-<script src="js/lib/lenis.min.js?v=19"></script>
-<script src="js/seq-manifest.js?v=19"></script>
-<script src="js/details.js?v=19"></script>
-<script src="js/core/sequence.js?v=19"></script>
-<script src="js/core/motion.js?v=19"></script>
-<script src="js/app.js?v=19"></script>
+<script src="js/lib/gsap.min.js?v=20"></script>
+<script src="js/lib/ScrollTrigger.min.js?v=20"></script>
+<script src="js/lib/lenis.min.js?v=20"></script>
+<script src="js/seq-manifest.js?v=20"></script>
+<script src="js/details.js?v=20"></script>
+<script src="js/core/sequence.js?v=20"></script>
+<script src="js/core/motion.js?v=20"></script>
+<script src="js/app.js?v=20"></script>
 </body>
 </html>

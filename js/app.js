@@ -23,6 +23,14 @@
     ['Car Wash',              'wash-01',   'Foam, decontaminate, hand-dry. The weekly ritual your paint actually deserves.']
   ];
 
+
+  /** A WhatsApp link that already names the service, so the customer never has
+   *  to type the thing we already know. */
+  function waFor(service) {
+    return 'https://wa.me/' + WHATSAPP + '?text=' +
+      encodeURIComponent("Hi Z Lab Design — I'd like to book " + service + ".\nCar: \nWhen: ");
+  }
+
   var M = w.ZLAB.motion, $ = M.$, $$ = M.$$, reduced = M.reduced;
   gsap.registerPlugin(ScrollTrigger);
 
@@ -281,6 +289,7 @@
     $('#modalBody').textContent = s[2];
     // the spec sheet lives in js/details.js so all three surfaces agree
     $('#modalDetail').innerHTML = w.ZLAB_DETAILS ? w.ZLAB_DETAILS.html(s[0]) : '';
+    $('#modalWa').href = waFor(s[0]);
     $('#modalPath').textContent = url;
     M.playInto($('#modalVid'), $('#modalPh'), url);
     lastFocus = document.activeElement;
