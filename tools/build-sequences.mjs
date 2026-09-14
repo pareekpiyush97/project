@@ -59,7 +59,8 @@ const CLIPS = {
   hero:     ['hero-reveal',     240],  // sports car reveal — every frame of the 24fps clip
   // craft: the manifesto chapter plays assets/videos/craft.mp4 outright instead
   // of scrubbing frames, so its sequence is no longer built or shipped
-  services: ['services-design', 240],  // blue coupe in the design hall — 1080p source
+  // services: The Menu plays assets/videos/services.mp4 outright, same as the
+  // manifesto chapter, so its sequence is no longer built or shipped
   process:  ['ezip - Copy (7)', 120],  // workshop, lifts + robots
   proof:    ['ezip - Copy (4)', 120],  // BODYSHOP, silver + lime (work.html)
   booking:  ['ezip - Copy (6)',  46],  // grey hypercar, chrome showroom

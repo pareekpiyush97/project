@@ -38,7 +38,7 @@
      the isMobile rule in sequence.js or a narrow window preloads a tier it
      will never draw -->
 <link rel="preload" as="image" href="assets/seq/hero/1920/f0001.webp" fetchpriority="high" media="(min-width:769px)" />
-<link rel="stylesheet" href="css/app.css?v=18" />
+<link rel="stylesheet" href="css/app.css?v=19" />
 </head>
 <body>
 
@@ -162,9 +162,13 @@
   </section>
 
   <!-- ── 03 · services ─────────────────────────────────────────────────── -->
-  <section class="section pin services" id="services" data-seq="services" data-chapter="2">
+  <!-- no data-seq: this chapter loops a video instead of scrubbing frames -->
+  <section class="section pin services" id="services" data-chapter="2">
     <div class="stage">
-      <canvas class="layer layer--canvas" aria-label="A blue coupe in the design hall"></canvas>
+      <video class="layer layer--video" id="servicesVid"
+             src="assets/videos/services.mp4" poster="assets/img/services-poster.webp"
+             muted loop playsinline preload="metadata"
+             aria-label="A blue coupe in the design hall"></video>
       <div class="layer layer--scrim scrim-left"></div>
       <div class="layer layer--content services__content">
         <div class="services__grid">
@@ -295,13 +299,13 @@
   </div>
 </div>
 
-<script src="js/lib/gsap.min.js?v=18"></script>
-<script src="js/lib/ScrollTrigger.min.js?v=18"></script>
-<script src="js/lib/lenis.min.js?v=18"></script>
-<script src="js/seq-manifest.js?v=18"></script>
-<script src="js/details.js?v=18"></script>
-<script src="js/core/sequence.js?v=18"></script>
-<script src="js/core/motion.js?v=18"></script>
-<script src="js/app.js?v=18"></script>
+<script src="js/lib/gsap.min.js?v=19"></script>
+<script src="js/lib/ScrollTrigger.min.js?v=19"></script>
+<script src="js/lib/lenis.min.js?v=19"></script>
+<script src="js/seq-manifest.js?v=19"></script>
+<script src="js/details.js?v=19"></script>
+<script src="js/core/sequence.js?v=19"></script>
+<script src="js/core/motion.js?v=19"></script>
+<script src="js/app.js?v=19"></script>
 </body>
 </html>
