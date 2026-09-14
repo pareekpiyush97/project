@@ -127,27 +127,6 @@
     };
   }
 
-  /* ---- chapters backed by a looping video ------------------------------
-     Some chapters play a clip outright instead of scrubbing a frame sequence.
-     Each one loops while its section is on screen and pauses the moment it
-     leaves — a 1080p clip decoding behind content nobody is looking at is pure
-     battery and main thread, and two of them at once is worse. Muted and
-     playsinline, or no browser would autoplay them at all. */
-  function initLayerVideos() {
-    var vids = $$('.layer--video');
-    if (!vids.length) return;
-    // reduced motion: leave them on their posters rather than moving unbidden
-    if (reduced || !('IntersectionObserver' in w)) return;
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        var v = e.target;
-        if (e.isIntersecting) v.play().catch(function () {});
-        else if (!v.paused) v.pause();
-      });
-    }, { threshold: 0.35 });
-    vids.forEach(function (v) { io.observe(v); });
-  }
-
   /* ---- manifesto: words illuminate with scroll ------------------------- */
   function initManifesto() {
     var line = $('#manifestoLine');
@@ -378,7 +357,7 @@
     initScroll();
     initSequences();
     initHero();
-    initLayerVideos();
+    M.initLayerVideos();
     initManifesto();
     initServices();
     initMenu();

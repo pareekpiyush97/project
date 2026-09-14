@@ -38,7 +38,7 @@
      the isMobile rule in sequence.js or a narrow window preloads a tier it
      will never draw -->
 <link rel="preload" as="image" href="assets/seq/hero/1920/f0001.webp" fetchpriority="high" media="(min-width:769px)" />
-<link rel="stylesheet" href="css/app.css?v=26" />
+<link rel="stylesheet" href="css/app.css?v=28" />
 </head>
 <body>
 
@@ -227,9 +227,13 @@
   </section>
 
   <!-- ── 05 · booking ──────────────────────────────────────────────────── -->
-  <section class="section pin booking" id="book" data-seq="booking" data-chapter="4">
+  <!-- no data-seq: this chapter loops a video instead of scrubbing frames -->
+  <section class="section pin booking" id="book" data-chapter="4">
     <div class="stage">
-      <canvas class="layer layer--canvas" aria-label="A hypercar in the chrome showroom"></canvas>
+      <video class="layer layer--video" id="bookingVid"
+             src="assets/videos/booking.mp4" poster="assets/img/booking-poster.webp"
+             muted loop playsinline preload="metadata"
+             aria-label="A car rotating on the studio turntable"></video>
       <div class="layer layer--scrim scrim-vignette"></div>
       <div class="layer layer--content booking__content">
         <div class="booking__inner">
@@ -320,13 +324,13 @@
   </div>
 </div>
 
-<script src="js/lib/gsap.min.js?v=26"></script>
-<script src="js/lib/ScrollTrigger.min.js?v=26"></script>
-<script src="js/lib/lenis.min.js?v=26"></script>
-<script src="js/seq-manifest.js?v=26"></script>
-<script src="js/details.js?v=26"></script>
-<script src="js/core/sequence.js?v=26"></script>
-<script src="js/core/motion.js?v=26"></script>
-<script src="js/app.js?v=26"></script>
+<script src="js/lib/gsap.min.js?v=28"></script>
+<script src="js/lib/ScrollTrigger.min.js?v=28"></script>
+<script src="js/lib/lenis.min.js?v=28"></script>
+<script src="js/seq-manifest.js?v=28"></script>
+<script src="js/details.js?v=28"></script>
+<script src="js/core/sequence.js?v=28"></script>
+<script src="js/core/motion.js?v=28"></script>
+<script src="js/app.js?v=28"></script>
 </body>
 </html>

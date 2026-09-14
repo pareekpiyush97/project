@@ -209,23 +209,8 @@
         });
       }
     }
-    // end CTA
-    var cta = $('#cta');
-    if (cta) {
-      var seq = new Sequence($('.layer--canvas', cta), cta.dataset.seq, { priority: 20 });
-      if (reduced) { seq.preload(null, function () { seq.draw(seq.count >> 1); }); }
-      else {
-        ScrollTrigger.create({ trigger: cta, start: 'top bottom+=60%', once: true,
-          onEnter: function () { seq.preload(); } });
-        ScrollTrigger.create({ trigger: cta, start: 'top bottom+=100%', end: 'bottom top-=100%',
-          onToggle: function (self) {
-            if (self.isActive) { seq.wake(); seq.activate(); }
-            else { seq.sleep(); seq.deactivate(); }
-          } });
-        ScrollTrigger.create({ trigger: cta, start: 'top top', end: 'bottom bottom', scrub: true,
-          onUpdate: function (self) { seq.seek(self.progress); } });
-      }
-    }
+    // the end CTA used to scrub a sequence here; it loops a video now, which
+    // M.initLayerVideos() drives — there is no canvas left to build one from
   }
 
   /* ---- menu (shared behaviour with the home page) ---------------------- */
@@ -322,6 +307,7 @@
     initSequences();
     initMenu();
     initChrome();
+    M.initLayerVideos();
     M.initCursor();
     M.initReveals();
     M.initFades();

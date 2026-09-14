@@ -206,6 +206,27 @@
     video.load();
   }
 
+  /** Chapters backed by a looping clip instead of a scrubbed frame sequence.
+      Each loops while its section is on screen and pauses the moment it leaves
+      — a 1080p clip decoding behind content nobody is looking at is pure
+      battery and main thread, and several at once is worse. Muted and
+      playsinline, or no browser would autoplay them at all. Lives here rather
+      than in app.js because the work page has one of these too. */
+  function initLayerVideos() {
+    var vids = $$('.layer--video');
+    if (!vids.length) return;
+    // reduced motion: leave them on their posters rather than moving unbidden
+    if (reduced || !('IntersectionObserver' in w)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting) v.play().catch(function () {});
+        else if (!v.paused) v.pause();
+      });
+    }, { threshold: 0.35 });
+    vids.forEach(function (v) { io.observe(v); });
+  }
+
   /** Hand focus back after closing an overlay.
       `element.focus()` on a stale or unfocusable trigger is a silent no-op, so
       focus would simply stay on whatever is inside the now-hidden overlay —
@@ -247,6 +268,7 @@
   w.APEX = w.ZLAB;
   w.ZLAB.motion = {
     playInto: playInto,
+    initLayerVideos: initLayerVideos,
     trapFocus: trapFocus,
     returnFocus: returnFocus,
     reduced: reduced, $: $, $$: $$,

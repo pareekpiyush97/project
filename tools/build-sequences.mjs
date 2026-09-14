@@ -64,9 +64,9 @@ const CLIPS = {
   // process: the Four Stages chapter plays assets/videos/process.mp4 outright,
   // so its sequence is no longer built or shipped
   proof:    ['ezip - Copy (4)', 120],  // BODYSHOP, silver + lime (work.html)
-  booking:  ['ezip - Copy (6)',  46],  // grey hypercar, chrome showroom
   menu:     ['ezip - Copy',      72],  // chameleon Porsche, menu backdrop
-  work:     ['ezip - Copy (2)', 120],  // purple + green, bright white studio
+  // booking + work: the booking chapter and the work page's end CTA both loop
+  // assets/videos/booking.mp4 outright, so neither sequence is built or shipped
 };
 
 /** Evenly sample `n` items from a list, always keeping first and last. */
