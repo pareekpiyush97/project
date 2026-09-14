@@ -592,6 +592,7 @@ body.menu-open .burger__lines span:nth-child(2){transform:translateY(-4.25px) ro
 .footer__grid ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
 .footer__grid a{color:var(--dim);transition:color .3s;font-size:var(--fs-base);}
 .footer__grid a:hover{color:var(--signal);}
+.footer__made b{color:var(--text);font-weight:inherit;}
 .footer__base{
   border-top:1px solid var(--line);padding:20px 0 30px;display:flex;
   justify-content:space-between;gap:14px;flex-wrap:wrap;

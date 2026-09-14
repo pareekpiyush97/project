@@ -416,6 +416,8 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.03em;line-height:1;}
   margin-top:var(--s7);padding-top:var(--s4);border-top:1px solid var(--line);
   font-size:.75rem;color:var(--dim);
 }
+.foot__made{margin-top:var(--s3);text-align:center;font-size:.72rem;color:var(--dim);}
+.foot__made b{color:var(--text-2);font-weight:500;}
 .foot__base a{color:var(--text-2);text-decoration:underline;text-underline-offset:3px;
   padding-block:13px;margin-block:-13px;}
 
