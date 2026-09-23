@@ -14,7 +14,7 @@
     var qs = location.search;
     if (/[?&]full=1/.test(qs)) { sessionStorage.setItem("zlab-full", "1"); return; }
     if (sessionStorage.getItem("zlab-full") === "1") return;
-    if (matchMedia("(pointer:coarse)").matches) location.replace("mobile.html" + qs + "#work");
+    if (matchMedia("(pointer:coarse)").matches) location.replace("mobile.html" + qs + (location.hash || "#work"));
   } catch (e) {}
 })();
 </script>
@@ -23,6 +23,18 @@
 <title>Our Work — Z Lab Design</title>
 <meta name="description" content="Recent paint protection, coloured PPF, ceramic coating and detailing builds from Z Lab Design, Indirapuram." />
 <meta name="theme-color" content="#08080a" />
+
+<link rel="canonical" href="https://pareekpiyush97.github.io/project/work.html" />
+
+<!-- Our Work is the page customers actually share. Without these a link
+     pasted into WhatsApp arrives as a bare URL with no title and no image. -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Our Work &mdash; Z Lab Design" />
+<meta property="og:description" content="Paint protection film, coloured PPF, ceramic coating and detailing from the Z Lab Design studio in Indirapuram, Ghaziabad." />
+<meta property="og:site_name" content="Z Lab Design" />
+<meta property="og:image" content="https://pareekpiyush97.github.io/project/assets/img/car-rover-purple.jpg" />
+<meta property="og:url" content="https://pareekpiyush97.github.io/project/work.html" />
+<meta name="twitter:card" content="summary_large_image" />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-var.woff2" crossorigin />
