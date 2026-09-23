@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Page not found &mdash; Z Lab Design</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="/project/favicon.svg" />
+<!--
+  Deliberately standalone. The real pages pull a 30MB scroll sequence; a wrong
+  URL should not. Everything here is inline, so this costs one request.
+  Absolute /project/ paths because GitHub Pages serves this file for ANY
+  unknown depth under the site, so relative links would resolve against the
+  wrong directory. They are tied to the repo name: if this ever moves to a
+  custom domain at the root, drop the /project prefix here.
+  No pointer redirect either — bouncing a 404 to the phone build would lose
+  the address the visitor actually mistyped.
+-->
+<style>
+  :root{ --void:#08080a; --text:#ecece8; --dim:#8c8c95; --signal:#ffa51f; --line:rgba(255,255,255,.14); }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100svh;display:grid;place-items:center;padding:32px;
+       background:var(--void);color:var(--text);
+       font-family:system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+  .b{max-width:44ch;text-align:center}
+  .n{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.7rem;
+     letter-spacing:.18em;text-transform:uppercase;color:var(--signal)}
+  h1{font-size:clamp(2rem,7vw,3.2rem);line-height:1.1;letter-spacing:.02em;
+     text-transform:uppercase;font-weight:400;margin:14px 0 16px}
+  p{color:var(--dim);line-height:1.6;margin:0 0 28px}
+  .r{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.7rem;
+    letter-spacing:.13em;text-transform:uppercase;padding:13px 22px;border-radius:100px;
+    border:1px solid var(--line);color:var(--text);transition:background .25s,color .25s,border-color .25s}
+  a:hover{background:var(--text);color:var(--void);border-color:var(--text)}
+  a.p{background:var(--signal);border-color:var(--signal);color:#1b0e00;font-weight:700}
+  a.p:hover{background:#ffb746;border-color:#ffb746;color:#1b0e00}
+  a:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+</style>
+</head>
+<body>
+  <main class="b">
+    <span class="n">Error 404</span>
+    <h1>This page left the studio</h1>
+    <p>The link is wrong or the page has moved. The work and the services are all still here.</p>
+    <div class="r">
+      <a class="p" href="/project/">Back to home</a>
+      <a href="/project/work.html">See our work</a>
+      <a href="https://wa.me/918745028280" target="_blank" rel="noopener">WhatsApp us</a>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Both builds are the same business at two URLs. mobile.html canonicalises to
+# the desktop root, so it is crawlable on purpose rather than blocked — a
+# Disallow here would strip the canonical signal instead of consolidating it.
+User-agent: *
+Allow: /
+
+Sitemap: https://pareekpiyush97.github.io/project/sitemap.xml
