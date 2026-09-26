@@ -68,12 +68,20 @@
       '?text=' + encodeURIComponent('Hi Z Lab Design — I\'d like to book ' + line + '.\nCar: \nWhen: ');
   }
 
+
+  /* The reveal stagger used to ride along as a style="" attribute inside the
+     innerHTML string. CSP treats that as an inline style; the DOM style API
+     it does not police, and the result is identical. */
+  function stagger(sel) {
+    $$(sel).forEach(function (el, i) {
+      el.style.transitionDelay = Math.min(i, 4) * 45 + 'ms';
+    });
+  }
   /* ---- service list ---------------------------------------------------- */
   function buildServices() {
     var n = SERVICES.length;
     $('#svcList').innerHTML = SERVICES.map(function (s, i) {
       return '<button class="svc rv" data-i="' + i + '" ' +
-        'style="transition-delay:' + Math.min(i, 4) * 45 + 'ms" ' +
         'aria-label="' + esc(s[0]) + ' — watch the clip">' +
         '<img class="svc__img" src="' + IMG + s[3] + '.webp" alt="" loading="lazy" decoding="async" />' +
         '<span class="svc__body">' +
@@ -84,6 +92,7 @@
         '<span class="svc__play">' + PLAY + '</span>' +
         '</button>';
     }).join('');
+    stagger('#svcList .svc');
 
     $$('#svcList .svc').forEach(function (b) {
       b.addEventListener('click', function () {
@@ -101,7 +110,7 @@
 
     $('#grid').innerHTML = WORK.map(function (it, i) {
       return '<button class="tile rv' + (it[4] ? ' tile--wide' : '') + '" data-cat="' + it[1] + '" ' +
-        'data-i="' + i + '" style="transition-delay:' + Math.min(i, 4) * 45 + 'ms" ' +
+        'data-i="' + i + '" ' +
         'aria-label="' + esc(it[2]) + ' — play the clip">' +
         '<img src="' + IMG + it[5] + '.webp" alt="" loading="lazy" decoding="async" />' +
         '<span class="tile__veil"></span>' +
@@ -109,6 +118,7 @@
         '<span class="tile__t">' + esc(it[2]) + '</span></span>' +
         '</button>';
     }).join('') + '<p class="grid__empty" id="gridEmpty" hidden>Nothing filed under that yet — ask us on WhatsApp.</p>';
+    stagger('#grid .tile');
 
     $$('#grid .tile').forEach(function (t) {
       t.addEventListener('click', function () {

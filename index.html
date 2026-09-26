@@ -2,6 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self' 'sha256-rFOuLi/C/+Nk4HQtAjSaHN/wkCrW60EuqhrXHYLpyXE=' 'sha256-eKajd7s5l/BQbXZs+P6EdD8uRt1Ynnul5l0scuWhw/g='; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; upgrade-insecure-requests" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+
+
+
+
+
+
+
 <script>
 /* Same domain, two builds. This is the desktop build: the scroll sequences
    assume a monitor, a mouse and a steady connection, so a coarse-pointer
@@ -119,8 +128,8 @@
   <div class="menu__foot">
     <div><h4 class="label">Studio</h4><p>Indirapuram, Ghaziabad</p></div>
     <div><h4 class="label">Hours</h4><p>Mon–Sun · 09:00–20:00</p></div>
-    <div><h4 class="label">WhatsApp</h4><p><a id="menuWa" href="#" target="_blank" rel="noopener">Start a chat →</a></p></div>
-    <div><h4 class="label">Social</h4><p><a href="https://instagram.com/zlabdesign" target="_blank" rel="noopener">@zlabdesign</a></p></div>
+    <div><h4 class="label">WhatsApp</h4><p><a id="menuWa" href="#" target="_blank" rel="noopener noreferrer">Start a chat →</a></p></div>
+    <div><h4 class="label">Social</h4><p><a href="https://instagram.com/zlabdesign" target="_blank" rel="noopener noreferrer">@zlabdesign</a></p></div>
   </div>
 </div>
 
@@ -180,8 +189,8 @@
           <span class="label label--signal">02 — The standard</span>
           <h2 class="manifesto__line" id="manifestoLine">Anyone can wash a car. We rebuild the way light sits on it — then we <em>protect that</em> for years.</h2>
           <div class="manifesto__aside">
-            <div><span class="label">Correction</span><p class="lede" style="margin-top:8px">Swirls and etching removed under calibrated light, not hidden by filler.</p></div>
-            <div><span class="label">Protection</span><p class="lede" style="margin-top:8px">Self-healing film and nano-ceramic, installed in a filtered booth.</p></div>
+            <div><span class="label">Correction</span><p class="lede u-mt-8">Swirls and etching removed under calibrated light, not hidden by filler.</p></div>
+            <div><span class="label">Protection</span><p class="lede u-mt-8">Self-healing film and nano-ceramic, installed in a filtered booth.</p></div>
           </div>
         </div>
       </div>
@@ -201,7 +210,7 @@
         <div class="services__grid">
           <div class="services__intro">
             <span class="label label--signal">03 — What we do</span>
-            <h2 class="display d-md" style="margin:14px 0 18px">The<br />Menu</h2>
+            <h2 class="display d-md u-my-14-18">The<br />Menu</h2>
             <div class="services__count"><b id="svcNum">01</b><span>of <i id="svcTotal">10</i> — tap to watch</span></div>
           </div>
           <ul class="services__list" id="svcList"><!-- built by app.js --></ul>
@@ -226,7 +235,7 @@
         <div class="process__grid">
           <div class="process__head">
             <span class="label label--signal">04 — How it runs</span>
-            <h2 class="display d-md" style="margin:14px 0 16px">Four<br />Stages</h2>
+            <h2 class="display d-md u-my-14-16">Four<br />Stages</h2>
             <p class="lede">Every car takes the same route through the studio. No shortcuts, no surprises on the invoice.</p>
           </div>
           <div class="process__steps">
@@ -244,7 +253,7 @@
   <section class="section numbers">
     <div class="shell">
       <h2 class="label label--signal" data-fade>At a glance</h2>
-      <div class="numbers__grid" style="margin-top:28px">
+      <div class="numbers__grid u-mt-28">
         <div class="stat"><b><span data-count="11">0</span></b><span class="label">Services on the menu</span></div>
         <div class="stat"><b><span data-count="4">0</span></b><span class="label">Stages every car goes through</span></div>
         <div class="stat"><b><span data-count="7">0</span></b><span class="label">Days open a week</span></div>
@@ -266,7 +275,7 @@
         <div class="booking__inner">
           <span class="label label--signal">05 — Get it booked</span>
           <h2 class="display d-lg booking__title">Bring Us<br />The <span class="sig">Car</span></h2>
-          <a class="wa" id="waBtn" href="#" target="_blank" rel="noopener" data-magnetic="0.22" data-cursor="Chat">
+          <a class="wa" id="waBtn" href="#" target="_blank" rel="noopener noreferrer" data-magnetic="0.22" data-cursor="Chat">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.6.2-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.6-.8-2.6-1.4-3.7-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5 0-.2-.6-1.6-.9-2.2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.9-.6 3 .7 2 2 3.5 3.9 4.7 2.5 1.5 3 .9 3.6.9.6 0 1.7-.7 2-1.4.2-.7.2-1.2.1-1.4 0 0-.2-.1-.5-.3zM12 2A10 10 0 0 0 3.5 17.2L2 22l5-1.3A10 10 0 1 0 12 2zm0 18c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 20 12a8 8 0 0 1-8 8z"/></svg>
             Book on WhatsApp
           </a>
@@ -287,7 +296,7 @@
     <div class="footer__grid">
       <div>
         <h4 class="label">Studio</h4>
-        <p class="lede" style="font-size:var(--fs-base)">Paint protection, ceramic and correction — obsessed over panel by panel.</p>
+        <p class="lede u-fs-base">Paint protection, ceramic and correction — obsessed over panel by panel.</p>
       </div>
       <div><h4 class="label">Services</h4><ul>
         <li><a href="#services">Paint Protection Film</a></li>
@@ -301,8 +310,8 @@
         <li><a href="#top">Back to top</a></li>
       </ul></div>
       <div><h4 class="label">Contact</h4><ul>
-        <li><a id="footWa" href="#" target="_blank" rel="noopener">WhatsApp</a></li>
-        <li><a href="https://instagram.com/zlabdesign" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a id="footWa" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+        <li><a href="https://instagram.com/zlabdesign" target="_blank" rel="noopener noreferrer">Instagram</a></li>
         <li><a href="tel:+918745028280">+91 87450 28280</a></li>
       </ul></div>
     </div>
@@ -326,7 +335,7 @@
          full-width player was mostly black bars -->
     <div class="modal__main">
       <div class="modal__media">
-        <video id="modalVid" playsinline muted loop controls preload="none" style="display:none"></video>
+        <video class="u-hide" id="modalVid" playsinline muted loop controls preload="none"></video>
         <div class="modal__ph" id="modalPh">
           <div class="ring"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div>
           <span class="label">Footage coming soon</span>
@@ -342,7 +351,7 @@
          without first scrolling past the spec sheet -->
     <div class="modal__foot">
       <span class="label" id="modalFootNote">Book it straight through WhatsApp</span>
-      <a class="wa modal__wa" id="modalWa" href="#" target="_blank" rel="noopener" data-cursor="Chat">
+      <a class="wa modal__wa" id="modalWa" href="#" target="_blank" rel="noopener noreferrer" data-cursor="Chat">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.6.2-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.6-.8-2.6-1.4-3.7-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5 0-.2-.6-1.6-.9-2.2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.9-.6 3 .7 2 2 3.5 3.9 4.7 2.5 1.5 3 .9 3.6.9.6 0 1.7-.7 2-1.4.2-.7.2-1.2.1-1.4 0 0-.2-.1-.5-.3zM12 2A10 10 0 0 0 3.5 17.2L2 22l5-1.3A10 10 0 1 0 12 2zm0 18c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 20 12a8 8 0 0 1-8 8z"/></svg>
         Book this service
       </a>

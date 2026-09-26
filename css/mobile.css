@@ -520,3 +520,6 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.03em;line-height:1;}
   .tile--wide{grid-column:span 3;}
   .grid__empty{grid-column:span 3;}
 }
+
+/* was a style="" attribute; see the note in app.css */
+.u-stat-sm{font-size:1.5rem;margin-top:4px;}

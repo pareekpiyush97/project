@@ -2,6 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self' 'sha256-0Kh3tfdOGlppLgyFDJh/steFE0+oMT2D3guVFpOMjkk='; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; upgrade-insecure-requests" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+
+
+
+
+
+
+
 <script>
 /* Same domain, two builds. This is the phone build; a machine with a mouse gets
    the full scroll build instead. Each guard keys on the PRIMARY pointer, which
@@ -51,7 +60,7 @@
       <a class="iconbtn" href="tel:+918745028280" aria-label="Call the studio">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 21A12.5 12.5 0 0 1 3 8.5V6a2 2 0 0 1 2-2h2.2a1 1 0 0 1 1 .82l.7 3.3a1 1 0 0 1-.53 1.1l-1.4.7a9.6 9.6 0 0 0 4.6 4.6l.7-1.4a1 1 0 0 1 1.1-.53l3.3.7a1 1 0 0 1 .82 1V19a2 2 0 0 1-2 2z"/></svg>
       </a>
-      <a class="iconbtn" href="https://instagram.com/zlabdesign" target="_blank" rel="noopener" aria-label="Z Lab Design on Instagram">
+      <a class="iconbtn" href="https://instagram.com/zlabdesign" target="_blank" rel="noopener noreferrer" aria-label="Z Lab Design on Instagram">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
       </a>
     </div>
@@ -71,7 +80,7 @@
       <h1 class="d1">Flawless<br />is <span class="sig">a craft.</span></h1>
       <p class="lede">Film, ceramic and correction for cars that deserve the extra hour. Panel by panel, in a filtered booth.</p>
       <div class="hero__cta">
-        <a class="btn btn--wa" id="heroWa" href="#" target="_blank" rel="noopener" data-haptic>
+        <a class="btn btn--wa" id="heroWa" href="#" target="_blank" rel="noopener noreferrer" data-haptic>
           <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.6.2-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.6-.8-2.6-1.4-3.7-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5 0-.2-.6-1.6-.9-2.2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.9-.6 3 .7 2 2 3.5 3.9 4.7 2.5 1.5 3 .9 3.6.9.6 0 1.7-.7 2-1.4.2-.7.2-1.2.1-1.4 0 0-.2-.1-.5-.3zM12 2A10 10 0 0 0 3.5 17.2L2 22l5-1.3A10 10 0 1 0 12 2zm0 18c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 20 12a8 8 0 0 1-8 8z"/></svg>
           Book on WhatsApp
         </a>
@@ -154,7 +163,7 @@
           <span id="previewTxt">Your message: <b>a quote for my car</b></span>
         </p>
 
-        <a class="btn btn--wa btn--wide" id="bookWa" href="#" target="_blank" rel="noopener" data-haptic>
+        <a class="btn btn--wa btn--wide" id="bookWa" href="#" target="_blank" rel="noopener noreferrer" data-haptic>
           <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.6.2-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.6-.8-2.6-1.4-3.7-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5 0-.2-.6-1.6-.9-2.2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.9-.6 3 .7 2 2 3.5 3.9 4.7 2.5 1.5 3 .9 3.6.9.6 0 1.7-.7 2-1.4.2-.7.2-1.2.1-1.4 0 0-.2-.1-.5-.3zM12 2A10 10 0 0 0 3.5 17.2L2 22l5-1.3A10 10 0 1 0 12 2zm0 18c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 20 12a8 8 0 0 1-8 8z"/></svg>
           Send on WhatsApp
         </a>
@@ -165,7 +174,7 @@
           <div><span class="label">Collection</span><b>Pickup &amp; drop</b></div>
           <div><span class="label">Directions</span>
             <a class="rowlink" href="https://maps.google.com/?q=Unit+No.+335,+Shakti+Khand+3,+Indirapuram,+Ghaziabad+201014"
-               target="_blank" rel="noopener">Open in Maps →</a></div>
+               target="_blank" rel="noopener noreferrer">Open in Maps →</a></div>
         </div>
       </div>
     </div>
@@ -202,8 +211,8 @@
         <h4 class="label">Contact</h4>
         <ul>
           <li><a href="tel:+918745028280">+91 87450 28280</a></li>
-          <li><a id="footWa" href="#" target="_blank" rel="noopener">WhatsApp</a></li>
-          <li><a href="https://instagram.com/zlabdesign" target="_blank" rel="noopener">@zlabdesign</a></li>
+          <li><a id="footWa" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+          <li><a href="https://instagram.com/zlabdesign" target="_blank" rel="noopener noreferrer">@zlabdesign</a></li>
         </ul>
       </div>
       <div>
@@ -249,7 +258,7 @@
     <div class="sheet__bar">
       <div>
         <span class="label label--sig" id="sheetKind">Service</span>
-        <h3 class="d2" id="sheetT" style="font-size:1.5rem;margin-top:4px">Service</h3>
+        <h3 class="d2 u-stat-sm" id="sheetT">Service</h3>
       </div>
       <button class="iconbtn" id="sheetX" aria-label="Close">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg>
@@ -262,7 +271,7 @@
       </div>
       <p class="sheet__copy" id="sheetCopy"></p>
       <div id="sheetDetail"></div>
-      <a class="btn btn--wa btn--wide" id="sheetWa" href="#" target="_blank" rel="noopener" data-haptic>Book this service</a>
+      <a class="btn btn--wa btn--wide" id="sheetWa" href="#" target="_blank" rel="noopener noreferrer" data-haptic>Book this service</a>
     </div>
   </div>
 </div>
